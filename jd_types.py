@@ -183,10 +183,10 @@ class BasicAuth:
 
 class AddLinksQuery:
     def __init__(self, assign_job_id=None, auto_extract=None, auto_start=None,
-                 data_urls=[], deep_decrypt=None, destination_folder='',
-                 download_password='', extract_password='', links='',
-                 overwrite_packagizer_rules=None, package_name='',
-                 priority=Priority.DEFAULT, source_url=''):
+                 data_urls=[], deep_decrypt=None, destination_folder=None,
+                 download_password=None, extract_password=None, links=None,
+                 overwrite_packagizer_rules=None, package_name=None,
+                 priority=Priority.DEFAULT, source_url=None):
         self.assign_job_id = assign_job_id
         self.auto_extract = auto_extract
         self.auto_start = auto_start
@@ -551,3 +551,26 @@ class LinkVariant:
 
     def to_json(self):
         return json.dumps(self.to_dict())
+
+
+class LogFolder:
+    def __init__(self, qdict):
+        self.created = qdict['created'] \
+            if 'created' in qdict \
+            else None
+        self.current = qdict['current'] \
+            if 'current' in qdict \
+            else None
+        self.last_modified = qdict['lastModified'] \
+            if 'lastModified' in qdict \
+            else None
+
+    def __repr__(self):
+        return f'<LogFolder>'
+
+    def to_dict(self):
+        return {
+            'created': self.created,
+            'current': self.current,
+            'lastModified': self.last_modified,
+        }
