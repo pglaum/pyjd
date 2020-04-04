@@ -20,10 +20,13 @@ def make_request(endpoint, params, method='GET'):
     if debugging:
         print(rurl)
         print(rparams)
-        print()
 
     rstr = requests.get(rurl + rparams).content.decode()
     robj = json.loads(rstr)
     robj = robj['data']
+
+    if debugging:
+        print(rstr)
+        print()
 
     return robj
