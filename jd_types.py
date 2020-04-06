@@ -47,6 +47,22 @@ class SelectionType(Enum):
     NONE = "NONE"
 
 
+class SkipRequest(Enum):
+    SINGLE = "SINGLE"
+    BLOCK_HOSTER = "BLOCK_HOSTER"
+    BLOCK_ALL_CAPTCHAS = "BLOCK_ALL_CAPTCHAS"
+    BLOCK_PACKAGE = "BLOCK_PACKAGE"
+    REFRESH = "REFRESH"
+    STOP_CURRENT_ACTION = "STOP_CURRENT_ACTION"
+    TIMEOUT = "TIMEOUT"
+
+
+class Status(Enum):
+    NA = "NA"
+    PENDING = "PENDING"
+    FINISHED = "FINISHED"
+
+
 # structures and objects
 class Account:
     def __init__(self, query_result):
@@ -228,6 +244,49 @@ class AddLinksQuery:
         return json.dumps(self.to_dict())
 
 
+class CaptchaJob:
+    def __init__(self, qdict):
+        self.captcha_category = qdict['captchaCategory'] \
+            if 'captchaCategory' in qdict \
+            else None
+        self.created = qdict['created'] \
+            if 'created' in qdict \
+            else None
+        self.explain = qdict['explain'] \
+            if 'explain' in qdict \
+            else None
+        self.hoster = qdict['hoster'] \
+            if 'hoster' in qdict \
+            else None
+        self.captcha_id = qdict['id'] \
+            if 'id' in qdict \
+            else None
+        self.link = qdict['link'] \
+            if 'link' in qdict \
+            else None
+        self.timeout = qdict['timeout'] \
+            if 'timeout' in qdict \
+            else None
+        self.captcha_type = qdict['type'] \
+            if 'type' in qdict \
+            else None
+
+    def __repr__(self):
+        return f'<CaptchaJob ({self.captcha_id})>'
+
+    def to_dict(self):
+        return {
+            'captchaCategory': self.captcha_category,
+            'created': self.created,
+            'explain': self.explain,
+            'hoster': self.hoster,
+            'id': self.captcha_id,
+            'link': self.link,
+            'timeout': self.timeout,
+            'type': self.captcha_type,
+        }
+
+
 class CrawledLink:
     def __init__(self, qdict):
         self.availability = AvailableLinkState(qdict['availability']) \
@@ -274,7 +333,7 @@ class CrawledLink:
         return f'<CrawledLink ({self.uuid})>'
 
     def to_dict(self):
-        return {
+        result = {
             'availability': self.availability.value,
             'bytesTotal': self.bytes_total,
             'comment': self.comment,
@@ -283,12 +342,18 @@ class CrawledLink:
             'host': self.host,
             'name': self.name,
             'packageUUID': self.package_uuid,
-            'priority': self.priority.value,
             'url': self.url,
             'uuid': self.uuid,
-            'variant': self.variant.to_json(),
             'variants': self.variants,
         }
+
+        if self.priority:
+            result['priority'] = self.priority.value
+
+        if self.variant:
+            result['variant'] = self.variant.to_json()
+
+        return result
 
 
 class CrawledLinkQuery:
@@ -330,7 +395,7 @@ class CrawledLinkQuery:
             'packageUUIDs': self.package_uuids,
             'password': self.password,
             'priority': self.priority,
-            'startAt': self.startAt,
+            'startAt': self.start_at,
             'status': self.status,
             'url': self.url,
             'variantID': self.variant_id,
@@ -389,7 +454,7 @@ class CrawledPackage:
         return f'<CrawledPackage ({self.uuid})'
 
     def to_dict(self):
-        return {
+        result = {
             'bytesTotal': self.bytes_total,
             'childCount': self.child_count,
             'comment': self.comment,
@@ -399,12 +464,16 @@ class CrawledPackage:
             'name': self.name,
             'offlineCount': self.offline_count,
             'onlineCount': self.online_count,
-            'priority': self.priority.value,
             'saveTo': self.save_to,
             'tempUnknownCount': self.temp_unknown_count,
             'unknownCount': self.unkownCount,
             'uuid': self.uuid,
         }
+
+        if self.priority:
+            result['priority'] = self.priority.value
+
+        return result
 
 
 class CrawledPackageQuery:
@@ -497,6 +566,25 @@ class JobLinkCrawler:
         }
 
 
+class LinkCheckResult:
+    def __init__(self, qdict):
+        self.links = [LinkStatus(x) for x in qdict['links']] \
+            if 'links' in qdict \
+            else None
+        self.status = Status(qdict['status']) \
+            if 'status' in qdict \
+            else None
+
+    def __repr__(self):
+        return f'<LinkCheckResult>'
+
+    def to_dict(self):
+        return {
+            'links': [x.to_dict() for x in self.links],
+            'status': self.status.value,
+        }
+
+
 class LinkCollectingJob:
     def __init__(self, qdict):
         self.id = qdict['id'] \
@@ -525,6 +613,45 @@ class LinkCrawlerJobsQuery:
             'collectorInfo': self.collector_info,
             'jobIds': self.job_ids,
         }
+
+
+class LinkStatus:
+    def __init__(self, qdict):
+        self.host = qdict['host'] \
+            if 'host' in qdict \
+            else None
+        self.link_check_id = qdict['linkCheckID'] \
+            if 'linkCheckID' in qdict \
+            else None
+        self.name = qdict['name'] \
+            if 'name' in qdict \
+            else None
+        self.size = qdict['size'] \
+            if 'size' in qdict \
+            else None
+        self.status = AvailableLinkState(qdict['status']) \
+            if 'status' in qdict \
+            else None
+        self.url = qdict['url'] \
+            if 'url' in qdict \
+            else None
+
+    def __repr__(self):
+        return f'<LinkStatus ({self.link_check_id})>'
+
+    def to_dict(self):
+        result = {
+            'host': self.host,
+            'linkCheckID': self.link_check_id,
+            'name': self.name,
+            'size': self.size,
+            'url': self.url,
+        }
+
+        if self.status:
+            result['status'] = self.status.value
+
+        return result
 
 
 class LinkVariant:

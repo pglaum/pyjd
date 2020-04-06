@@ -1,6 +1,7 @@
 from pyjd import make_request
-from pyjd.jd_types import CrawledLink, CrawledPackage, JobLinkCrawler, \
-    LinkCollectingJob, LinkVariant
+from pyjd.jd_types import AddLinksQuery, CrawledLink, CrawledLinkQuery, \
+    CrawledPackage, CrawledPackageQuery, JobLinkCrawler, LinkCollectingJob, \
+    LinkCrawlerJobsQuery, LinkVariant
 
 endpoint = 'linkgrabberv2'
 
@@ -44,7 +45,7 @@ def add_container(container_type, content):
     return job
 
 
-def add_links(add_links_query):
+def add_links(add_links_query=AddLinksQuery()):
     """
     Add links to the linkcollector
 
@@ -240,7 +241,7 @@ def move_to_new_package(link_ids, package_ids, new_pkg_name, download_path):
     return resp
 
 
-def query_link_crawler_jobs(link_crawler_jobs_query):
+def query_link_crawler_jobs(link_crawler_jobs_query=LinkCrawlerJobsQuery()):
     """Query link crawler jobs.
 
     :param crawled_link_query: Query to filter by
@@ -260,7 +261,7 @@ def query_link_crawler_jobs(link_crawler_jobs_query):
     return crawler_jobs
 
 
-def query_links(crawled_link_query):
+def query_links(crawled_link_query=CrawledLinkQuery()):
     """Get the links in the linkcollector/linkgrabber
 
     :param params: A CrawledLinkQuery object with options.
@@ -281,7 +282,7 @@ def query_links(crawled_link_query):
     return crawled_links
 
 
-def query_packages(crawled_package_query):
+def query_packages(crawled_package_query=CrawledPackageQuery()):
     """Get the crawled packages in the linkgrabber
 
     :param params: A dictionary of parameters to pass.
