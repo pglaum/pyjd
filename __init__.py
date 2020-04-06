@@ -5,7 +5,7 @@ base_url = 'http://localhost:3128/'
 debugging = True
 
 
-def make_request(endpoint, params, method='GET'):
+def make_request(endpoint, params, binary=False, method='GET'):
     rurl = f'{base_url}{endpoint}'
 
     rparams = []
@@ -20,6 +20,9 @@ def make_request(endpoint, params, method='GET'):
     if debugging:
         print(rurl)
         print(rparams)
+
+    if binary:
+        return requests.get(rurl + rparams).content
 
     rstr = requests.get(rurl + rparams).content.decode()
     robj = json.loads(rstr)

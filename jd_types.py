@@ -653,6 +653,37 @@ class EnumOption:
         }
 
 
+class IconDescriptor:
+    def __init__(self, qdict):
+        self.icon_cls = qdict['cls'] \
+            if 'cls' in qdict \
+            else None
+        self.key = qdict['key'] \
+            if 'key' in qdict \
+            else None
+        self.prps = qdict['prps'] \
+            if 'prps' in qdict \
+            else None
+        self.rsc = [IconDescriptor(x) for x in qdict['rsc']] \
+            if 'rsc' in qdict \
+            else None
+
+    def __repr__(self):
+        return f'<IconDescriptor ({self.key})>'
+
+    def to_dict(self):
+        result = {
+            'cls': self.cls,
+            'key': self.key,
+            'prps': self.prps,
+        }
+
+        if self.rsc:
+            result['rsc'] = [x.to_dict() for x in self.rsc]
+
+        return result
+
+
 class JobLinkCrawler:
     def __init__(self, qdict):
         self.broken = qdict['broken'] \
