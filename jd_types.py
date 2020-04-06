@@ -69,6 +69,20 @@ class Priority(Enum):
     LOWEST = "LOWEST"
 
 
+class Reason(Enum):
+    CONNECTION_UNAVAILABLE = "CONNECTION_UNAVAILABLE"
+    TOO_MANY_RETRIES = "TOO_MANY_RETRIES"
+    CAPTCHA = "CAPTCHA"
+    MANUAL = "MANUAL"
+    DISK_FULL = "DISK_FULL"
+    NO_ACCOUNT = "NO_ACCOUNT"
+    INVALID_DESTINATION = "INVALID_DESTINATION"
+    FILE_EXISTS = "FILE_EXISTS"
+    UPDATE_RESTART_REQUIRED = "UPDATE_RESTART_REQUIRED"
+    FFMPEG_MISSING = "FFMPEG_MISSING"
+    FFPROBE_MISSING = "FFPROBE_MISSING"
+
+
 class SelectionType(Enum):
     SELECTED = "SELECTED"
     UNSELECTED = "UNSELECTED"
@@ -634,6 +648,105 @@ class CrawledPackageQuery:
         }
 
 
+class DownloadLink:
+    def __init__(self, qdict):
+        self.added_date = qdict['addedDate'] \
+            if 'addedDate' in qdict \
+            else None
+        self.bytes_loaded = qdict['bytesLoaded'] \
+            if 'bytesLoaded' in qdict \
+            else None
+        self.bytes_total = qdict['bytesTotal'] \
+            if 'bytesTotal' in qdict \
+            else None
+        self.comment = qdict['comment'] \
+            if 'comment' in qdict \
+            else None
+        self.download_password = qdict['downloadPassword'] \
+            if 'downloadPassword' in qdict \
+            else None
+        self.enabled = qdict['enabled'] \
+            if 'enabled' in qdict \
+            else None
+        self.eta = qdict['eta'] \
+            if 'eta' in qdict \
+            else None
+        self.extraction_status = qdict['extractionStatus'] \
+            if 'extractionStatus' in qdict \
+            else None
+        self.finished = qdict['finished'] \
+            if 'finished' in qdict \
+            else None
+        self.finished_date = qdict['finishedDate'] \
+            if 'finishedDate' in qdict \
+            else None
+        self.host = qdict['host'] \
+            if 'host' in qdict \
+            else None
+        self.name = qdict['name'] \
+            if 'name' in qdict \
+            else None
+        self.package_uuid = qdict['packageUUID'] \
+            if 'packageUUID' in qdict \
+            else None
+        self.priority = Priority(qdict['priority']) \
+            if 'priority' in qdict \
+            else None
+        self.running = qdict['running'] \
+            if 'running' in qdict \
+            else None
+        self.skipped = qdict['skipped'] \
+            if 'skipped' in qdict \
+            else None
+        self.speed = qdict['speed'] \
+            if 'speed' in qdict \
+            else None
+        self.status = qdict['status'] \
+            if 'status' in qdict \
+            else None
+        self.status_icon_key = qdict['statusIconKey'] \
+            if 'statusIconKey' in qdict \
+            else None
+        self.url = qdict['url'] \
+            if 'url' in qdict \
+            else None
+        self.uuid = qdict['uuid'] \
+            if 'uuid' in qdict \
+            else None
+
+    def __repr__(self):
+        return f'<DownloadLink ({self.uuid})>'
+
+    def to_dict(self):
+        result = {
+            'addedDate': self.added_date,
+            'bytesLoaded': self.bytes_loaded,
+            'bytesTotal': self.bytes_total,
+            'comment': self.comment,
+            'downloadPassword': self.download_password,
+            'enabled': self.enabled,
+            'eta': self.eta,
+            'extractionStatus': self.extraction_status,
+            'finished': self.finished,
+            'finishedDate': self.finished_date,
+            'host': self.host,
+            'name': self.name,
+            'packageUUID': self.package_uuid,
+            'running': self.running,
+            'skipped': self.skipped,
+            'speed': self.speed,
+            'status': self.status,
+            'statusIconKey': self.status_icon_key,
+            'url': self.url,
+            'uuid': self.uuid,
+        }
+
+        if self.priority:
+            result['priority'] = self.priority.value
+
+        return result
+
+
 class EnumOption:
     def __init__(self, qdict):
         self.label = qdict['label'] \
@@ -651,6 +764,93 @@ class EnumOption:
             'label': self.label,
             'name': self.name,
         }
+
+
+class FilePackage:
+    def __init__(self, qdict):
+        self.active_task = qdict['activeTask'] \
+            if 'activeTask' in qdict \
+            else None
+        self.bytes_loaded = qdict['bytesLoaded'] \
+            if 'bytesLoaded' in qdict \
+            else None
+        self.bytes_total = qdict['bytesTotal'] \
+            if 'bytesTotal' in qdict \
+            else None
+        self.child_count = qdict['childCount'] \
+            if 'childCount' in qdict \
+            else None
+        self.comment = qdict['comment'] \
+            if 'comment' in qdict \
+            else None
+        self.download_password = qdict['downloadPassword'] \
+            if 'downloadPassword' in qdict \
+            else None
+        self.enabled = qdict['enabled'] \
+            if 'enabled' in qdict \
+            else None
+        self.eta = qdict['eta'] \
+            if 'eta' in qdict \
+            else None
+        self.finished = qdict['finished'] \
+            if 'finished' in qdict \
+            else None
+        self.hosts = qdict['hosts'] \
+            if 'hosts' in qdict \
+            else None
+        self.name = qdict['name'] \
+            if 'name' in qdict \
+            else None
+        self.priority = Priority(qdict['priority']) \
+            if 'priority' in qdict \
+            else None
+        self.running = qdict['running'] \
+            if 'running' in qdict \
+            else None
+        self.save_to = qdict['saveTo'] \
+            if 'saveTo' in qdict \
+            else None
+        self.speed = qdict['speed'] \
+            if 'speed' in qdict \
+            else None
+        self.status = qdict['status'] \
+            if 'status' in qdict \
+            else None
+        self.status_icon_key = qdict['statusIconKey'] \
+            if 'statusIconKey' in qdict \
+            else None
+        self.uuid = qdict['uuid'] \
+            if 'uuid' in qdict \
+            else None
+
+    def __repr__(self):
+        return f'<FilePackage ({self.uuid})>'
+
+    def to_dict(self):
+        result = {
+            'activeTask': self.active_task,
+            'bytesLoaded': self.bytes_loaded,
+            'bytesTotal': self.bytes_total,
+            'childCount': self.child_count,
+            'comment': self.comment,
+            'downloadPassword': self.download_password,
+            'enabled': self.enabled,
+            'eta': self.eta,
+            'finished': self.finished,
+            'hosts': self.hosts,
+            'name': self.name,
+            'running': self.running,
+            'saveTo': self.save_to,
+            'speed': self.speed,
+            'status': self.status,
+            'statusIconKey': self.status_icon_key,
+            'uuid': self.uuid,
+        }
+
+        if self.priority:
+            result['priority'] = self.priority.value
+
+        return result
 
 
 class IconDescriptor:
@@ -776,6 +976,64 @@ class LinkCrawlerJobsQuery:
         }
 
 
+class LinkQuery:
+    def __init__(self, added_date=True, bytes_loaded=True, bytes_total=True,
+                 comment=True, enabled=True, eta=True,
+                 extraction_status=True, finished=True, finished_date=True,
+                 host=True, job_uuids=None, max_results=-1, package_uuids=None,
+                 password=True, priority=True, running=True, skipped=True,
+                 speed=True, start_at=0, status=True, url=True):
+        self.added_date = added_date
+        self.bytes_loaded = bytes_loaded
+        self.bytes_total = bytes_total
+        self.comment = comment
+        self.enabled = enabled
+        self.eta = eta
+        self.extraction_status = extraction_status
+        self.finished = finished
+        self.finished_date = finished_date
+        self.host = host
+        self.job_uuids = job_uuids
+        self.max_results = max_results
+        self.package_uuids = package_uuids
+        self.password = password
+        self.priority = priority
+        self.running = running
+        self.skipped = skipped
+        self.speed = speed
+        self.start_at = start_at
+        self.status = status
+        self.url = url
+
+    def __repr__(self):
+        return '<LinkQuery>'
+
+    def to_dict(self):
+        return {
+            'addedDate': self.added_date,
+            'bytesLoaded': self.bytes_loaded,
+            'bytesTotal': self.bytes_total,
+            'comment': self.comment,
+            'enabled': self.enabled,
+            'eta': self.eta,
+            'extractionStatus': self.extraction_status,
+            'finished': self.finished,
+            'finishedDate': self.finished_date,
+            'host': self.host,
+            'jobUUIDs': self.job_uuids,
+            'maxResults': self.max_results,
+            'packageUUIDs': self.package_uuids,
+            'password': self.password,
+            'priority': self.priority,
+            'running': self.running,
+            'skipped': self.skipped,
+            'speed': self.speed,
+            'startAt': self.start_at,
+            'status': self.status,
+            'url': self.url,
+        }
+
+
 class LinkStatus:
     def __init__(self, qdict):
         self.host = qdict['host'] \
@@ -861,4 +1119,51 @@ class LogFolder:
             'created': self.created,
             'current': self.current,
             'lastModified': self.last_modified,
+        }
+
+
+class PackageQuery:
+    def __init__(self, bytes_loaded=True, bytes_total=True, child_count=True,
+                 comment=True, enabled=True, eta=True, finished=True,
+                 hosts=True, max_results=-1, package_uuids=None, priority=True,
+                 running=True, save_to=True, speed=True, start_at=0,
+                 status=True):
+        self.bytes_loaded = bytes_loaded
+        self.bytes_total = bytes_total
+        self.child_count = child_count
+        self.comment = comment
+        self.enabled = enabled
+        self.eta = eta
+        self.finished = finished
+        self.hosts = hosts
+        self.max_results = max_results
+        self.package_uuids = package_uuids
+        self.priority = priority
+        self.running = running
+        self.save_to = save_to
+        self.speed = speed
+        self.start_at = start_at
+        self.status = status
+
+    def __repr__(self):
+        return '<PackageQuery>'
+
+    def to_dict(self):
+        return {
+            'bytesLoaded': self.bytes_loaded,
+            'bytesTotal': self.bytes_total,
+            'childCount': self.child_count,
+            'comment': self.comment,
+            'enabled': self.enabled,
+            'eta': self.eta,
+            'finished': self.finished,
+            'hosts': self.hosts,
+            'maxResults': self.max_results,
+            'packageUUIDs': self.package_uuids,
+            'priority': self.priority,
+            'running': self.running,
+            'saveTo': self.save_to,
+            'speed': self.speed,
+            'startAt': self.start_at,
+            'status': self.status,
         }
