@@ -3,6 +3,35 @@ import json
 
 
 # enums and constants
+class AbstractType(Enum):
+    BOOLEAN = "BOOLEAN"
+    INT = "INT"
+    LONG = "LONG"
+    STRING = "STRING"
+    OBJECT = "OBJECT"
+    OBJECT_LIST = "OBJECT_LIST"
+    STRING_LIST = "STRING_LIST"
+    ENUM = "ENUM"
+    BYTE = "BYTE"
+    CHAR = "CHAR"
+    DOUBLE = "DOUBLE"
+    FLOAT = "FLOAT"
+    SHORT = "SHORT"
+    BOOLEAN_LIST = "BOOLEAN_LIST"
+    BYTE_LIST = "BYTE_LIST"
+    SHORT_LIST = "SHORT_LIST"
+    LONG_LIST = "LONG_LIST"
+    INT_LIST = "INT_LIST"
+    FLOAT_LIST = "FLOAT_LIST"
+    ENUM_LIST = "ENUM_LIST"
+    DOUBLE_LIST = "DOUBLE_LIST"
+    CHAR_LIST = "CHAR_LIST"
+    UNKNOWN = "UNKNOWN"
+    HEX_COLOR = "HEX_COLOR"
+    HEX_COLOR_LIST = "HEX_COLOR_LIST"
+    ACTION = "ACTION"
+
+
 class Action(Enum):
     DELETE_ALL = "DELETE_ALL"
     DELETE_DISABLED = "DELETE_DISABLED"
@@ -151,6 +180,88 @@ class AccountQuery:
             'uuidlist': self.uuid_list,
             'valid': self.valid,
             'validUntil': self.valid_until,
+        }
+
+
+class AdvancedConfigAPIEntry:
+    def __init__(self, qdict):
+        self.abstract_type = AbstractType(qdict['abstractType']) \
+            if 'abstract_type' in qdict \
+            else None
+        self.default_value = qdict['defaultValue'] \
+            if 'defaultValue' in qdict \
+            else None
+        self.docs = qdict['docs'] \
+            if 'docs' in qdict \
+            else None
+        self.enum_label = qdict['enumLabel'] \
+            if 'enumLabel' in qdict \
+            else None
+        self.enum_options = qdict['enumOptions'] \
+            if 'enumOptions' in qdict \
+            else None
+        self.interface_name = qdict['interfaceName'] \
+            if 'interfaceName' in qdict \
+            else None
+        self.key = qdict['key'] \
+            if 'key' in qdict \
+            else None
+        self.storage = qdict['storage'] \
+            if 'storage' in qdict \
+            else None
+        self.config_type = qdict['type'] \
+            if 'type' in qdict \
+            else None
+        self.value = qdict['value'] \
+            if 'value' in qdict \
+            else None
+
+    def __repr__(self):
+        return f'<AdvancedConfigAPIEntry ({self.key})>'
+
+    def to_dict(self):
+        result = {
+            'defaultValue': self.default_value,
+            'docs': self.docs,
+            'enumLabel': self.enum_label,
+            'enumOptions': self.enum_options,
+            'interfaceName': self.interface_name,
+            'key': self.key,
+            'storage': self.storage,
+            'type': self.config_type,
+            'value': self.value,
+        }
+
+        if self.abstract_type:
+            result['abstractType'] = self.abstract_type.value
+
+        return result
+
+
+class AdvancedConfigQuery:
+    def __init__(self, config_interface=None, default_values=True,
+                 description=True, enum_info=True, include_extensions=True,
+                 pattern=None, values=True):
+        self.config_interface = config_interface
+        self.default_values = default_values
+        self.description = description
+        self.enum_info = enum_info
+        self.include_extensions = include_extensions
+        self.pattern = pattern
+        self.values = values
+
+    def __repr__(self):
+        return f'<AdvancedConfigQuery ({self.config_interface})>'
+
+    def to_dict(self):
+        return {
+            'configInterface': self.config_interface,
+            'defaultValues': self.default_values,
+            'description': self.description,
+            'enumInfo': self.enum_info,
+            'includeExtensions': self.include_extensions,
+            'pattern': self.pattern,
+            'values': self.values,
         }
 
 
@@ -520,6 +631,25 @@ class CrawledPackageQuery:
             'saveTo': self.save_to,
             'startAt': self.start_at,
             'status': self.status,
+        }
+
+
+class EnumOption:
+    def __init__(self, qdict):
+        self.label = qdict['label'] \
+            if 'label' in qdict \
+            else None
+        self.name = qdict['name'] \
+            if 'name' in qdict \
+            else None
+
+    def __repr__(self):
+        return f'<EnumOption ({self.name})>'
+
+    def to_dict(self):
+        return {
+            'label': self.label,
+            'name': self.name,
         }
 
 
