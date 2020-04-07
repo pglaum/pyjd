@@ -766,6 +766,71 @@ class EnumOption:
         }
 
 
+class Extension:
+    def __init__(self, qdict):
+        self.config_interface = qdict['configInterface'] \
+            if 'configInterface' in qdict \
+            else None
+        self.description = qdict['description'] \
+            if 'description' in qdict \
+            else None
+        self.enabled = qdict['enabled'] \
+            if 'enabled' in qdict \
+            else None
+        self.icon_key = qdict['iconKey'] \
+            if 'iconKey' in qdict \
+            else None
+        self.extension_id = qdict['id'] \
+            if 'id' in qdict \
+            else None
+        self.installed = qdict['installed'] \
+            if 'installed' in qdict \
+            else None
+        self.name = qdict['name'] \
+            if 'name' in qdict \
+            else None
+
+    def __repr__(self):
+        return f'<Extension ({self.extension_id})>'
+
+    def to_dict(self):
+        return {
+            'configInterface': self.config_interface,
+            'description': self.description,
+            'enabled': self.enabled,
+            'iconKey': self.icon_key,
+            'id': self.extension_id,
+            'installed': self.installed,
+            'name': self.name,
+        }
+
+
+class ExtensionQuery:
+    def __init__(self, config_interface=True, description=True, enabled=True,
+                 icon_key=True, installed=True, name=True, pattern=None):
+        self.config_interface = config_interface
+        self.description = description
+        self.enabled = enabled
+        self.icon_key = icon_key
+        self.installed = installed
+        self.name = name
+        self.pattern = pattern
+
+    def __repr__(self):
+        return '<ExtensionQuery>'
+
+    def to_dict(self):
+        return {
+            'configInterface': self.config_interface,
+            'description': self.description,
+            'enabled': self.enabled,
+            'iconKey': self.icon_key,
+            'installed': self.installed,
+            'name': self.name,
+            'pattern': self.pattern,
+        }
+
+
 class FilePackage:
     def __init__(self, qdict):
         self.active_task = qdict['activeTask'] \
