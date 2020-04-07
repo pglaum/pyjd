@@ -53,6 +53,17 @@ class BasicAuthType(Enum):
     HTTP = "HTTP"
 
 
+class Context(Enum):
+    LGC = "LGC"     # linkgrabber rightclick
+    DLC = "DLC"     # downloadlist rightclick
+
+
+class MenuType(Enum):
+    CONTAINER = "CONTAINER"
+    ACTION = "ACTION"
+    LINK = "LINK"
+
+
 class Mode(Enum):
     REMOVE_LINKS_AND_DELETE_FILES = "REMOVE_LINKS_AND_DELETE_FILES"
     REMOVE_LINKS_AND_RECYCLE_FILES = "REMOVE_LINKS_AND_RECYCLE_FILES"
@@ -1185,6 +1196,46 @@ class LogFolder:
             'current': self.current,
             'lastModified': self.last_modified,
         }
+
+
+class MenuStructure:
+    def __init__(self, qdict):
+        print('MenuStructure:')
+        print(qdict)
+
+        self.children = [MenuStructure(x) for x in qdict['children']] \
+            if 'children' in qdict \
+            else None
+        self.icon = qdict['icon'] \
+            if 'icon' in qdict \
+            else None
+        self.menu_id = qdict['id'] \
+            if 'id' in qdict \
+            else None
+        self.name = qdict['name'] \
+            if 'name' in qdict \
+            else None
+        self.menu_type = MenuType(qdict['type']) \
+            if 'type' in qdict \
+            else None
+
+    def __repr__(self):
+        return f'<MenuStructure ({self.menu_id})>'
+
+    def to_dict(self):
+        result =  {
+            'icon': self.icon,
+            'id': self.menu_id,
+            'name': self.name,
+        }
+
+        if self.children:
+            result['children'] = [x.to_dict() for x in self.children]
+
+        if self.menu_type:
+            result['type'] = self.menu_type.value
+
+        return result
 
 
 class PackageQuery:
