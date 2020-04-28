@@ -1,5 +1,6 @@
 import json
 import requests
+import traceback
 
 base_url = 'http://localhost:3128/'
 debugging = True
@@ -11,13 +12,13 @@ def make_request(endpoint, params, binary=False, method='GET'):
     rparams = []
     if params:
         for param in params:
-            if not isinstance(param, list):
-                rparams.append(json.dumps(param))
-            else:
-                rparams.append(param)
+            rparams.append(json.dumps(param))
     rparams = '?' + '&'.join(rparams)
 
     if debugging:
+        for line in traceback.format_stack():
+            print(line.strip())
+
         print(rurl)
         print(rparams)
 
