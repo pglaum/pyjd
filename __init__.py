@@ -34,3 +34,13 @@ def make_request(endpoint, params, binary=False, method='GET'):
         print()
 
     return robj
+
+
+def has_connection():
+    try:
+        requests.get(base_url + 'flash')
+        return True
+    except Exception:
+        pass
+
+    return False

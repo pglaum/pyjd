@@ -1223,7 +1223,7 @@ class MenuStructure:
         return f'<MenuStructure ({self.menu_id})>'
 
     def to_dict(self):
-        result =  {
+        result = {
             'icon': self.icon,
             'id': self.menu_id,
             'name': self.name,
@@ -1282,4 +1282,58 @@ class PackageQuery:
             'speed': self.speed,
             'startAt': self.start_at,
             'status': self.status,
+        }
+
+
+class PublisherResponse:
+    def __init__(self, qdict):
+        self.event_ids = qdict['eventids'] \
+            if 'eventids' in qdict \
+            else None
+        self.publisher = qdict['publisher'] \
+            if 'publisher' in qdict \
+            else None
+
+    def __repr__(self):
+        return f'<PublisherResponse ({self.publisher})>'
+
+    def to_dict(self):
+        return {
+            'eventids': self.event_ids,
+            'publisher': self.publisher,
+        }
+
+
+class SubscriptionResponse:
+    def __init__(self, qdict):
+        self.exclusions = qdict['exclusions'] \
+            if 'exclusions' in qdict \
+            else None
+        self.max_keep_alive = qdict['maxKeepalive'] \
+            if 'maxKeepalive' in qdict \
+            else None
+        self.max_poll_timeout = qdict['maxPolltimeout'] \
+            if 'maxPolltimeout' in qdict \
+            else None
+        self.subscribed = qdict['subscribed'] \
+            if 'subscribed' in qdict \
+            else None
+        self.subscription_id = qdict['subscriptionid'] \
+            if 'subscriptionid' in qdict \
+            else None
+        self.subscriptions = qdict['subscriptions'] \
+            if 'subscriptions' in qdict \
+            else None
+
+    def __repr__(self):
+        return f'<SubscriptionResponse ({self.subscription_id})>'
+
+    def to_dict(self):
+        return {
+            'exclusions': self.exclusions,
+            'maxKeepalive': self.max_keep_alive,
+            'maxPolltimeout': self.max_poll_timeout,
+            'subscribed': self.subscribed,
+            'subscriptionid': self.subscription_id,
+            'subscriptions': self.subscriptions,
         }
