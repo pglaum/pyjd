@@ -25,7 +25,7 @@ def get_default(interface_name, storage, key):
     return resp
 
 
-def list(pattern=None, returnDescription=True, returnValues=True,
+def list(pattern="", returnDescription=True, returnValues=True,
          returnDefaultValues=True, returnEnumInfo=True):
     """List all available config entries.
 
@@ -44,10 +44,8 @@ def list(pattern=None, returnDescription=True, returnValues=True,
     :rtype: List[AdvancedConfigAPIEntry]
     """
 
-    params = None
-    if pattern:
-        params = [pattern, returnDescription, returnValues,
-                  returnDefaultValues, returnEnumInfo]
+    params = [pattern, returnDescription, returnValues,
+              returnDefaultValues, returnEnumInfo]
     resp = action("/list", params)
 
     config_api_entries = []
