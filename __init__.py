@@ -3,7 +3,7 @@ import requests
 import traceback
 
 base_url = 'http://localhost:3128/'
-debugging = True
+debugging = 1
 
 
 def make_request(endpoint, params, binary=False, method='GET'):
@@ -15,7 +15,7 @@ def make_request(endpoint, params, binary=False, method='GET'):
             rparams.append(json.dumps(param))
     rparams = '?' + '&'.join(rparams)
 
-    if debugging:
+    if debugging > 1:
         for line in traceback.format_stack():
             print(line.strip())
 
@@ -29,7 +29,7 @@ def make_request(endpoint, params, binary=False, method='GET'):
     robj = json.loads(rstr)
     robj = robj['data']
 
-    if debugging:
+    if debugging > 0:
         print(rstr)
         print()
 
