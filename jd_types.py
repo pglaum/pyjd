@@ -211,7 +211,7 @@ class AccountQuery:
 class AdvancedConfigAPIEntry:
     def __init__(self, qdict):
         self.abstract_type = AbstractType(qdict['abstractType']) \
-            if 'abstract_type' in qdict \
+            if 'abstractType' in qdict \
             else None
         self.default_value = qdict['defaultValue'] \
             if 'defaultValue' in qdict \
@@ -1282,6 +1282,78 @@ class PackageQuery:
             'speed': self.speed,
             'startAt': self.start_at,
             'status': self.status,
+        }
+
+
+class Plugin:
+    def __init__(self, qdict):
+        self.abstract_type = AbstractType(qdict['abstract_type']) \
+            if 'abstract_type' in qdict else None
+        self.class_name = qdict['className'] \
+            if 'className' in qdict else None
+        self.default_value = qdict['defaultValue'] \
+            if 'defaultValue' in qdict else None
+        self.display_name = qdict['displayName'] \
+            if 'displayName' in qdict else None
+        self.docs = qdict['docs'] \
+            if 'docs' in qdict else None
+        self.enum_label = qdict['enumLabel'] \
+            if 'enumLabel' in qdict else None
+        self.enum_options = qdict['enumOptions'] \
+            if 'enumOptions' in qdict else None
+        self.interface_name = qdict['interfaceName'] \
+            if 'interfaceName' in qdict else None
+        self.key = qdict['key'] \
+            if 'key' in qdict else None
+        self.pattern = qdict['pattern'] \
+            if 'pattern' in qdict else None
+        self.storage = qdict['storage'] \
+            if 'storage' in qdict else None
+        self.plugin_type = qdict['type'] \
+            if 'type' in qdict else None
+        self.value = qdict['value'] \
+            if 'value' in qdict else None
+        self.version = qdict['version'] \
+            if 'version' in qdict else None
+
+    def __repr__(self):
+        return f'<Plugin ({self.class_name})>'
+
+    def to_dict(self):
+        result = {
+            'className': self.class_name,
+            'defaultValue': self.default_value,
+            'displayName': self.display_name,
+            'docs': self.docs,
+            'enumLabel': self.enum_label,
+            'enumOptions': self.enum_options,
+            'interfaceName': self.interface_name,
+            'key': self.key,
+            'pattern': self.pattern,
+            'storage': self.storage,
+            'type': self.plugin_type,
+            'value': self.value,
+            'version': self.version,
+        }
+
+        result['abstractType'] = self.abstract_type.value \
+            if self.abstract_type else None
+
+        return result
+
+
+class PluginsQuery:
+    def __init__(self, pattern="", version=None):
+        self.pattern = pattern
+        self.version = version
+
+    def __repr__(self):
+        return f'<PluginsQuery ({self.pattern})>'
+
+    def to_dict(self):
+        return {
+            'pattern': self.pattern,
+            'version': self.version,
         }
 
 
