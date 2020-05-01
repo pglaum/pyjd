@@ -134,7 +134,7 @@ def list_basic_auth():
     return basic_auths
 
 
-def list_premium_hoster(self):
+def list_premium_hoster():
     """List known premium hosters.
 
     :return: A list of all known premium hosters.
@@ -145,7 +145,7 @@ def list_premium_hoster(self):
     return resp
 
 
-def list_premium_hoster_urls(self):
+def list_premium_hoster_urls():
     """List known premium hosters with urls.
 
     :return: A map of all known premium hosters to urls.
