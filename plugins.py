@@ -31,7 +31,7 @@ def get_plugin_regex(url):
     """Get plugin regular expressions for a url."""
 
     params = [url]
-    resp = action('/getAllPluginRegex', params)
+    resp = action('/getPluginRegex', params)
 
     return resp
 

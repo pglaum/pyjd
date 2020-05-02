@@ -25,7 +25,7 @@ def get_file_icon(filename):
     return resp
 
 
-def getIcon(key, size):
+def get_icon(key, size):
     """Get an icon."""
 
     params = [key, size]
@@ -33,7 +33,7 @@ def getIcon(key, size):
     return resp
 
 
-def getIconDescription(key):
+def get_icon_description(key):
     """Get an icon description."""
 
     params = [key]
