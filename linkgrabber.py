@@ -126,7 +126,7 @@ def get_download_folder_history_selection_base():
     return resp
 
 
-def get_download_urls(link_ids, package_ids, url_display_types):
+def get_download_urls(link_ids, package_ids, url_display_types=['ORIGIN']):
     """Gets download urls from Linkgrabber.
 
     :param package_ids: Package UUIDs.
@@ -137,7 +137,7 @@ def get_download_urls(link_ids, package_ids, url_display_types):
     :type url_display_types: List
     """
 
-    params = [package_ids, link_ids, url_display_types]
+    params = [link_ids, package_ids, url_display_types]
     resp = action("/getDownloadUrls", params)
     return resp
 

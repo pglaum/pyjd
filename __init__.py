@@ -30,6 +30,7 @@ def make_request(endpoint, params, binary=False, method='GET'):
     robj = robj['data']
 
     if debugging > 0:
+        print(rurl + rparams)
         print(rstr)
         print()
 
