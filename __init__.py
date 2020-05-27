@@ -37,9 +37,9 @@ def make_request(endpoint, params, binary=False, method='GET'):
     return robj
 
 
-def has_connection():
+def test_connection():
     try:
-        requests.get(base_url + 'flash')
+        requests.get(base_url + 'jd/version')
         return True
     except Exception:
         pass
