@@ -40,8 +40,12 @@ def get_stop_mark():
 def get_stop_marked_link():
 
     resp = action("/getStopMarkedLink")
-    download_link = DownloadLink(resp)
-    return download_link
+
+    if resp:
+        download_link = DownloadLink(resp)
+        return download_link
+
+    return None
 
 
 def get_structure_change_counter(old_counter_value):

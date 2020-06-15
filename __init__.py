@@ -27,7 +27,9 @@ def make_request(endpoint, params, binary=False, method='GET'):
 
     rstr = requests.get(rurl + rparams).content.decode()
     robj = json.loads(rstr)
-    robj = robj['data']
+
+    if 'data' in robj:
+        robj = robj['data']
 
     if debugging > 0:
         print(rurl + rparams)
@@ -45,3 +47,8 @@ def test_connection():
         pass
 
     return False
+
+
+def version():
+    route = 'jd/version'
+    return make_request(route, None)

@@ -576,10 +576,10 @@ class CrawledPackage:
         self.save_to = qdict['saveTo'] \
             if 'saveTo' in qdict \
             else None
-        self.temp_unknown_count = qdict['tempUnkownCount'] \
-            if 'tempUnkownCount' in qdict \
+        self.temp_unknown_count = qdict['tempUnknownCount'] \
+            if 'tempUnknownCount' in qdict \
             else None
-        self.unkownCount = qdict['unknownCount'] \
+        self.unknownCount = qdict['unknownCount'] \
             if 'unknownCount' in qdict \
             else None
         self.uuid = qdict['uuid'] \
@@ -602,7 +602,7 @@ class CrawledPackage:
             'onlineCount': self.online_count,
             'saveTo': self.save_to,
             'tempUnknownCount': self.temp_unknown_count,
-            'unknownCount': self.unkownCount,
+            'unknownCount': self.unknownCount,
             'uuid': self.uuid,
         }
 
