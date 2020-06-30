@@ -1,5 +1,5 @@
-from pyjd import make_request
-from pyjd.jd_types import DownloadLink, FilePackage, LinkQuery, PackageQuery
+from .jd import make_request
+from .jd_types import DownloadLink, FilePackage, LinkQuery, PackageQuery
 
 endpoint = 'downloadsV2'
 

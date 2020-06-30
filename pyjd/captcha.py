@@ -1,5 +1,5 @@
-from pyjd import make_request
-from pyjd.jd_types import CaptchaJob, SkipRequest
+from .jd import make_request
+from .jd_types import CaptchaJob, SkipRequest
 
 endpoint = 'captcha'
 

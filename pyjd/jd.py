@@ -3,7 +3,7 @@ import requests
 import traceback
 
 base_url = 'http://localhost:3128/'
-debugging = 1
+debugging = 0
 
 
 def make_request(endpoint, params, binary=False, method='GET'):

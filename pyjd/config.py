@@ -1,5 +1,5 @@
-from pyjd import make_request
-from pyjd.jd_types import AdvancedConfigAPIEntry, EnumOption
+from .jd import make_request
+from .jd_types import AdvancedConfigAPIEntry, EnumOption
 
 endpoint = 'config'
 

@@ -1,5 +1,5 @@
-from pyjd import make_request
-from pyjd.jd_types import Account, AccountQuery, BasicAuth, BasicAuthType
+from .jd import make_request
+from .jd_types import Account, AccountQuery, BasicAuth, BasicAuthType
 
 endpoint = 'accountsV2'
 

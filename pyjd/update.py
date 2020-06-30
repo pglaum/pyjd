@@ -1,4 +1,4 @@
-from pyjd import make_request
+from .jd import make_request
 
 endpoint = 'update'
 

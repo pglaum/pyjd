@@ -380,6 +380,26 @@ class AddLinksQuery:
         return json.dumps(self.to_dict())
 
 
+class APIQuery:
+    def __init__(self, empty=False, for_null_key='', max_results=-1,
+            start_at=0):
+        self.empty = empty
+        self.for_null_key = for_null_key
+        self.max_results = max_results
+        self.start_at = start_at
+
+    def __repr__(self):
+        return '<APIQuery>'
+
+    def to_dict(self):
+        return {
+            'empty': self.empty,
+            'forNullKey': self.for_null_key,
+            'maxResults': self.max_results,
+            'startAt': self.start_at,
+        }
+
+
 class CaptchaJob:
     def __init__(self, qdict):
         self.captcha_category = qdict['captchaCategory'] \

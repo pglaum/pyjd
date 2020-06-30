@@ -1,5 +1,5 @@
-from pyjd import make_request
-from pyjd.jd_types import AddLinksQuery, CrawledLink, CrawledLinkQuery, \
+from .jd import make_request
+from .jd_types import AddLinksQuery, CrawledLink, CrawledLinkQuery, \
     CrawledPackage, CrawledPackageQuery, JobLinkCrawler, LinkCollectingJob, \
     LinkCrawlerJobsQuery, LinkVariant
 
