@@ -206,6 +206,13 @@ class Account:
 
 
 class AccountQuery:
+    """Query for premium host accounts.
+
+    The fields are booleans, that can be turned on or off, if you want to have
+    query for the information or not.
+    By default all possible data is queried.
+    """
+
     def __init__(self, enabled=True, error=True, max_results=-1, start_at=0,
                  traffic_left=True, traffic_max=True, username=True,
                  uuid_list=None, valid=True, valid_until=True):
@@ -411,6 +418,11 @@ class AddLinksQuery:
 
 
 class APIQuery:
+    """A standard api query.
+
+    Most endpoint use a specialized version.
+    """
+
     def __init__(self, empty=False, for_null_key='', max_results=-1,
             start_at=0):
         self.empty = empty
