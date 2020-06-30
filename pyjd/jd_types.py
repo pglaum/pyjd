@@ -4,6 +4,8 @@ import json
 
 # enums and constants
 class AbstractType(Enum):
+    """Abstract types that are used for config entries."""
+
     BOOLEAN = "BOOLEAN"
     INT = "INT"
     LONG = "LONG"
@@ -33,6 +35,8 @@ class AbstractType(Enum):
 
 
 class Action(Enum):
+    """Delete actions, that can be executed."""
+
     DELETE_ALL = "DELETE_ALL"
     DELETE_DISABLED = "DELETE_DISABLED"
     DELETE_FAILED = "DELETE_FAILED"
@@ -42,6 +46,8 @@ class Action(Enum):
 
 
 class AvailableLinkState(Enum):
+    """The availability of a link."""
+
     ONLINE = "ONLINE"
     OFFLINE = "OFFLINE"
     UNKNOWN = "UNKNOWN"
@@ -49,28 +55,38 @@ class AvailableLinkState(Enum):
 
 
 class BasicAuthType(Enum):
+    """Types of basic auth protocols."""
+
     FTP = "FTP"
     HTTP = "HTTP"
 
 
 class Context(Enum):
+    """Contextmenu selection."""
+
     LGC = "LGC"     # linkgrabber rightclick
     DLC = "DLC"     # downloadlist rightclick
 
 
 class MenuType(Enum):
+    """Menu types"""
+
     CONTAINER = "CONTAINER"
     ACTION = "ACTION"
     LINK = "LINK"
 
 
 class Mode(Enum):
+    """Modes for package deletion."""
+
     REMOVE_LINKS_AND_DELETE_FILES = "REMOVE_LINKS_AND_DELETE_FILES"
     REMOVE_LINKS_AND_RECYCLE_FILES = "REMOVE_LINKS_AND_RECYCLE_FILES"
     REMOVE_LINKS_ONLY = "REMOVE_LINKS_ONLY"
 
 
 class Priority(Enum):
+    """Download priority for packages."""
+
     HIGHEST = "HIGHEST"
     HIGHER = "HIGHER"
     HIGH = "HIGH"
@@ -81,6 +97,8 @@ class Priority(Enum):
 
 
 class Reason(Enum):
+    """Reasons for exceptions."""
+
     CONNECTION_UNAVAILABLE = "CONNECTION_UNAVAILABLE"
     TOO_MANY_RETRIES = "TOO_MANY_RETRIES"
     CAPTCHA = "CAPTCHA"
@@ -95,6 +113,8 @@ class Reason(Enum):
 
 
 class SelectionType(Enum):
+    """Types for selection"""
+
     SELECTED = "SELECTED"
     UNSELECTED = "UNSELECTED"
     ALL = "ALL"
@@ -102,6 +122,8 @@ class SelectionType(Enum):
 
 
 class SkipRequest(Enum):
+    """Captcha skip request"""
+
     SINGLE = "SINGLE"
     BLOCK_HOSTER = "BLOCK_HOSTER"
     BLOCK_ALL_CAPTCHAS = "BLOCK_ALL_CAPTCHAS"
@@ -112,6 +134,8 @@ class SkipRequest(Enum):
 
 
 class Status(Enum):
+    """Status"""
+
     NA = "NA"
     PENDING = "PENDING"
     FINISHED = "FINISHED"
@@ -119,7 +143,13 @@ class Status(Enum):
 
 # structures and objects
 class Account:
+    """This is a premium hoster account
+
+    Initializes itself from a query result (dict)
+    """
+
     def __init__(self, query_result):
+
         self.enabled = query_result['enabled'] \
             if 'enabled' in query_result \
             else None

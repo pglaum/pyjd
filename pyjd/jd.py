@@ -6,7 +6,19 @@ base_url = 'http://localhost:3128/'
 debugging = 0
 
 
-def make_request(endpoint, params, binary=False, method='GET'):
+def make_request(endpoint: str, params: str, binary: bool=False) -> any:
+    """Makes a request to the JDownloader.
+
+    :param endpoint: The url endpoint (exluding base_url) that is called.
+    :type endpoint: str
+    :param params: Parameters that are to be added
+    :type params: list, dict or str
+    :param binary: If the request expects a binary answer
+    :type binary: bool
+    :returns: The result of the request
+    :rtype: binary, dict, or string
+    """
+
     rurl = f'{base_url}{endpoint}'
 
     rparams = []
@@ -39,7 +51,16 @@ def make_request(endpoint, params, binary=False, method='GET'):
     return robj
 
 
-def test_connection():
+def test_connection() -> bool:
+    """Checks if the JDownloader is reachable.
+
+    This makes a dummy-request to the JDownloader and returns, if it was
+    successful
+
+    :returns: Connection status
+    :rtype: bool
+    """
+
     try:
         requests.get(base_url + 'jd/version')
         return True
@@ -49,6 +70,12 @@ def test_connection():
     return False
 
 
-def version():
+def version() -> str:
+    """Returns the version of the connected JDownloader.
+
+    :returns: JDownloader version
+    :rtype: str
+    """
+
     route = 'jd/version'
     return make_request(route, None)
