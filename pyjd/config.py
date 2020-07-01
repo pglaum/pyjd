@@ -1,32 +1,58 @@
 from .jd import make_request
-from .jd_types import AdvancedConfigAPIEntry, EnumOption
+from .jd_types import AdvancedConfigAPIEntry, AdvancedConfigQuery, EnumOption
+from typing import List
 
 endpoint = 'config'
 
 
-def action(route, params=None):
+def action(route: str, params: any = None) -> any:
     route = f'{endpoint}{route}'
     return make_request(route, params)
 
 
-def get(interface_name, storage, key):
-    """Get value from interface by key."""
+def get(interface_name: str, storage: str, key: str) -> any:
+    """Get value from interface by key.
+
+    :param interface_name: The name of the JDownloader interface
+    :type interface_name: str
+    :param storage: The storage for the config entry.
+        (None, for normal settings, or the extensions name for extension
+        settings)
+    :type storage: str
+    :param key: The key of the config entry
+    :type key: str
+    :returns: The value of the config entry
+    :rtype: any
+    """
 
     params = [interface_name, storage, key]
     resp = action("/get", params)
     return resp
 
 
-def get_default(interface_name, storage, key):
-    """Get default value from interface by key."""
+def get_default(interface_name: str, storage: str, key: str) -> any:
+    """Get default value from interface by key.
+
+    :param interface_name: The name of the JDownloader interface
+    :type interface_name: str
+    :param storage: The storage for the config entry.
+        (None, for normal settings, or the extensions name for extension
+        settings)
+    :type storage: str
+    :param key: The key of the config entry
+    :type key: str
+    :returns: The default value of the config entry
+    :rtype: any
+    """
 
     params = [interface_name, storage, key]
     resp = action("/getDefault", params)
     return resp
 
 
-def list(pattern="", returnDescription=True, returnValues=True,
-         returnDefaultValues=True, returnEnumInfo=True):
+def list(pattern: str = "", returnDescription: bool = True,
+        returnValues: bool = True, returnDefaultValues: bool = True,
+        returnEnumInfo: bool = True) -> List[AdvancedConfigAPIEntry]:
     """List all available config entries.
 
     :param pattern: A regex pattern to query by. If no pattern is given, all
@@ -56,16 +82,38 @@ def list(pattern="", returnDescription=True, returnValues=True,
     return config_api_entries
 
 
-def list_enum(enum_type):
-    """List all possible enum values."""
+def list_enum(enum_type: str) -> List[EnumOption]:
+    """List all possible enum values for the type.
+
+    The enum_type is the AdvancedConfigAPIEntry.config_type for an Enum.
+    (e.g.: 'org.jdownloader.settings.DelayWriteMode')
+
+    :param enum_type: The enum type
+    :type enum_type: str
+    :returns: A list of possible options for the enum_type
+    :rtype: List[EnumOption]
+    """
 
     params = [enum_type]
     resp = action("/listEnum", params)
-    return resp
+
+    enum_options = []
+    for entry in resp:
+        enum_option = EnumOption(entry)
+        enum_options.append(enum_option)
+
+    return enum_options
 
 
-def query(advanced_config_query):
-    """Query config entries."""
+def query(advanced_config_query: AdvancedConfigQuery = AdvancedConfigQuery()
+        ) -> List[AdvancedConfigAPIEntry]:
+    """Query config entries with an :class:`AdvancedConfigQuery`.
+
+    :param advanced_config_query: The query options
+    :type advanced_config_query: AdvancedConfigQuery
+    :returns: A list of config entries
+    :rtype: List[AdvancedConfigAPIEntry]
+    """
 
     params = [advanced_config_query.to_dict()]
     resp = action("/query", params=params)
@@ -78,16 +126,43 @@ def query(advanced_config_query):
     return config_api_entries
 
 
-def reset(interface_name, storage, key):
-    """Reset a config entry."""
+def reset(interface_name: str, storage: str, key: str) -> bool:
+    """Reset a config entry.
+
+    :param interface_name: The name of the JDownloader interface
+    :type interface_name: str
+    :param storage: The storage for the config entry.
+        (None, for normal settings, or the extensions name for extension
+        settings)
+    :type storage: str
+    :param key: The key of the config entry
+    :type key: str
+    :returns: Success
+    :rtype: bool
+    """
 
     params = [interface_name, storage, key]
     resp = action("/reset", params)
     return resp
 
 
-def set(interface_name, storage, key, value):
-    """Set a config entry."""
+def set(interface_name: str, storage: str, key: str, value: str) -> bool:
+    """Set a config entry.
+
+    :param interface_name: The name of the JDownloader interface
+    :type interface_name: str
+    :param storage: The storage for the config entry.
+        (None, for normal settings, or the extensions name for extension
+        settings)
+    :type storage: str
+    :param key: The key of the config entry
+    :type key: str
+    :param value: The new value for the config. Integers, booleans, etc.
+        should be converted to strings.
+    :type value: str
+    :returns: Success
+    :rtype: bool
+    """
 
     params = [interface_name, storage, key, value]
     resp = action("/set", params)

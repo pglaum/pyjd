@@ -1,15 +1,16 @@
 from .jd import make_request
 from .jd_types import CaptchaJob, SkipRequest
+from typing import List
 
 endpoint = 'captcha'
 
 
-def action(route, params=None):
+def action(route: str, params: any=None, binary: bool=False) -> any:
     route = f'{endpoint}{route}'
-    return make_request(route, params)
+    return make_request(route, params, binary=binary)
 
 
-def get(captcha_id, format=None):
+def get(captcha_id: int, c_format: str = None) -> str:
     """Get the base64 captcha image.
 
     The result is a captcha image as base64 encoded data url.
@@ -23,13 +24,13 @@ def get(captcha_id, format=None):
     """
 
     params = [captcha_id]
-    if format:
-        params.append(format)
-    resp = action("/get", params)
+    if c_format:
+        params.append(c_format)
+    resp = action("/get", params, binary=True)
     return resp
 
 
-def get_captcha_job(job_id):
+def get_captcha_job(job_id: int) -> CaptchaJob:
     """Get a captcha job for `job_id`
 
     :param job_id: ID of the job
@@ -44,7 +45,7 @@ def get_captcha_job(job_id):
     return captcha_job
 
 
-def list():
+def list() -> List[CaptchaJob]:
     """Get the waiting captchas
 
     :return: Returns a list of all available captcha jobs
@@ -60,7 +61,8 @@ def list():
     return captcha_jobs
 
 
-def skip(captcha_id, skip_type=SkipRequest.SINGLE):
+def skip(captcha_id: int,
+        skip_type: SkipRequest = SkipRequest.SINGLE) -> bool:
     """Skip a captcha with a SkipRequest type
 
     :param captcha_id: ID of the captcha to skip
@@ -76,7 +78,7 @@ def skip(captcha_id, skip_type=SkipRequest.SINGLE):
     return resp
 
 
-def solve(captcha_id, result, result_format=None):
+def solve(captcha_id: int, result: str, result_format: str = None) -> bool:
     """Solve a captcha.
 
     :param captcha_id: The ID of the captcha that is solved.
