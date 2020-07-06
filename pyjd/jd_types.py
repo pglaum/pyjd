@@ -1011,7 +1011,7 @@ class IconDescriptor:
 
     def to_dict(self):
         result = {
-            'cls': self.cls,
+            'cls': self.icon_cls,
             'key': self.key,
             'prps': self.prps,
         }
