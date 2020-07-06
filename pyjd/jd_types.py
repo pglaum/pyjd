@@ -1,8 +1,19 @@
+"""
+These are the types and constants that are defined in JDownloader.
+
+For more information, see here:
+    https://my.jdownloader.org/developers/index.html#tag_342
+"""
+
 from enum import Enum
+from typing import List
 import json
 
 
+#
 # enums and constants
+#
+
 class AbstractType(Enum):
     """Abstract types that are used for config entries."""
 
@@ -141,14 +152,17 @@ class Status(Enum):
     FINISHED = "FINISHED"
 
 
+#
 # structures and objects
+#
+
 class Account:
     """This is a premium hoster account
 
     Initializes itself from a query result (dict)
     """
 
-    def __init__(self, query_result):
+    def __init__(self, query_result: dict) -> None:
 
         self.enabled = query_result['enabled'] \
             if 'enabled' in query_result \
@@ -181,10 +195,10 @@ class Account:
             if 'validUntil' in query_result \
             else None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<Account ({self.uuid})>'
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'enabled': self.enabled,
             'errorString': self.error_string,
@@ -198,7 +212,7 @@ class Account:
             'validUntil': self.valid_until,
         }
 
-    def to_json(self, pretty=False):
+    def to_json(self, pretty: bool = False) -> str:
         if pretty:
             return json.dumps(self.to_dict(), indent=2)
 
@@ -213,9 +227,11 @@ class AccountQuery:
     By default all possible data is queried.
     """
 
-    def __init__(self, enabled=True, error=True, max_results=-1, start_at=0,
-                 traffic_left=True, traffic_max=True, username=True,
-                 uuid_list=None, valid=True, valid_until=True):
+    def __init__(self, enabled: bool = True, error: bool = True,
+                 max_results: int = -1, start_at: int = 0,
+                 traffic_left: bool = True, traffic_max: bool = True,
+                 username: bool = True, uuid_list: List[int] = None,
+                 valid: bool = True, valid_until: bool = True) -> None:
         self.enabled = enabled
         self.error = error
         self.max_results = max_results

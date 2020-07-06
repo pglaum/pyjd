@@ -1,3 +1,4 @@
+from typing import Any
 import json
 import requests
 import traceback
@@ -6,7 +7,7 @@ base_url = 'http://localhost:3128/'
 debugging = 0
 
 
-def make_request(endpoint: str, params: str, binary: bool=False) -> any:
+def make_request(endpoint: str, params: Any, binary: bool = False) -> Any:
     """Makes a request to the JDownloader.
 
     :param endpoint: The url endpoint (exluding base_url) that is called.

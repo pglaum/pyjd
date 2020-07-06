@@ -1,15 +1,16 @@
 from .jd import make_request
 from .jd_types import Extension, ExtensionQuery
+from typing import List
 
 endpoint = 'extensions'
 
 
-def action(route, params=None):
+def action(route: str, params: any = None) -> any:
     route = f'{endpoint}{route}'
     return make_request(route, params)
 
 
-def install(extension_id):
+def install(extension_id: str) -> bool:
     """Install the extension with extension_id.
 
     :param extension_id: The ID of the extension
@@ -23,7 +24,7 @@ def install(extension_id):
     return resp
 
 
-def is_enabled(extension_id):
+def is_enabled(extension_id: str) -> bool:
     """Check if the extension of extension_id is enabled.
 
     :param extension_id: ID of the extension
@@ -37,7 +38,7 @@ def is_enabled(extension_id):
     return resp
 
 
-def is_installed(extension_id):
+def is_installed(extension_id: str) -> bool:
     """Check if the extension of extension_id is installed.
 
     :param extension_id: ID of the extension
@@ -51,7 +52,7 @@ def is_installed(extension_id):
     return resp
 
 
-def list(query=ExtensionQuery()):
+def list(query: ExtensionQuery = ExtensionQuery()) -> List[Extension]:
     """List all extensions.
 
     :param query: A query to filter by (default: all)
@@ -71,7 +72,7 @@ def list(query=ExtensionQuery()):
     return extensions
 
 
-def set_enabled(extension_id, enabled):
+def set_enabled(extension_id: str, enabled: bool) -> bool:
     """Enable/Disable an extensions.
 
     :param extension_id: ID of the extension
