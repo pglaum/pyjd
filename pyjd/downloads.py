@@ -1,36 +1,37 @@
 from .jd import make_request
-from .jd_types import Action, DownloadLink, FilePackage, LinkQuery, Mode, \
+from .jd_types import DeleteAction, DownloadLink, FilePackage, LinkQuery, Mode, \
         PackageQuery, Priority, Reason, SelectionType
-from typing import Dict, List
+from typing import Any, Dict, List, Optional
 
 endpoint = 'downloadsV2'
 
 
-def action(route: str, params:any = None) -> any:
+def action(route: str, params: Any = None) -> Any:
     route = f'{endpoint}{route}'
     return make_request(route, params)
 
 
 # TODO: test functionality
-def cleanup(link_ids: List[int], package_ids: List[int], action: Action,
-        mode: Mode, selection_type: SelectionType) -> any:
+def cleanup(link_ids: List[int], package_ids: List[int],
+        delete_action: DeleteAction, mode: Mode,
+        selection_type: SelectionType) -> Any:
     """Cleanup the link_ids & package_ids in the download list.
 
     :param link_ids: Link IDs that are used
     :type link_ids: List[int]
     :param package_ids: Package IDs that are used
     :type package_ids: List[int]
-    :param action: The class:`jd_types.Action` that will be performed
-    :type action: Action
+    :param action: The class:`jd_types.DeleteAction` that will be performed
+    :type action: DeleteAction
     :param mode: The class:`jd_types.Mode` that is used
     :type mode: Mode
     :type selection_type: The class:`jd_types.SelectionType` that is applied
     :type selection_type: SelectionType
     :returns: resp
-    :rtype: any
+    :rtype: Any
     """
 
-    params = [link_ids, package_ids, action.value, mode.value,
+    params = [link_ids, package_ids, delete_action.value, mode.value,
               selection_type.value]
     resp = action("/cleanup", params)
     return resp
@@ -85,7 +86,7 @@ def get_stop_mark() -> int:
     return resp
 
 
-def get_stop_marked_link() -> DownloadLink:
+def get_stop_marked_link() -> Optional[DownloadLink]:
     """Get the :class:`DownloadLink` object for the stopmark.
 
     :returns: Download link for stop mark, or None
@@ -118,7 +119,7 @@ def get_structure_change_counter(old_counter_value: int) -> int:
 
 # TODO: test functionality
 def move_links(link_ids: List[int], after_link_id: int,
-        dest_package_id: int) -> any:
+        dest_package_id: int) -> Any:
     """Move links to a package.
 
     :param link_ids: Link IDs that are used
@@ -128,7 +129,7 @@ def move_links(link_ids: List[int], after_link_id: int,
     :param dest_package_id: The ID of the destination package
     :type dest_package_id: int
     :returns: resp
-    :rtype: any
+    :rtype: Any
     """
 
     params = [link_ids, after_link_id, dest_package_id]
@@ -145,7 +146,7 @@ def move_packages(package_ids, after_dest_package_id):
     :param after_dest_package_id: ?
     :type after_dest_package_id: int
     :returns: resp
-    :rtype: any
+    :rtype: Any
     """
 
     params = [package_ids, after_dest_package_id]
@@ -155,7 +156,7 @@ def move_packages(package_ids, after_dest_package_id):
 
 # TODO: test functionality
 def move_to_new_package(link_ids: List[int], pkg_ids: List[int],
-        new_pkg_name: str, download_path: str) -> any:
+        new_pkg_name: str, download_path: str) -> Any:
     """Move link_ids and pkg_ids to a new package
 
     :param link_ids: Link IDs that are used
@@ -167,7 +168,7 @@ def move_to_new_package(link_ids: List[int], pkg_ids: List[int],
     :param download_path: Download path for the new package
     :type download_path: str
     :returns: resp
-    :rtype: any
+    :rtype: Any
     """
 
     params = [link_ids, pkg_ids, new_pkg_name, download_path]
@@ -207,7 +208,7 @@ def query_links(query_params: LinkQuery = LinkQuery()) -> List[DownloadLink]:
 
 
 def query_packages(query_params: PackageQuery = PackageQuery()
-        ) -> [FilePackage]:
+        ) -> List[FilePackage]:
     """Query the packages in the download list.
 
     :param query_params: The parameters for the query

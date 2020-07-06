@@ -22,11 +22,11 @@ def make_request(endpoint: str, params: Any, binary: bool = False) -> Any:
 
     rurl = f'{base_url}{endpoint}'
 
-    rparams = []
+    param_list = []
     if params:
         for param in params:
-            rparams.append(json.dumps(param))
-    rparams = '?' + '&'.join(rparams)
+            param_list.append(json.dumps(param))
+    rparams = '?' + '&'.join(param_list)
 
     if debugging > 1:
         for line in traceback.format_stack():

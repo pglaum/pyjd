@@ -1,11 +1,11 @@
 from .jd import make_request
 from .jd_types import Account, AccountQuery, BasicAuth, BasicAuthType
-from typing import Dict, List
+from typing import Any, Dict, List
 
 endpoint = 'accountsV2'
 
 
-def action(route: str, params: any=None) -> any:
+def action(route: str, params: Any = None) -> Any:
     route = f'{endpoint}{route}'
     return make_request(route, params)
 

@@ -1,10 +1,11 @@
 from .jd import make_request
 from .jd_types import IconDescriptor
+from typing import Any
 
 endpoint = 'contentV2'
 
 
-def action(route: str, params: any = None, binary: bool = False) -> any:
+def action(route: str, params: Any = None, binary: bool = False) -> Any:
     route = f'{endpoint}{route}'
     return make_request(route, params, binary=binary)
 
@@ -53,7 +54,7 @@ def get_icon(key: str, size: int) -> bytes:
     return resp
 
 
-def get_icon_description(key: str) -> str:
+def get_icon_description(key: str) -> IconDescriptor:
     """Get an icon description.
 
     :param key: The icon key

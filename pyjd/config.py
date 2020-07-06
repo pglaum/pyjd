@@ -1,16 +1,16 @@
 from .jd import make_request
 from .jd_types import AdvancedConfigAPIEntry, AdvancedConfigQuery, EnumOption
-from typing import List
+from typing import Any, List
 
 endpoint = 'config'
 
 
-def action(route: str, params: any = None) -> any:
+def action(route: str, params: Any = None) -> Any:
     route = f'{endpoint}{route}'
     return make_request(route, params)
 
 
-def get(interface_name: str, storage: str, key: str) -> any:
+def get(interface_name: str, storage: str, key: str) -> Any:
     """Get value from interface by key.
 
     :param interface_name: The name of the JDownloader interface
@@ -22,7 +22,7 @@ def get(interface_name: str, storage: str, key: str) -> any:
     :param key: The key of the config entry
     :type key: str
     :returns: The value of the config entry
-    :rtype: any
+    :rtype: Any
     """
 
     params = [interface_name, storage, key]
@@ -30,7 +30,7 @@ def get(interface_name: str, storage: str, key: str) -> any:
     return resp
 
 
-def get_default(interface_name: str, storage: str, key: str) -> any:
+def get_default(interface_name: str, storage: str, key: str) -> Any:
     """Get default value from interface by key.
 
     :param interface_name: The name of the JDownloader interface
@@ -42,7 +42,7 @@ def get_default(interface_name: str, storage: str, key: str) -> any:
     :param key: The key of the config entry
     :type key: str
     :returns: The default value of the config entry
-    :rtype: any
+    :rtype: Any
     """
 
     params = [interface_name, storage, key]

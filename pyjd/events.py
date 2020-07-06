@@ -31,12 +31,12 @@ The workflow for using events is this:
 
 from .jd import make_request
 from .jd_types import SubscriptionResponse, PublisherResponse
-from typing import List
+from typing import Any, List
 
 endpoint = 'events'
 
 
-def action(route: str, params: any=None) -> any:
+def action(route: str, params: Any = None) -> Any:
     route = f'{endpoint}{route}'
     return make_request(route, params)
 

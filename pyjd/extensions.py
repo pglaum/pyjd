@@ -1,11 +1,11 @@
 from .jd import make_request
 from .jd_types import Extension, ExtensionQuery
-from typing import List
+from typing import Any, List
 
 endpoint = 'extensions'
 
 
-def action(route: str, params: any = None) -> any:
+def action(route: str, params: Any = None) -> Any:
     route = f'{endpoint}{route}'
     return make_request(route, params)
 
@@ -62,7 +62,7 @@ def list(query: ExtensionQuery = ExtensionQuery()) -> List[Extension]:
     """
 
     params = [query.to_dict()]
-    resp = action("/list", params)
+    resp = list(action("/list", params))
 
     extensions = []
     for ext in resp:

@@ -86,8 +86,8 @@ def cleanup(action,
     :type package_ids: List[int]
     :param link_ids: Link UUIDs.
     :type link_ids: List[int]
-    :param action: Action to be done on cleanup.
-    :type action: jd_types.Action
+    :param action: DeleteAction to be done on cleanup.
+    :type action: jd_types.DeleteAction
     :param mode: Mode to use.
     :type mode: jd_types.Mode
     :param selection_type: Type of selection to use.

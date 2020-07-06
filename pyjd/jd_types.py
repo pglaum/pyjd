@@ -45,8 +45,11 @@ class AbstractType(Enum):
     ACTION = "ACTION"
 
 
-class Action(Enum):
-    """Delete actions, that can be executed."""
+class DeleteAction(Enum):
+    """Delete actions, that can be executed.
+
+    This corresponds to the "Action" enum of JDownloader.
+    """
 
     DELETE_ALL = "DELETE_ALL"
     DELETE_DISABLED = "DELETE_DISABLED"
