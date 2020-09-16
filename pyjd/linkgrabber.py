@@ -1,17 +1,18 @@
 from .jd import make_request
 from .jd_types import AddLinksQuery, CrawledLink, CrawledLinkQuery, \
-    CrawledPackage, CrawledPackageQuery, JobLinkCrawler, LinkCollectingJob, \
-    LinkCrawlerJobsQuery, LinkVariant
+    CrawledPackage, CrawledPackageQuery, DeleteAction, JobLinkCrawler, \
+    LinkCollectingJob, LinkCrawlerJobsQuery, LinkVariant
+from typing import Any
 
 endpoint = 'linkgrabberv2'
 
 
-def action(route, params=None):
+def action(route: str, params: Any = None) -> Any:
     route = f'{endpoint}{route}'
     return make_request(route, params)
 
 
-def abort(job_id=None):
+def abort(job_id:int = None) -> bool:
     """Abort one or all jobs.
 
     :param job_id: If this is given, only the job `job_id` will be aborted.
@@ -28,7 +29,7 @@ def abort(job_id=None):
     return resp
 
 
-def add_container(container_type, content):
+def add_container(container_type: str, content: str) -> LinkCollectingJob:
     """Add a container of type and content.
 
     :param container_type: The type of the container
@@ -45,7 +46,8 @@ def add_container(container_type, content):
     return job
 
 
-def add_links(add_links_query=AddLinksQuery()):
+def add_links(add_links_query: AddLinksQuery = AddLinksQuery()
+        ) -> LinkCollectingJob:
     """
     Add links to the linkcollector
 
@@ -61,10 +63,10 @@ def add_links(add_links_query=AddLinksQuery()):
     return job
 
 
-def add_variant_copy(link_id,
-                     destination_after_link_id,
-                     destination_package_id,
-                     variant_id):
+def add_variant_copy(link_id: int,
+        destination_after_link_id: int,
+        destination_package_id: int,
+        variant_id: int) -> Any:
     """Unkown."""
 
     params = [link_id, destination_after_link_id, destination_package_id,
@@ -73,7 +75,7 @@ def add_variant_copy(link_id,
     return resp
 
 
-def cleanup(action,
+def cleanup(delete_action: DeleteAction,
             mode,
             selection_type,
             link_ids=[],
@@ -95,7 +97,7 @@ def cleanup(action,
     """
 
     params = [link_ids, package_ids]
-    params += [action.value, mode.value, selection_type.value]
+    params += [delete_action.value, mode.value, selection_type.value]
     resp = action("/cleanup", params)
     return resp
 
@@ -103,7 +105,7 @@ def cleanup(action,
 def clear_list():
     """Clears Linkgrabbers list."""
 
-    resp = action("/clearList", http_action="POST")
+    resp = action("/clearList")
     return resp
 
 

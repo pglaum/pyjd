@@ -52,7 +52,7 @@ def is_installed(extension_id: str) -> bool:
     return resp
 
 
-def list(query: ExtensionQuery = ExtensionQuery()) -> List[Extension]:
+def list_extensions(query: ExtensionQuery = ExtensionQuery()) -> List[Extension]:
     """List all extensions.
 
     :param query: A query to filter by (default: all)
