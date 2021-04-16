@@ -280,15 +280,14 @@ class MyJDConnector:
         Use ``update_devices()`` to update the device list.
         Each device in the list is a dictionary, like in this example:
 
-        .. codeblock :: json
+        .. code-block :: json
 
             [
                 {
                     "name": "Device",
                     "id": "af9d03a21ddb917492dc1af8a6427f11",
                     "type": "jd"
-                },
-                ...
+                }
             ]
 
         :returns: List of devices

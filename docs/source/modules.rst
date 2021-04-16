@@ -5,3 +5,4 @@ pyjd
    :maxdepth: 4
 
    pyjd
+   setup

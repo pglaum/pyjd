@@ -36,6 +36,22 @@ pyjd.content module
    :undoc-members:
    :show-inheritance:
 
+pyjd.direct\_connection\_helper module
+--------------------------------------
+
+.. automodule:: pyjd.direct_connection_helper
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyjd.direct\_connector module
+-----------------------------
+
+.. automodule:: pyjd.direct_connector
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyjd.downloads module
 ---------------------
 
@@ -60,10 +76,10 @@ pyjd.extensions module
    :undoc-members:
    :show-inheritance:
 
-pyjd.jd module
---------------
+pyjd.jd\_device module
+----------------------
 
-.. automodule:: pyjd.jd
+.. automodule:: pyjd.jd_device
    :members:
    :undoc-members:
    :show-inheritance:
@@ -88,6 +104,22 @@ pyjd.log module
 ---------------
 
 .. automodule:: pyjd.log
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyjd.myjd\_connection\_helper module
+------------------------------------
+
+.. automodule:: pyjd.myjd_connection_helper
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyjd.myjd\_connector module
+---------------------------
+
+.. automodule:: pyjd.myjd_connector
    :members:
    :undoc-members:
    :show-inheritance:

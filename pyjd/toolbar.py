@@ -29,6 +29,8 @@ class Toolbar:
 
         Example result:
 
+        .. code-block :: json
+
             {
                 "running" : false,
                 "reconnect" : false,
