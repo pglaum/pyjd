@@ -72,7 +72,7 @@ class MyJDConnectionHelper:
 
     def action(self, path: str, params: List = [], http_action: str = 'POST',
                binary: bool = False) -> None:
-        """Execute any action ffor the device using the params.
+        """Execute any action for the device using the params.
 
         All the information about the parameters and their default values,
         types, etc. can be found in the API specification for MyJDownloader

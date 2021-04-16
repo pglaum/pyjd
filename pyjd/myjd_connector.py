@@ -1,4 +1,5 @@
 from .jd_device import JDDevice
+from .myjd_connection_helper import MyJDConnectionHelper
 from Crypto.Cipher import AES
 from typing import Any, Dict, List
 from urllib.parse import quote
@@ -316,12 +317,12 @@ class MyJDConnector:
         if device_id is not None:
             for device in self.__devices:
                 if device["id"] == device_id:
-                    return JDDevice(self, device)
+                    return JDDevice(self, MyJDConnectionHelper, device)
 
         elif device_name is not None:
             for device in self.__devices:
                 if device["name"] == device_name:
-                    return JDDevice(self, device)
+                    return JDDevice(self, MyJDConnectionHelper, device)
 
         raise (Exception("Device not found\n"))
 
