@@ -1,60 +1,56 @@
-from .jd import make_request
-from .jd_types import AdvancedConfigAPIEntry, EnumOption
-
-endpoint = 'system'
+from typing import Any
 
 
-def action(route, params=None):
-    route = f'{endpoint}{route}'
-    return make_request(route, params)
+class System:
 
+    def __init__(self, device):
+        self.device = device
+        self.endpoint = 'system'
 
-def exit_jd():
-    """Stop the JDownloader."""
+    def action(self, route: str, params: Any = None) -> Any:
+        route = f'/{self.endpoint}{route}'
+        return self.device.connection_helper.action(route, params)
 
-    resp = action("/exitJD")
-    return resp
+    def exit_jd(self):
+        """Stop the JDownloader."""
 
+        resp = self.action("/exitJD")
+        return resp
 
-def get_storage_infos(path=None):
-    """Get storage information."""
+    def get_storage_infos(self, path=None):
+        """Get storage information."""
 
-    params = [path]
-    resp = action("/getStorageInfos", params)
-    return resp
+        params = [path]
+        resp = self.action("/getStorageInfos", params)
+        return resp
 
+    def get_system_infos(self):
+        """Get system information."""
 
-def get_system_infos():
-    """Get system information."""
+        resp = self.action("/getSystemInfos")
+        return resp
 
-    resp = action("/getSystemInfos")
-    return resp
+    def hibernate_os(self):
+        """Hibernate the OS."""
 
+        resp = self.action("/hibernateOS")
+        return resp
 
-def hibernate_os():
-    """Hibernate the OS."""
+    def restart_jd(self):
+        """Restart the JDownloader."""
 
-    resp = action("/hibernateOS")
-    return resp
+        resp = self.action("/restartJD")
+        return resp
 
+    def shutdown_os(self, force=False):
+        """Shutdown the OS."""
 
-def restart_jd():
-    """Restart the JDownloader."""
+        params = [force]
+        resp = self.action("/shutdownOS", params)
+        return resp
 
-    resp = action("/restartJD")
-    return resp
+    def standby_os(self):
+        """Put the OS in standby."""
 
-
-def shutdown_os(force=False):
-    """Shutdown the OS."""
-
-    params = [force]
-    resp = action("/shutdownOS", params)
-    return resp
-
-
-def standby_os():
-    """Put the OS in standby."""
-
-    resp = action("/standbyOS")
-    return resp
+        resp = self.action("/standbyOS")
+        return resp

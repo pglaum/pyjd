@@ -1,26 +1,28 @@
-from .jd import make_request
 from .jd_types import MenuStructure
-
-endpoint = 'ui'
-
-
-def action(route, params=None):
-    route = f'{endpoint}{route}'
-    return make_request(route, params)
+from typing import Any
 
 
-def get_menu(context):
-    """Get the custom menu structure for the desired context."""
+class UI:
 
-    params = [context.value]
-    resp = action("/getMenu", params)
-    menu_item = MenuStructure(resp)
-    return menu_item
+    def __init__(self, device):
+        self.device = device
+        self.endpoint = 'ui'
 
+    def action(self, route: str, params: Any = None) -> Any:
+        route = f'/{self.endpoint}{route}'
+        return self.device.connection_helper.action(route, params)
 
-def invoke_action(context, action_id, link_ids, package_ids):
-    """Invoke a menu action on our selection and get the results."""
+    def get_menu(self, context):
+        """Get the custom menu structure for the desired context."""
 
-    params = [context, action_id, link_ids, package_ids]
-    resp = action("/invokeAction", params)
-    return resp
+        params = [context.value]
+        resp = self.action("/getMenu", params)
+        menu_item = MenuStructure(resp)
+        return menu_item
+
+    def invoke_action(self, context, action_id, link_ids, package_ids):
+        """Invoke a menu action on our selection and get the results."""
+
+        params = [context, action_id, link_ids, package_ids]
+        resp = self.action("/invokeAction", params)
+        return resp

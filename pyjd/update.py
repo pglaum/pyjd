@@ -1,29 +1,30 @@
-from .jd import make_request
-
-endpoint = 'update'
+from typing import Any
 
 
-def action(route, params=None):
-    route = f'{endpoint}{route}'
-    return make_request(route, params)
+class Update:
 
+    def __init__(self, device):
+        self.device = device
+        self.endpoint = 'update'
 
-def is_update_available():
-    """Returns if an update is available."""
+    def action(self, route: str, params: Any = None) -> Any:
+        route = f'/{self.endpoint}{route}'
+        return self.device.connection_helper.action(route, params)
 
-    resp = action("/isUpdateAvailable")
-    return resp
+    def is_update_available(self):
+        """Returns if an update is available."""
 
+        resp = self.action("/isUpdateAvailable")
+        return resp
 
-def restart_and_update():
-    """Restarts and update."""
+    def restart_and_update(self):
+        """Restarts and update."""
 
-    resp = action("/restartAndUpdate")
-    return resp
+        resp = self.action("/restartAndUpdate")
+        return resp
 
+    def run_update_check(self):
+        """Runs an update check."""
 
-def run_update_check():
-    """Runs an update check."""
-
-    resp = action("/runUpdateCheck")
-    return resp
+        resp = self.action("/runUpdateCheck")
+        return resp

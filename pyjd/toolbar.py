@@ -1,136 +1,125 @@
-from .jd import make_request
 from .jd_types import LinkCheckResult
-
-endpoint = 'toolbar'
-
-
-def action(route, params=None):
-    route = f'{endpoint}{route}'
-    return make_request(route, params)
+from typing import Any
 
 
-def add_links_from_dom():
-    """Unknown."""
+class Toolbar:
 
-    resp = action("/addLinksFromDOM")
-    return resp
+    def __init__(self, device):
+        self.device = device
+        self.endpoint = 'toolbar'
 
+    def action(self, route: str, params: Any = None) -> Any:
+        route = f'/{self.endpoint}{route}'
+        return self.device.connection_helper.action(route, params)
 
-def check_links_from_dom():
-    """Unknown."""
+    def add_links_from_dom(self):
+        """Unknown."""
 
-    resp = action("/checkLinksFromDOM")
-    return resp
+        resp = self.action("/addLinksFromDOM")
+        return resp
 
+    def check_links_from_dom(self):
+        """Unknown."""
 
-def get_status():
-    """Get JDownloader status.
+        resp = self.action("/checkLinksFromDOM")
+        return resp
 
-    Example result:
+    def get_status(self):
+        """Get JDownloader status.
 
-        {
-            "running" : false,
-            "reconnect" : false,
-            "premium" : true,
-            "download_complete" : 0,
-            "stopafter" : false,
-            "limit" : false,
-            "limitspeed" : 0,
-            "state" : "STOPPED_STATE",
-            "download_current" : 0,
-            "clipboard" : true,
-            "speed" : 0,
-            "pause" : false
-        }
+        Example result:
 
-    """
+            {
+                "running" : false,
+                "reconnect" : false,
+                "premium" : true,
+                "download_complete" : 0,
+                "stopafter" : false,
+                "limit" : false,
+                "limitspeed" : 0,
+                "state" : "STOPPED_STATE",
+                "download_current" : 0,
+                "clipboard" : true,
+                "speed" : 0,
+                "pause" : false
+            }
 
-    resp = action("/getStatus")
-    return resp
+        """
 
+        resp = self.action("/getStatus")
+        return resp
 
-def is_available():
-    """Unknown."""
+    def is_available(self):
+        """Unknown."""
 
-    resp = action("/isAvailable")
-    return resp
+        resp = self.action("/isAvailable")
+        return resp
 
+    def poll_checked_links_from_dom(self, check_id):
+        """Unknown."""
 
-def poll_checked_links_from_dom(check_id):
-    """Unknown."""
+        params = [check_id]
+        resp = self.action("/pollCheckedLinksFromDOM", params)
+        link_check_result = LinkCheckResult(resp)
+        return link_check_result
 
-    params = [check_id]
-    resp = action("/pollCheckedLinksFromDOM", params)
-    link_check_result = LinkCheckResult(resp)
-    return link_check_result
+    def special_url_handling(self, url):
+        """Unknown."""
 
+        params = [url]
+        resp = self.action("/specialURLHandling", params)
+        return resp
 
-def special_url_handling(url):
-    """Unknown."""
+    def start_downloads(self):
+        """Start downloads."""
 
-    params = [url]
-    resp = action("/specialURLHandling", params)
-    return resp
+        resp = self.action("/startDownloads")
+        return resp
 
+    def stop_downloads(self):
+        """Stops the downloads."""
 
-def start_downloads():
-    """Start downloads."""
+        resp = self.action("/stopDownloads")
+        return resp
 
-    resp = action("/startDownloads")
-    return resp
+    def toggle_automatic_reconnect(self):
+        """Unknown."""
 
+        resp = self.action("/toggleAutomaticReconnect")
+        return resp
 
-def stop_downloads():
-    """Stops the downloads."""
+    def toggle_clipboard_monitoring(self):
+        """Unknown."""
 
-    resp = action("/stopDownloads")
-    return resp
+        resp = self.action("/toggleClipboardMonitoring")
+        return resp
 
+    def toggle_download_speed_limit(self):
+        """Unknown."""
 
-def toggle_automatic_reconnect():
-    """Unknown."""
+        resp = self.action("/toggleDownloadSpeedLimit")
+        return resp
 
-    resp = action("/toggleAutomaticReconnect")
-    return resp
+    def toggle_pause_downloads(self):
+        """Unknown."""
 
+        resp = self.action("/togglePauseDownloads")
+        return resp
 
-def toggle_clipboard_monitoring():
-    """Unknown."""
+    def toggle_premium(self):
+        """Unknown."""
 
-    resp = action("/toggleClipboardMonitoring")
-    return resp
+        resp = self.action("/togglePremium")
+        return resp
 
+    def toggle_stop_after_current_download(self):
+        """Unknown."""
 
-def toggle_download_speed_limit():
-    """Unknown."""
+        resp = self.action("/toggleStopAfterCurrentDownload")
+        return resp
 
-    resp = action("/toggleDownloadSpeedLimit")
-    return resp
+    def trigger_update(self):
+        """Unknown."""
 
-
-def toggle_pause_downloads():
-    """Unknown."""
-
-    resp = action("/togglePauseDownloads")
-    return resp
-
-
-def toggle_premium():
-    """Unknown."""
-
-    resp = action("/togglePremium")
-    return resp
-
-
-def toggle_stop_after_current_download():
-    """Unknown."""
-
-    resp = action("/toggleStopAfterCurrentDownload")
-    return resp
-
-
-def trigger_update():
-    """Unknown."""
-
-    resp = action("/triggerUpdate")
-    return resp
+        resp = self.action("/triggerUpdate")
+        return resp

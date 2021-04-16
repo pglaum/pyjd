@@ -1,18 +1,21 @@
-from .jd import make_request
 from .jd_types import APIQuery
-
-endpoint = 'polling'
-
-
-def action(route, params=None):
-    route = f'{endpoint}{route}'
-    return make_request(route, params)
+from typing import Any
 
 
-def poll(query_params=APIQuery()):
-    """Poll for APIQuery.
-    """
+class Polling:
 
-    params = [query_params.to_dict()]
-    resp = action("/poll", params)
-    return resp
+    def __init__(self, device):
+        self.device = device
+        self.endpoint = 'polling'
+
+    def action(self, route: str, params: Any = None) -> Any:
+        route = f'/{self.endpoint}{route}'
+        return self.device.connection_helper.action(route, params)
+
+    def poll(self, query_params=APIQuery()):
+        """Poll for APIQuery.
+        """
+
+        params = [query_params.to_dict()]
+        resp = self.action("/poll", params)
+        return resp

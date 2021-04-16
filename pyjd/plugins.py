@@ -1,82 +1,79 @@
-from .jd import make_request
 from .jd_types import AdvancedConfigQuery, AdvancedConfigAPIEntry, Plugin, \
     PluginsQuery
-
-endpoint = 'plugins'
-
-
-def action(route, params=None):
-    route = f'{endpoint}{route}'
-    return make_request(route, params)
+from typing import Any
 
 
-def get(interface_name, display_name, key):
-    """Get a plugin."""
+class Plugins:
 
-    params = [interface_name, display_name, key]
-    resp = action('/get', params)
+    def __init__(self, device):
+        self.device = device
+        self.endpoint = 'plugins'
 
-    return resp
+    def action(self, route: str, params: Any = None) -> Any:
+        route = f'/{self.endpoint}{route}'
+        return self.device.connection_helper.action(route, params)
 
+    def get(self, interface_name, display_name, key):
+        """Get a plugin."""
 
-def get_all_plugin_regex():
-    """Get all plugin regular expressions."""
+        params = [interface_name, display_name, key]
+        resp = self.action('/get', params)
 
-    resp = action('/getAllPluginRegex')
+        return resp
 
-    return resp
+    def get_all_plugin_regex(self):
+        """Get all plugin regular expressions."""
 
+        resp = self.action('/getAllPluginRegex')
 
-def get_plugin_regex(url):
-    """Get plugin regular expressions for a url."""
+        return resp
 
-    params = [url]
-    resp = action('/getPluginRegex', params)
+    def get_plugin_regex(self, url):
+        """Get plugin regular expressions for a url."""
 
-    return resp
+        params = [url]
+        resp = self.action('/getPluginRegex', params)
 
+        return resp
 
-def list(plugins_query=PluginsQuery()):
-    """List plugins with query."""
+    def list(self, plugins_query=PluginsQuery()):
+        """List plugins with query."""
 
-    params = [plugins_query.to_dict()]
-    resp = action('/list', params)
+        params = [plugins_query.to_dict()]
+        resp = self.action('/list', params)
 
-    plugins = []
-    for p in resp:
-        plugin = Plugin(p)
-        plugins.append(plugin)
+        plugins = []
+        for p in resp:
+            plugin = Plugin(p)
+            plugins.append(plugin)
 
-    return plugins
+        return plugins
 
+    def query(self, config_query=AdvancedConfigQuery()):
+        """Query plugin configurations."""
 
-def query(config_query=AdvancedConfigQuery()):
-    """Query plugin configurations."""
+        params = [config_query.to_dict()]
+        resp = self.action('/query', params)
 
-    params = [config_query.to_dict()]
-    resp = action('/query', params)
+        entries = []
+        for c in resp:
+            entry = AdvancedConfigAPIEntry(c)
+            entries.append(entry)
 
-    entries = []
-    for c in resp:
-        entry = AdvancedConfigAPIEntry(c)
-        entries.append(entry)
+        return entries
 
-    return entries
+    def reset(self, interface_name, display_name, key):
+        """Reset plugin config."""
 
+        params = [interface_name, display_name, key]
+        resp = self.action('/reset', params)
 
-def reset(interface_name, display_name, key):
-    """Reset plugin config."""
+        return resp
 
-    params = [interface_name, display_name, key]
-    resp = action('/reset', params)
+    def set(self, interface_name, display_name, key, new_value):
+        """Set a plugin config value."""
 
-    return resp
+        params = [interface_name, display_name, key, new_value]
+        resp = self.action('/set', params)
 
-
-def set(interface_name, display_name, key, new_value):
-    """Set a plugin config value."""
-
-    params = [interface_name, display_name, key, new_value]
-    resp = action('/set', params)
-
-    return resp
+        return resp

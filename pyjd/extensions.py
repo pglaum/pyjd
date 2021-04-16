@@ -1,88 +1,87 @@
-from .jd import make_request
 from .jd_types import Extension, ExtensionQuery
 from typing import Any, List
 
-endpoint = 'extensions'
 
+class Extensions:
 
-def action(route: str, params: Any = None) -> Any:
-    route = f'{endpoint}{route}'
-    return make_request(route, params)
+    def __init__(self, device):
+        self.device = device
+        self.endpoint = 'extensions'
 
+    def action(self, route: str, params: Any = None) -> Any:
+        route = f'/{self.endpoint}{route}'
+        return self.device.connection_helper.action(route, params)
 
-def install(extension_id: str) -> bool:
-    """Install the extension with extension_id.
+    def install(self, extension_id: str) -> bool:
+        """Install the extension with extension_id.
 
-    :param extension_id: The ID of the extension
-    :type extension_id: str
-    :return: Success
-    :rtype: boolean
-    """
+        :param extension_id: The ID of the extension
+        :type extension_id: str
+        :return: Success
+        :rtype: boolean
+        """
 
-    params = [extension_id]
-    resp = action("/install", params)
-    return resp
+        params = [extension_id]
+        resp = self.action("/install", params)
+        return resp
 
+    def is_enabled(self, extension_id: str) -> bool:
+        """Check if the extension of extension_id is enabled.
 
-def is_enabled(extension_id: str) -> bool:
-    """Check if the extension of extension_id is enabled.
+        :param extension_id: ID of the extension
+        :type extension_id: str
+        :return: Is enabled
+        :rtype: boolean
+        """
 
-    :param extension_id: ID of the extension
-    :type extension_id: str
-    :return: Is enabled
-    :rtype: boolean
-    """
+        params = [extension_id]
+        resp = self.action("/isEnabled", params)
+        return resp
 
-    params = [extension_id]
-    resp = action("/isEnabled", params)
-    return resp
+    def is_installed(self, extension_id: str) -> bool:
+        """Check if the extension of extension_id is installed.
 
+        :param extension_id: ID of the extension
+        :type extension_id: str
+        :return: Is installed
+        :rtype: boolean
+        """
 
-def is_installed(extension_id: str) -> bool:
-    """Check if the extension of extension_id is installed.
+        params = [extension_id]
+        resp = self.action("/isInstalled", params)
+        return resp
 
-    :param extension_id: ID of the extension
-    :type extension_id: str
-    :return: Is installed
-    :rtype: boolean
-    """
+    def list_extensions(
+            self, query: ExtensionQuery = ExtensionQuery()) -> List[Extension]:
+        """List all extensions.
 
-    params = [extension_id]
-    resp = action("/isInstalled", params)
-    return resp
+        :param query: A query to filter by (default: all)
+        :type query: jd_types.ExtensionQuery
+        :result: A list of extensions
+        :rtype: List[jd_types.Extension]
+        """
 
+        params = [query.to_dict()]
+        resp = list(self.action("/list", params))
 
-def list_extensions(query: ExtensionQuery = ExtensionQuery()) -> List[Extension]:
-    """List all extensions.
+        extensions = []
+        for ext in resp:
+            extension = Extension(ext)
+            extensions.append(extension)
 
-    :param query: A query to filter by (default: all)
-    :type query: jd_types.ExtensionQuery
-    :result: A list of extensions
-    :rtype: List[jd_types.Extension]
-    """
+        return extensions
 
-    params = [query.to_dict()]
-    resp = list(action("/list", params))
+    def set_enabled(self, extension_id: str, enabled: bool) -> bool:
+        """Enable/Disable an extensions.
 
-    extensions = []
-    for ext in resp:
-        extension = Extension(ext)
-        extensions.append(extension)
+        :param extension_id: ID of the extension
+        :type extension_id: str
+        :param enabled: Enable or disable
+        :type enabled: boolean
+        :return: Success
+        :rtype: boolean
+        """
 
-    return extensions
-
-
-def set_enabled(extension_id: str, enabled: bool) -> bool:
-    """Enable/Disable an extensions.
-
-    :param extension_id: ID of the extension
-    :type extension_id: str
-    :param enabled: Enable or disable
-    :type enabled: boolean
-    :return: Success
-    :rtype: boolean
-    """
-
-    params = [extension_id, enabled]
-    resp = action("/setEnabled", params)
-    return resp
+        params = [extension_id, enabled]
+        resp = self.action("/setEnabled", params)
+        return resp

@@ -152,6 +152,7 @@ class MyJDConnector:
         init_vector = secret_token[:len(secret_token) // 2]
         key = secret_token[len(secret_token) // 2:]
         decryptor = AES.new(key, AES.MODE_CBC, init_vector)
+
         decrypted_data = UNPAD(decryptor.decrypt(base64.b64decode(data)))
 
         return decrypted_data
@@ -325,8 +326,8 @@ class MyJDConnector:
         raise (Exception("Device not found\n"))
 
     def request_api(self, path: str, http_method: str = 'GET',
-                    params: Any = None, action: str = None, api: str = None
-                    ) -> Any:
+                    params: Any = None, action: str = None, api: str = None,
+                    binary: bool = False) -> Any:
         """Make a request to the MyJD API.
 
         The request goes to ``path``, using the ``http_method`` with the
@@ -450,13 +451,20 @@ class MyJDConnector:
 
             raise (Exception(msg))
 
+        if binary:
+
+            self.update_request_id()
+
+            # Binary content is not encrypted
+            return encrypted_response.content
+
         if action is None:
             if not self.__server_encryption_token:
                 response = self.__decrypt(
                     self.__login_secret, encrypted_response.text)
             else:
-                response = self.__decrypt(self.__server_encryption_token,
-                                          encrypted_response.text)
+                response = self.__decrypt(
+                    self.__server_encryption_token, encrypted_response.text)
 
         else:
             response = self.__decrypt(

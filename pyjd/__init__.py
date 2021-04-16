@@ -14,7 +14,7 @@ Local JDownloader setups can be easily accessed with this API.
 """
 
 __title__ = 'pyjd'
-__version__ = '1.0'
+__version__ = '2.0-alpha'
 __author__ = 'Philipp Glaum'
-__copyright__ = 'Copyright (c) 2020 Philipp Glaum'
+__copyright__ = 'Copyright (c) 2021 Philipp Glaum'
 __license__ = 'GPLv2'

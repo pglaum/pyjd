@@ -70,8 +70,8 @@ class MyJDConnectionHelper:
         self.__direct_connection_enabled = False
         self.__direct_connection_info = None
 
-    def action(self, path: str, params: List = [], http_action: str = 'POST'
-               ) -> None:
+    def action(self, path: str, params: List = [], http_action: str = 'POST',
+               binary: bool = False) -> None:
         """Execute any action ffor the device using the params.
 
         All the information about the parameters and their default values,
@@ -86,6 +86,8 @@ class MyJDConnectionHelper:
         :type params: List
         :param http_action: The HTTP request type ('GET' or 'POST')
         :type http_action: str
+        :param binary: Return binary response, if needed
+        :type binary: bool
         :return: Response from the MyJD API
         :rtype: dict
         """
@@ -98,7 +100,7 @@ class MyJDConnectionHelper:
 
             # No direct connection available, use the MyJD API
             response = self.device.connector.request_api(
-                    path, http_action, params, action_url)
+                    path, http_action, params, action_url, binary=binary)
 
             if response is None:
                 return False
@@ -121,7 +123,8 @@ class MyJDConnectionHelper:
                     api = f'http://{connection["ip"]}:{connection["port"]}'
 
                     response = self.device.connector.request_api(
-                        path, http_action, params, action_url, api)
+                        path, http_action, params, action_url, api,
+                        binary=binary)
 
                     if response is not None:
 
@@ -146,7 +149,7 @@ class MyJDConnectionHelper:
 
             # Use the MyJD API instead
             response = self.device.connector.request_api(
-                path, http_action, params, action_url)
+                path, http_action, params, action_url, binary=binary)
 
             if response is None:
                 return False

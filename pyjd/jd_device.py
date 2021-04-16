@@ -1,7 +1,20 @@
+from .accounts import Accounts
+from .captcha import Captcha
+from .config import Config
+from .content import Content
 from .downloads import Downloads
+from .events import Events
+from .extensions import Extensions
+from .linkgrabber import LinkGrabber
+from .log import Log
 from .myjd_connection_helper import MyJDConnectionHelper
+from .plugins import Plugins
+from .polling import Polling
+from .system import System
+from .toolbar import Toolbar
+from .ui import UI
+from .update import Update
 from typing import Any
-import time
 
 
 class JDDevice:
@@ -25,4 +38,18 @@ class JDDevice:
         self.connector = connector
         self.connection_helper = MyJDConnectionHelper(self)
 
+        self.accounts = Accounts(self)
+        self.captcha = Captcha(self)
+        self.config = Config(self)
+        self.content = Content(self)
         self.downloads = Downloads(self)
+        self.events = Events(self)
+        self.extensions = Extensions(self)
+        self.linkgrabber = LinkGrabber(self)
+        self.log = Log(self)
+        self.plugins = Plugins(self)
+        self.polling = Polling(self)
+        self.system = System(self)
+        self.toolbar = Toolbar(self)
+        self.ui = UI(self)
+        self.update = Update(self)

@@ -1,38 +1,40 @@
-from .jd import make_request
 from .jd_types import LogFolder
-
-endpoint = 'log'
-
-
-def action(route, params=None):
-    route = f'{endpoint}{route}'
-    return make_request(route, params)
+from typing import Any
 
 
-def get_available_logs():
-    """Returns a list of available logs.
+class Log:
 
-    :return: List of log folders
-    :rtype: jd_types.LogFolder
-    """
+    def __init__(self, device):
+        self.device = device
+        self.endpoint = 'log'
 
-    resp = action("/getAvailableLogs")
+    def action(self, route: str, params: Any = None) -> Any:
+        route = f'/{self.endpoint}{route}'
+        return self.device.connection_helper.action(route, params)
 
-    log_folders = []
-    for folder in resp:
-        log_folder = LogFolder(folder)
-        log_folders.append(log_folder)
+    def get_available_logs(self):
+        """Returns a list of available logs.
 
-    return log_folders
+        :return: List of log folders
+        :rtype: jd_types.LogFolder
+        """
 
+        resp = self.action("/getAvailableLogs")
 
-def send_log_file(log_folders):
-    """Returns a log file.
+        log_folders = []
+        for folder in resp:
+            log_folder = LogFolder(folder)
+            log_folders.append(log_folder)
 
-    :return: The log file
-    :rtype: str
-    """
+        return log_folders
 
-    params = [log_folders]
-    resp = action("/sendLogFile", params)
-    return resp
+    def send_log_file(self, log_folders):
+        """Returns a log file.
+
+        :return: The log file
+        :rtype: str
+        """
+
+        params = [log_folders]
+        resp = self.action("/sendLogFile", params)
+        return resp
