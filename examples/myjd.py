@@ -2,7 +2,7 @@
 MyJD connection example
 =======================
 
-This script gives a short overview of how to connect to a JDownloader vie the
+This script gives a short overview of how to connect to a JDownloader via the
 MyJD API.
 
 You'll have to use your email and password for the login.
