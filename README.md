@@ -1,8 +1,19 @@
-# PyJD
+# pyjd
 
 This is a wrapper for the JDownloader API.
 
-More information: <https://pglaum.srht.site/pyjd-api>
+## Installation
+
+Run `pip install .` in the repository folder.
+
+## Usage
+
+The documentation of the JDownloader API can be found here
+<https://my.jdownloader.org/developers/>. This library includes all of the
+documented functions (but uses underscores instead of CamelCase).
+
+For examples, check out the sample scripts in the repository
+([see here](https://git.sr.ht/~pglaum/pyjd/tree/master/item/examples)).
 
 ## Building auto-docs
 
@@ -19,5 +30,5 @@ Then, remove the `setup.rst` file from the source folder.
 
 ## Credits
 
-The MyJD API authentication is taken from here:
+The MyJD API authentication code is taken from here:
 <https://github.com/mmarquezs/My.Jdownloader-API-Python-Library>
