@@ -37,6 +37,10 @@ class DirectConnectionHelper:
                 param_list.append(json.dumps(param))
         rparams = "?" + "&".join(param_list)
 
+        print(rurl)
+        print(params)
+        print(rparams)
+
         if binary:
             return requests.get(rurl + rparams).content
 

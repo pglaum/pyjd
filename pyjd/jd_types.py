@@ -6,7 +6,8 @@ For more information, see here:
 """
 
 from enum import Enum
-from typing import List
+from pydantic import BaseModel
+from typing import Any, List, Optional
 import json
 
 
@@ -15,7 +16,7 @@ import json
 #
 
 
-class AbstractType(Enum):
+class AbstractType(str, Enum):
     """Abstract types that are used for config entries."""
 
     BOOLEAN = "BOOLEAN"
@@ -46,7 +47,7 @@ class AbstractType(Enum):
     ACTION = "ACTION"
 
 
-class DeleteAction(Enum):
+class DeleteAction(str, Enum):
     """Delete actions, that can be executed.
 
     This corresponds to the "Action" enum of JDownloader.
@@ -60,7 +61,7 @@ class DeleteAction(Enum):
     DELETE_MODE = "DELETE_MODE"
 
 
-class AvailableLinkState(Enum):
+class AvailableLinkState(str, Enum):
     """The availability of a link."""
 
     ONLINE = "ONLINE"
@@ -69,21 +70,21 @@ class AvailableLinkState(Enum):
     TEMP_UNKNOWN = "TEMP_UNKNOWN"
 
 
-class BasicAuthType(Enum):
+class BasicAuthType(str, Enum):
     """Types of basic auth protocols."""
 
     FTP = "FTP"
     HTTP = "HTTP"
 
 
-class Context(Enum):
+class Context(str, Enum):
     """Contextmenu selection."""
 
     LGC = "LGC"  # linkgrabber rightclick
     DLC = "DLC"  # downloadlist rightclick
 
 
-class MenuType(Enum):
+class MenuType(str, Enum):
     """Menu types"""
 
     CONTAINER = "CONTAINER"
@@ -91,7 +92,7 @@ class MenuType(Enum):
     LINK = "LINK"
 
 
-class Mode(Enum):
+class Mode(str, Enum):
     """Modes for package deletion."""
 
     REMOVE_LINKS_AND_DELETE_FILES = "REMOVE_LINKS_AND_DELETE_FILES"
@@ -99,7 +100,7 @@ class Mode(Enum):
     REMOVE_LINKS_ONLY = "REMOVE_LINKS_ONLY"
 
 
-class Priority(Enum):
+class Priority(str, Enum):
     """Download priority for packages."""
 
     HIGHEST = "HIGHEST"
@@ -111,7 +112,7 @@ class Priority(Enum):
     LOWEST = "LOWEST"
 
 
-class Reason(Enum):
+class Reason(str, Enum):
     """Reasons for exceptions."""
 
     CONNECTION_UNAVAILABLE = "CONNECTION_UNAVAILABLE"
@@ -127,7 +128,7 @@ class Reason(Enum):
     FFPROBE_MISSING = "FFPROBE_MISSING"
 
 
-class SelectionType(Enum):
+class SelectionType(str, Enum):
     """Types for selection"""
 
     SELECTED = "SELECTED"
@@ -136,7 +137,7 @@ class SelectionType(Enum):
     NONE = "NONE"
 
 
-class SkipRequest(Enum):
+class SkipRequest(str, Enum):
     """Captcha skip request"""
 
     SINGLE = "SINGLE"
@@ -148,7 +149,7 @@ class SkipRequest(Enum):
     TIMEOUT = "TIMEOUT"
 
 
-class Status(Enum):
+class Status(str, Enum):
     """Status"""
 
     NA = "NA"
@@ -161,60 +162,28 @@ class Status(Enum):
 #
 
 
-class Account:
+class Account(BaseModel):
     """This is a premium hoster account
 
     Initializes itself from a query result (dict)
     """
 
-    def __init__(self, query_result: dict) -> None:
-
-        self.enabled = query_result["enabled"] if "enabled" in query_result else None
-        self.error_string = (
-            query_result["errorString"] if "errorString" in query_result else None
-        )
-        self.error_type = (
-            query_result["errorType"] if "errorType" in query_result else None
-        )
-        self.hostname = query_result["hostname"] if "hostname" in query_result else None
-        self.traffic_left = (
-            query_result["trafficLeft"] if "trafficLeft" in query_result else None
-        )
-        self.traffic_max = (
-            query_result["trafficMax"] if "trafficMax" in query_result else None
-        )
-        self.username = query_result["username"] if "username" in query_result else None
-        self.uuid = query_result["uuid"] if "uuid" in query_result else None
-        self.valid = query_result["valid"] if "valid" in query_result else None
-        self.valid_until = (
-            query_result["validUntil"] if "validUntil" in query_result else None
-        )
+    enabled: Optional[bool]
+    errorString: Optional[str]
+    errorType: Optional[str]
+    hostname: Optional[str]
+    trafficLeft: Optional[int]
+    trafficMax: Optional[int]
+    username: Optional[str]
+    uuid: Optional[int]
+    valid: Optional[bool]
+    validUntil: Optional[int]
 
     def __repr__(self) -> str:
         return f"<Account ({self.uuid})>"
 
-    def to_dict(self) -> dict:
-        return {
-            "enabled": self.enabled,
-            "errorString": self.error_string,
-            "errorType": self.error_type,
-            "hostname": self.hostname,
-            "trafficLeft": self.traffic_left,
-            "trafficMax": self.traffic_max,
-            "username": self.username,
-            "uuid": self.uuid,
-            "valid": self.valid,
-            "validUntil": self.valid_until,
-        }
 
-    def to_json(self, pretty: bool = False) -> str:
-        if pretty:
-            return json.dumps(self.to_dict(), indent=2)
-
-        return json.dumps(self.to_dict())
-
-
-class AccountQuery:
+class AccountQuery(BaseModel):
     """Query for premium host accounts.
 
     The fields are booleans, that can be turned on or off, if you want to have
@@ -222,206 +191,96 @@ class AccountQuery:
     By default all possible data is queried.
     """
 
-    def __init__(
-        self,
-        enabled: bool = True,
-        error: bool = True,
-        max_results: int = -1,
-        start_at: int = 0,
-        traffic_left: bool = True,
-        traffic_max: bool = True,
-        username: bool = True,
-        uuid_list: List[int] = None,
-        valid: bool = True,
-        valid_until: bool = True,
-    ) -> None:
-        self.enabled = enabled
-        self.error = error
-        self.max_results = max_results
-        self.start_at = start_at
-        self.traffic_left = traffic_left
-        self.traffic_max = traffic_max
-        self.username = username
-        self.uuid_list = uuid_list
-        self.valid = valid
-        self.valid_until = valid_until
+    enabled: bool = True,
+    error: bool = True,
+    maxResults: int = -1,
+    startAt: int = 0,
+    trafficLeft: bool = True,
+    trafficMax: bool = True,
+    userName: bool = True,
+    uuidlist: Optional[List[int]]
+    valid: bool = True,
+    validUntil: bool = True,
 
     def __repr__(self):
         return f"<AccountQuery ({self.uuid_list})>"
 
-    def to_dict(self):
-        return {
-            "enabled": self.enabled,
-            "error": self.error,
-            "maxResults": self.max_results,
-            "startAt": self.start_at,
-            "trafficLeft": self.traffic_left,
-            "trafficMax": self.traffic_max,
-            "userName": self.username,
-            "uuidlist": self.uuid_list,
-            "valid": self.valid,
-            "validUntil": self.valid_until,
-        }
+    def default():
+        return AccountQuery(enabled=True, error=True, maxResults=-1, startAt=0,
+                            trafficLeft=True, trafficMax=True, userName=True,
+                            uuidlist=None, valid=True, validUntil=True)
 
 
-class AdvancedConfigAPIEntry:
-    def __init__(self, qdict):
-        self.abstract_type = (
-            AbstractType(qdict["abstractType"]) if "abstractType" in qdict else None
-        )
-        self.default_value = qdict["defaultValue"] if "defaultValue" in qdict else None
-        self.docs = qdict["docs"] if "docs" in qdict else None
-        self.enum_label = qdict["enumLabel"] if "enumLabel" in qdict else None
-        self.enum_options = qdict["enumOptions"] if "enumOptions" in qdict else None
-        self.interface_name = (
-            qdict["interfaceName"] if "interfaceName" in qdict else None
-        )
-        self.key = qdict["key"] if "key" in qdict else None
-        self.storage = qdict["storage"] if "storage" in qdict else None
-        self.config_type = qdict["type"] if "type" in qdict else None
-        self.value = qdict["value"] if "value" in qdict else None
+class AdvancedConfigAPIEntry(BaseModel):
+
+    abstractType: Optional[AbstractType]
+    defaultValue: Optional[Any]
+    docs: Optional[str]
+    enumLabel: Optional[str]
+    enumOptions: Optional[Any]
+    interfaceName: Optional[str]
+    key: Optional[str]
+    storage: Optional[str]
+    type: Optional[str]
+    value: Optional[Any]
 
     def __repr__(self):
         return f"<AdvancedConfigAPIEntry ({self.key})>"
 
-    def to_dict(self):
-        result = {
-            "defaultValue": self.default_value,
-            "docs": self.docs,
-            "enumLabel": self.enum_label,
-            "enumOptions": self.enum_options,
-            "interfaceName": self.interface_name,
-            "key": self.key,
-            "storage": self.storage,
-            "type": self.config_type,
-            "value": self.value,
-        }
 
-        if self.abstract_type:
-            result["abstractType"] = self.abstract_type.value
+class AdvancedConfigQuery(BaseModel):
 
-        return result
-
-
-class AdvancedConfigQuery:
-    def __init__(
-        self,
-        config_interface=None,
-        default_values=True,
-        description=True,
-        enum_info=True,
-        include_extensions=True,
-        pattern=None,
-        values=True,
-    ):
-        self.config_interface = config_interface
-        self.default_values = default_values
-        self.description = description
-        self.enum_info = enum_info
-        self.include_extensions = include_extensions
-        self.pattern = pattern
-        self.values = values
+    configInterface: Optional[str]
+    defaultValues: bool
+    description: bool
+    enumInfo: bool
+    includeExtensions: bool
+    pattern: Optional[str]
+    values: bool
 
     def __repr__(self):
         return f"<AdvancedConfigQuery ({self.config_interface})>"
 
-    def to_dict(self):
-        return {
-            "configInterface": self.config_interface,
-            "defaultValues": self.default_values,
-            "description": self.description,
-            "enumInfo": self.enum_info,
-            "includeExtensions": self.include_extensions,
-            "pattern": self.pattern,
-            "values": self.values,
-        }
+    def default():
+        return AdvancedConfigQuery(configInterface=None, defaultValues=True,
+                                   description=True, enumInfo=True,
+                                   includeExtensions=True, pattern=None,
+                                   values=True)
 
 
-class BasicAuth:
-    def __init__(self, qdict):
-        self.created = qdict["created"] if "created" in qdict else None
-        self.enabled = qdict["enabled"] if "enabled" in qdict else None
-        self.hostmask = qdict["hostmask"] if "hostmask" in qdict else None
-        self.id = qdict["id"] if "id" in qdict else None
-        self.last_validated = (
-            qdict["lastValidated"] if "lastValidated" in qdict else None
-        )
-        self.password = qdict["password"] if "password" in qdict else None
-        self.auth_type = BasicAuthType(qdict["type"]) if "type" in qdict else None
-        self.username = qdict["username"] if "username" in qdict else None
+class BasicAuth(BaseModel):
+
+    created: Optional[int]
+    enabled: Optional[bool]
+    hostmask: Optional[str]
+    id: Optional[int]
+    lastValidated: Optional[int]
+    password: Optional[str]
+    type: Optional[BasicAuthType]
+    username: Optional[str]
 
     def __repr__(self):
         return f"<BasicAuth ({self.id})>"
 
-    def to_dict(self):
-        return {
-            "created": self.created,
-            "enabled": self.enabled,
-            "hostmask": self.hostmask,
-            "id": self.id,
-            "lastValidated": self.last_validated,
-            "password": self.password,
-            "type": self.auth_type.value,
-            "username": self.username,
-        }
 
+class AddLinksQuery(BaseModel):
 
-class AddLinksQuery:
-    def __init__(
-        self,
-        assign_job_id=None,
-        auto_extract=None,
-        auto_start=None,
-        data_urls=[],
-        deep_decrypt=None,
-        destination_folder=None,
-        download_password=None,
-        extract_password=None,
-        links=None,
-        overwrite_packagizer_rules=None,
-        package_name=None,
-        priority=Priority.DEFAULT,
-        source_url=None,
-    ):
-        self.assign_job_id = assign_job_id
-        self.auto_extract = auto_extract
-        self.auto_start = auto_start
-        self.data_urls = data_urls
-        self.deep_decrypt = deep_decrypt
-        self.destination_folder = destination_folder
-        self.download_password = download_password
-        self.extract_password = extract_password
-        self.links = links
-        self.overwrite_packagizer_rules = overwrite_packagizer_rules
-        self.package_name = package_name
-        self.priority = priority
-        self.source_url = source_url
+    assignJobID: Optional[bool]
+    autoExtract: Optional[bool]
+    autostart: Optional[bool]
+    dataURLs: List[str] = []
+    deepDecrypt: Optional[bool]
+    destinationFolder: Optional[str]
+    downloadPassword: Optional[str]
+    extractPassword: Optional[str]
+    links: Optional[str]
+    overwritePackagizerRulse: Optional[bool]
+    packageName: Optional[str]
+    priority: Optional[Priority] = Priority.DEFAULT
+    sourceUrl: Optional[str]
 
     def __repr__(self):
-        return f"<AddLinksQuery ({self.package_name})>"
-
-    def to_dict(self):
-        return {
-            "assignJobID": self.assign_job_id,
-            "autoExtract": self.auto_extract,
-            "autostart": self.auto_start,
-            "dataURLs": self.data_urls,
-            "deepDecrypt": self.deep_decrypt,
-            "destinationFolder": self.destination_folder,
-            "downloadPassword": self.download_password,
-            "extractPassword": self.extract_password,
-            "links": self.links,
-            "overwritePackagizerRules": self.overwrite_packagizer_rules,
-            "packageName": self.package_name,
-            "priority": self.priority.value,
-            "sourceUrl": self.source_url,
-        }
-
-    def to_json(self, pretty=False):
-        if pretty:
-            return json.dumps(self.to_dict(), indent=2)
-
-        return json.dumps(self.to_dict())
+        return f"<AddLinksQuery ({self.packageName})>"
 
 
 class APIQuery:
@@ -430,7 +289,8 @@ class APIQuery:
     Most endpoint use a specialized version.
     """
 
-    def __init__(self, empty=False, for_null_key="", max_results=-1, start_at=0):
+    def __init__(self, empty=False, for_null_key="",
+                 max_results=-1, start_at=0):
         self.empty = empty
         self.for_null_key = for_null_key
         self.max_results = max_results
@@ -493,10 +353,12 @@ class CrawledLink:
         self.host = qdict["host"] if "host" in qdict else None
         self.name = qdict["name"] if "name" in qdict else None
         self.package_uuid = qdict["packageUUID"] if "packageUUID" in qdict else None
-        self.priority = Priority(qdict["priority"]) if "priority" in qdict else None
+        self.priority = Priority(
+            qdict["priority"]) if "priority" in qdict else None
         self.url = qdict["url"] if "url" in qdict else None
         self.uuid = qdict["uuid"] if "uuid" in qdict else None
-        self.variant = LinkVariant(qdict["variant"]) if "variant" in qdict else None
+        self.variant = LinkVariant(
+            qdict["variant"]) if "variant" in qdict else None
         self.variants = qdict["variants"] if "variants" in qdict else None
 
     def __repr__(self):
@@ -603,7 +465,8 @@ class CrawledPackage:
         self.name = qdict["name"] if "name" in qdict else None
         self.offline_count = qdict["offlineCount"] if "offlineCount" in qdict else None
         self.online_count = qdict["onlineCount"] if "onlineCount" in qdict else None
-        self.priority = Priority(qdict["priority"]) if "priority" in qdict else None
+        self.priority = Priority(
+            qdict["priority"]) if "priority" in qdict else None
         self.save_to = qdict["saveTo"] if "saveTo" in qdict else None
         self.temp_unknown_count = (
             qdict["tempUnknownCount"] if "tempUnknownCount" in qdict else None
@@ -714,7 +577,8 @@ class DownloadLink:
         self.host = qdict["host"] if "host" in qdict else None
         self.name = qdict["name"] if "name" in qdict else None
         self.package_uuid = qdict["packageUUID"] if "packageUUID" in qdict else None
-        self.priority = Priority(qdict["priority"]) if "priority" in qdict else None
+        self.priority = Priority(
+            qdict["priority"]) if "priority" in qdict else None
         self.running = qdict["running"] if "running" in qdict else None
         self.skipped = qdict["skipped"] if "skipped" in qdict else None
         self.speed = qdict["speed"] if "speed" in qdict else None
@@ -849,7 +713,8 @@ class FilePackage:
         self.finished = qdict["finished"] if "finished" in qdict else None
         self.hosts = qdict["hosts"] if "hosts" in qdict else None
         self.name = qdict["name"] if "name" in qdict else None
-        self.priority = Priority(qdict["priority"]) if "priority" in qdict else None
+        self.priority = Priority(
+            qdict["priority"]) if "priority" in qdict else None
         self.running = qdict["running"] if "running" in qdict else None
         self.save_to = qdict["saveTo"] if "saveTo" in qdict else None
         self.speed = qdict["speed"] if "speed" in qdict else None
@@ -894,7 +759,8 @@ class IconDescriptor:
         self.icon_cls = qdict["cls"] if "cls" in qdict else None
         self.key = qdict["key"] if "key" in qdict else None
         self.prps = qdict["prps"] if "prps" in qdict else None
-        self.rsc = [IconDescriptor(x) for x in qdict["rsc"]] if "rsc" in qdict else None
+        self.rsc = [IconDescriptor(x)
+                    for x in qdict["rsc"]] if "rsc" in qdict else None
 
     def __repr__(self):
         return f"<IconDescriptor ({self.key})>"
@@ -942,8 +808,8 @@ class JobLinkCrawler:
 class LinkCheckResult:
     def __init__(self, qdict):
         self.links = (
-            [LinkStatus(x) for x in qdict["links"]] if "links" in qdict else None
-        )
+            [LinkStatus(x) for x in qdict["links"]]
+            if "links" in qdict else None)
         self.status = Status(qdict["status"]) if "status" in qdict else None
 
     def __repr__(self):
@@ -1064,7 +930,8 @@ class LinkStatus:
         self.link_check_id = qdict["linkCheckID"] if "linkCheckID" in qdict else None
         self.name = qdict["name"] if "name" in qdict else None
         self.size = qdict["size"] if "size" in qdict else None
-        self.status = AvailableLinkState(qdict["status"]) if "status" in qdict else None
+        self.status = AvailableLinkState(
+            qdict["status"]) if "status" in qdict else None
         self.url = qdict["url"] if "url" in qdict else None
 
     def __repr__(self):
@@ -1220,8 +1087,8 @@ class PackageQuery:
 class Plugin:
     def __init__(self, qdict):
         self.abstract_type = (
-            AbstractType(qdict["abstract_type"]) if "abstract_type" in qdict else None
-        )
+            AbstractType(qdict["abstract_type"])
+            if "abstract_type" in qdict else None)
         self.class_name = qdict["className"] if "className" in qdict else None
         self.default_value = qdict["defaultValue"] if "defaultValue" in qdict else None
         self.display_name = qdict["displayName"] if "displayName" in qdict else None

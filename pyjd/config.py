@@ -86,7 +86,7 @@ class Config:
 
         config_api_entries = []
         for entry in resp:
-            config_api_entry = AdvancedConfigAPIEntry(entry)
+            config_api_entry = AdvancedConfigAPIEntry(**entry)
             config_api_entries.append(config_api_entry)
 
         return config_api_entries
@@ -114,7 +114,8 @@ class Config:
         return enum_options
 
     def query(
-        self, advanced_config_query: AdvancedConfigQuery = AdvancedConfigQuery()
+        self, advanced_config_query: AdvancedConfigQuery =
+            AdvancedConfigQuery.default()
     ) -> List[AdvancedConfigAPIEntry]:
         """Query config entries with an :class:`AdvancedConfigQuery`.
 
@@ -124,12 +125,12 @@ class Config:
         :rtype: List[AdvancedConfigAPIEntry]
         """
 
-        params = [advanced_config_query.to_dict()]
+        params = [advanced_config_query.dict(exclude_none=True)]
         resp = self.action("/query", params=params)
 
         config_api_entries = []
         for entry in resp:
-            config_api_entry = AdvancedConfigAPIEntry(entry)
+            config_api_entry = AdvancedConfigAPIEntry(**entry)
             config_api_entries.append(config_api_entry)
 
         return config_api_entries
@@ -153,7 +154,8 @@ class Config:
         resp = self.action("/reset", params)
         return resp
 
-    def set(self, interface_name: str, storage: str, key: str, value: str) -> bool:
+    def set(self, interface_name: str, storage: str,
+            key: str, value: str) -> bool:
         """Set a config entry.
 
         :param interface_name: The name of the JDownloader interface

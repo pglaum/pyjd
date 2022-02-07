@@ -55,7 +55,7 @@ class LinkGrabber:
         return job
 
     def add_links(
-        self, add_links_query: AddLinksQuery = AddLinksQuery()
+        self, add_links_query: AddLinksQuery
     ) -> LinkCollectingJob:
         """
         Add links to the linkcollector
@@ -66,7 +66,7 @@ class LinkGrabber:
         :rtype: LinkCollectingJob
         """
 
-        params = [add_links_query.to_dict()]
+        params = [add_links_query.dict(exclude_none=True)]
         resp = self.action("/addLinks", params)
         job = LinkCollectingJob(resp)
         return job

@@ -19,7 +19,8 @@ from typing import Any
 class JDDevice:
     """A class that represents a JDownloader device and its functions."""
 
-    def __init__(self, connector: Any, connection_helper: Any, device_dict: dict):
+    def __init__(self, connector: Any, connection_helper: Any,
+                 device_dict: dict):
         """Initializes the device instance.
 
         :param connector: The connector object (direct or MyJD)

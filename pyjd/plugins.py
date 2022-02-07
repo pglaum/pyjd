@@ -47,15 +47,15 @@ class Plugins:
 
         return plugins
 
-    def query(self, config_query=AdvancedConfigQuery()):
+    def query(self, config_query=AdvancedConfigQuery.default()):
         """Query plugin configurations."""
 
-        params = [config_query.to_dict()]
+        params = [config_query.dict(exclude_none=True)]
         resp = self.action("/query", params)
 
         entries = []
         for c in resp:
-            entry = AdvancedConfigAPIEntry(c)
+            entry = AdvancedConfigAPIEntry(**c)
             entries.append(entry)
 
         return entries

@@ -12,7 +12,8 @@ class Accounts:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
-    def add_account(self, premium_hoster: str, username: str, password: str) -> None:
+    def add_account(self, premium_hoster: str, username: str,
+                    password: str) -> None:
         """Add a premium hoster account.
 
         .. warning:: The password is used in plain text, so beware...
@@ -32,8 +33,8 @@ class Accounts:
         self.action("/addAccount", params)
 
     def add_basic_auth(
-        self, auth_type: BasicAuthType, hostmask: str, username: str, password: str
-    ) -> int:
+            self, auth_type: BasicAuthType, hostmask: str, username: str,
+            password: str) -> int:
         """Add a basic auth account.
 
         These accounts are plain HTTP or FTP connections, with passwords.
@@ -95,7 +96,7 @@ class Accounts:
         return resp
 
     def list_accounts(
-        self, account_query: AccountQuery = AccountQuery()
+        self, account_query: AccountQuery = AccountQuery.default()
     ) -> List[Account]:
         """List premium hoster accounts.
 
@@ -105,12 +106,13 @@ class Accounts:
         :rtype: List[Account]
         """
 
-        params = [account_query.to_dict()]
+        print(account_query.dict(exclude_none=True))
+        params = [account_query.dict(exclude_none=True)]
         resp = self.action("/listAccounts", params)
 
         accounts = []
         for acc in resp:
-            account = Account(acc)
+            account = Account(**acc)
             accounts.append(account)
 
         return accounts
@@ -126,7 +128,7 @@ class Accounts:
 
         basic_auths = []
         for auth in resp:
-            basic_auth = BasicAuth(auth)
+            basic_auth = BasicAuth(**auth)
             basic_auths.append(basic_auth)
 
         return basic_auths
@@ -222,6 +224,6 @@ class Accounts:
         :rtype: bool
         """
 
-        params = [basic_authentication.to_dict()]
+        params = [basic_authentication.dict(exclude_none=True)]
         resp = self.action("/updateBasicAuth", params)
         return resp
