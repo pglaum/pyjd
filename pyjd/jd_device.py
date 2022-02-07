@@ -19,8 +19,7 @@ from typing import Any
 class JDDevice:
     """A class that represents a JDownloader device and its functions."""
 
-    def __init__(self, connector: Any, connection_helper: Any,
-                 device_dict: dict):
+    def __init__(self, connector: Any, connection_helper: Any, device_dict: dict):
         """Initializes the device instance.
 
         :param connector: The connector object (direct or MyJD)
@@ -31,9 +30,9 @@ class JDDevice:
         :rtype: JDDevice
         """
 
-        self.name = device_dict['name']
-        self.device_id = device_dict['id']
-        self.device_type = device_dict['type']
+        self.name = device_dict["name"]
+        self.device_id = device_dict["id"]
+        self.device_type = device_dict["type"]
 
         self.connector = connector
         self.connection_helper = connection_helper(self)

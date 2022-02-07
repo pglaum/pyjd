@@ -34,7 +34,7 @@ def UNPAD(s: str) -> str:
     :rtype: str
     """
 
-    return s[0:-s[-1]]
+    return s[0 : -s[-1]]
 
 
 class MyJDConnector:
@@ -44,8 +44,8 @@ class MyJDConnector:
         """Initialize MyJD connector."""
 
         self.__request_id = int(time.time() * 1000)
-        self.__api_url = 'https://api.jdownloader.org'
-        self.__app_key = 'https://pglaum.srht.site/pyjd-api'
+        self.__api_url = "https://api.jdownloader.org"
+        self.__app_key = "https://pglaum.srht.site/pyjd-api"
         self.__api_version = 1
         self.__devices = None
 
@@ -102,9 +102,11 @@ class MyJDConnector:
         """
 
         secret_hash = hashlib.sha256()
-        secret_hash.update(email.lower().encode('utf-8')
-                           + password.encode('utf-8')
-                           + domain.lower().encode('utf-8'))
+        secret_hash.update(
+            email.lower().encode("utf-8")
+            + password.encode("utf-8")
+            + domain.lower().encode("utf-8")
+        )
 
         return secret_hash.digest()
 
@@ -121,8 +123,7 @@ class MyJDConnector:
         new_token.update(old_token + bytearray.fromhex(self.__session_token))
         self.__server_encryption_token = new_token.digest()
         new_token = hashlib.sha256()
-        new_token.update(self.__device_secret +
-                         bytearray.fromhex(self.__session_token))
+        new_token.update(self.__device_secret + bytearray.fromhex(self.__session_token))
         self.__device_encryption_token = new_token.digest()
 
     def __create_signature(self, key: str, data: str) -> None:
@@ -136,7 +137,7 @@ class MyJDConnector:
         :rtype: bytes
         """
 
-        signature = hmac.new(key, data.encode('utf-8'), hashlib.sha256)
+        signature = hmac.new(key, data.encode("utf-8"), hashlib.sha256)
         return signature.hexdigest()
 
     def __decrypt(self, secret_token: str, data: str) -> str:
@@ -150,8 +151,8 @@ class MyJDConnector:
         :rtype: str
         """
 
-        init_vector = secret_token[:len(secret_token) // 2]
-        key = secret_token[len(secret_token) // 2:]
+        init_vector = secret_token[: len(secret_token) // 2]
+        key = secret_token[len(secret_token) // 2 :]
         decryptor = AES.new(key, AES.MODE_CBC, init_vector)
 
         decrypted_data = UNPAD(decryptor.decrypt(base64.b64decode(data)))
@@ -169,13 +170,13 @@ class MyJDConnector:
         :rtype: str
         """
 
-        data = PAD(data.encode('utf-8'))
-        init_vector = secret_token[:len(secret_token) // 2]
-        key = secret_token[len(secret_token) // 2:]
+        data = PAD(data.encode("utf-8"))
+        init_vector = secret_token[: len(secret_token) // 2]
+        key = secret_token[len(secret_token) // 2 :]
         encryptor = AES.new(key, AES.MODE_CBC, init_vector)
         encrypted_data = base64.b64encode(encryptor.encrypt(data))
 
-        return encrypted_data.decode('utf-8')
+        return encrypted_data.decode("utf-8")
 
     def update_request_id(self) -> None:
         """Update ``__request_id``.
@@ -208,9 +209,9 @@ class MyJDConnector:
 
         self.__login_secret = self.__create_secret(email, password, "server")
         self.__device_secret = self.__create_secret(email, password, "device")
-        response = self.request_api("/my/connect", "GET",
-                                    [("email", email),
-                                     ("appkey", self.__app_key)])
+        response = self.request_api(
+            "/my/connect", "GET", [("email", email), ("appkey", self.__app_key)]
+        )
         self.__connected = True
         self.update_request_id()
         self.__session_token = response["sessiontoken"]
@@ -227,9 +228,14 @@ class MyJDConnector:
         :rtype: bool
         """
 
-        response = self.request_api("/my/reconnect", "GET",
-                                    [("sessiontoken", self.__session_token),
-                                     ("regaintoken", self.__regain_token)])
+        response = self.request_api(
+            "/my/reconnect",
+            "GET",
+            [
+                ("sessiontoken", self.__session_token),
+                ("regaintoken", self.__regain_token),
+            ],
+        )
         self.update_request_id()
         self.__session_token = response["sessiontoken"]
         self.__regain_token = response["regaintoken"]
@@ -244,8 +250,9 @@ class MyJDConnector:
         :rtype: bool
         """
 
-        response = self.request_api("/my/disconnect", "GET",
-                                    [("sessiontoken", self.__session_token)])
+        response = self.request_api(
+            "/my/disconnect", "GET", [("sessiontoken", self.__session_token)]
+        )
         self.update_request_id()
         self.__login_secret = None
         self.__device_secret = None
@@ -267,8 +274,9 @@ class MyJDConnector:
         :rtype: bool
         """
 
-        response = self.request_api("/my/listdevices", "GET",
-                                    [("sessiontoken", self.__session_token)])
+        response = self.request_api(
+            "/my/listdevices", "GET", [("sessiontoken", self.__session_token)]
+        )
         self.update_request_id()
         self.__devices = response["list"]
 
@@ -296,8 +304,7 @@ class MyJDConnector:
 
         return self.__devices
 
-    def get_device(self, device_name: str = None, device_id: str = None
-                   ) -> JDDevice:
+    def get_device(self, device_name: str = None, device_id: str = None) -> JDDevice:
         """Get a JDDevice instance for a device
 
         Will search for ``device_id`` first and then for ``device_name``.
@@ -325,9 +332,15 @@ class MyJDConnector:
 
         raise (Exception("Device not found\n"))
 
-    def request_api(self, path: str, http_method: str = 'GET',
-                    params: Any = None, action: str = None, api: str = None,
-                    binary: bool = False) -> Any:
+    def request_api(
+        self,
+        path: str,
+        http_method: str = "GET",
+        params: Any = None,
+        action: str = None,
+        api: str = None,
+        binary: bool = False,
+    ) -> Any:
         """Make a request to the MyJD API.
 
         The request goes to ``path``, using the ``http_method`` with the
@@ -372,15 +385,25 @@ class MyJDConnector:
             query += ["rid=" + str(self.__request_id)]
 
             if self.__server_encryption_token is None:
-                query += ["signature=" +
-                          str(self.__create_signature(
-                              self.__login_secret, query[0] +
-                              "&".join(query[1:])))]
+                query += [
+                    "signature="
+                    + str(
+                        self.__create_signature(
+                            self.__login_secret, query[0] + "&".join(query[1:])
+                        )
+                    )
+                ]
 
             else:
-                query += ["signature=" + str(self.__create_signature(
-                    self.__server_encryption_token, query[0] +
-                    "&".join(query[1:])))]
+                query += [
+                    "signature="
+                    + str(
+                        self.__create_signature(
+                            self.__server_encryption_token,
+                            query[0] + "&".join(query[1:]),
+                        )
+                    )
+                ]
 
             query = query[0] + "&".join(query[1:])
             encrypted_response = requests.get(api + query, timeout=3)
@@ -397,15 +420,14 @@ class MyJDConnector:
                 "apiVer": self.__api_version,
                 "url": path,
                 "params": params_request,
-                "rid": self.__request_id
+                "rid": self.__request_id,
             }
 
             data = json.dumps(params_request)
             # Removing quotes around null elements.
             data = data.replace('"null"', "null")
             data = data.replace("'null'", "null")
-            encrypted_data = self.__encrypt(self.__device_encryption_token,
-                                            data)
+            encrypted_data = self.__encrypt(self.__device_encryption_token, data)
 
             if action is not None:
                 request_url = api + action + path
@@ -415,11 +437,10 @@ class MyJDConnector:
             try:
                 encrypted_response = requests.post(
                     request_url,
-                    headers={
-                        "Content-Type": "application/aesjson-jd; charset=utf-8"
-                    },
+                    headers={"Content-Type": "application/aesjson-jd; charset=utf-8"},
                     data=encrypted_data,
-                    timeout=3)
+                    timeout=3,
+                )
 
             except requests.exceptions.RequestException:
                 return None
@@ -431,16 +452,23 @@ class MyJDConnector:
                 try:
                     error_msg = json.loads(
                         self.__decrypt(
-                            self.__device_encryption_token,
-                            encrypted_response.text))
+                            self.__device_encryption_token, encrypted_response.text
+                        )
+                    )
                 except json.JSONDecodeError:
                     raise Exception(
-                        "Failed to decode response: {}",
-                        encrypted_response.text)
+                        "Failed to decode response: {}", encrypted_response.text
+                    )
 
-            msg = "\n\tSOURCE: " + error_msg["src"] + "\n\tTYPE: " + \
-                  error_msg["type"] + "\n------\nREQUEST_URL: " + \
-                  api + path
+            msg = (
+                "\n\tSOURCE: "
+                + error_msg["src"]
+                + "\n\tTYPE: "
+                + error_msg["type"]
+                + "\n------\nREQUEST_URL: "
+                + api
+                + path
+            )
 
             if http_method == "GET":
                 msg += query
@@ -460,18 +488,19 @@ class MyJDConnector:
 
         if action is None:
             if not self.__server_encryption_token:
-                response = self.__decrypt(
-                    self.__login_secret, encrypted_response.text)
+                response = self.__decrypt(self.__login_secret, encrypted_response.text)
             else:
                 response = self.__decrypt(
-                    self.__server_encryption_token, encrypted_response.text)
+                    self.__server_encryption_token, encrypted_response.text
+                )
 
         else:
             response = self.__decrypt(
-                self.__device_encryption_token, encrypted_response.text)
+                self.__device_encryption_token, encrypted_response.text
+            )
 
-        jsondata = json.loads(response.decode('utf-8'))
-        if jsondata['rid'] != self.__request_id:
+        jsondata = json.loads(response.decode("utf-8"))
+        if jsondata["rid"] != self.__request_id:
             self.update_request_id()
             return None
 

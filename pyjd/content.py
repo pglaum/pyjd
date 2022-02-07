@@ -3,17 +3,14 @@ from typing import Any
 
 
 class Content:
-
     def __init__(self, device):
 
         self.device = device
-        self.endpoint = 'contentV2'
+        self.endpoint = "contentV2"
 
-    def action(self, route: str, params: Any = None, binary: bool = False
-               ) -> Any:
-        route = f'/{self.endpoint}{route}'
-        return self.device.connection_helper.action(
-            route, params, binary=binary)
+    def action(self, route: str, params: Any = None, binary: bool = False) -> Any:
+        route = f"/{self.endpoint}{route}"
+        return self.device.connection_helper.action(route, params, binary=binary)
 
     def get_fav_icon(self, hostername: str) -> bytes:
         """Get the fav icon for a hoster.

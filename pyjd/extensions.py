@@ -3,13 +3,12 @@ from typing import Any, List
 
 
 class Extensions:
-
     def __init__(self, device):
         self.device = device
-        self.endpoint = 'extensions'
+        self.endpoint = "extensions"
 
     def action(self, route: str, params: Any = None) -> Any:
-        route = f'/{self.endpoint}{route}'
+        route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
     def install(self, extension_id: str) -> bool:
@@ -52,7 +51,8 @@ class Extensions:
         return resp
 
     def list_extensions(
-            self, query: ExtensionQuery = ExtensionQuery()) -> List[Extension]:
+        self, query: ExtensionQuery = ExtensionQuery()
+    ) -> List[Extension]:
         """List all extensions.
 
         :param query: A query to filter by (default: all)

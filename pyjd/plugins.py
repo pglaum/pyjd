@@ -1,30 +1,28 @@
-from .jd_types import AdvancedConfigQuery, AdvancedConfigAPIEntry, Plugin, \
-    PluginsQuery
+from .jd_types import AdvancedConfigQuery, AdvancedConfigAPIEntry, Plugin, PluginsQuery
 from typing import Any
 
 
 class Plugins:
-
     def __init__(self, device):
         self.device = device
-        self.endpoint = 'plugins'
+        self.endpoint = "plugins"
 
     def action(self, route: str, params: Any = None) -> Any:
-        route = f'/{self.endpoint}{route}'
+        route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
     def get(self, interface_name, display_name, key):
         """Get a plugin."""
 
         params = [interface_name, display_name, key]
-        resp = self.action('/get', params)
+        resp = self.action("/get", params)
 
         return resp
 
     def get_all_plugin_regex(self):
         """Get all plugin regular expressions."""
 
-        resp = self.action('/getAllPluginRegex')
+        resp = self.action("/getAllPluginRegex")
 
         return resp
 
@@ -32,7 +30,7 @@ class Plugins:
         """Get plugin regular expressions for a url."""
 
         params = [url]
-        resp = self.action('/getPluginRegex', params)
+        resp = self.action("/getPluginRegex", params)
 
         return resp
 
@@ -40,7 +38,7 @@ class Plugins:
         """List plugins with query."""
 
         params = [plugins_query.to_dict()]
-        resp = self.action('/list', params)
+        resp = self.action("/list", params)
 
         plugins = []
         for p in resp:
@@ -53,7 +51,7 @@ class Plugins:
         """Query plugin configurations."""
 
         params = [config_query.to_dict()]
-        resp = self.action('/query', params)
+        resp = self.action("/query", params)
 
         entries = []
         for c in resp:
@@ -66,7 +64,7 @@ class Plugins:
         """Reset plugin config."""
 
         params = [interface_name, display_name, key]
-        resp = self.action('/reset', params)
+        resp = self.action("/reset", params)
 
         return resp
 
@@ -74,6 +72,6 @@ class Plugins:
         """Set a plugin config value."""
 
         params = [interface_name, display_name, key, new_value]
-        resp = self.action('/set', params)
+        resp = self.action("/set", params)
 
         return resp

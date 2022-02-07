@@ -3,17 +3,14 @@ from typing import Any, List
 
 
 class Captcha:
-
     def __init__(self, device):
 
         self.device = device
-        self.endpoint = 'captcha'
+        self.endpoint = "captcha"
 
-    def action(self, route: str, params: Any = None, binary: bool = False
-               ) -> Any:
-        route = f'/{self.endpoint}{route}'
-        return self.device.connection_helper.action(
-            route, params, binary=binary)
+    def action(self, route: str, params: Any = None, binary: bool = False) -> Any:
+        route = f"/{self.endpoint}{route}"
+        return self.device.connection_helper.action(route, params, binary=binary)
 
     def get(self, captcha_id: int, c_format: str = None) -> str:
         """Get the base64 captcha image.
@@ -63,8 +60,9 @@ class Captcha:
 
         return captcha_jobs
 
-    def skip(self, captcha_id: int,
-             skip_type: SkipRequest = SkipRequest.SINGLE) -> bool:
+    def skip(
+        self, captcha_id: int, skip_type: SkipRequest = SkipRequest.SINGLE
+    ) -> bool:
         """Skip a captcha with a SkipRequest type
 
         :param captcha_id: ID of the captcha to skip
@@ -79,8 +77,7 @@ class Captcha:
         resp = self.action("/skip", params)
         return resp
 
-    def solve(self, captcha_id: int, result: str, result_format: str = None
-              ) -> bool:
+    def solve(self, captcha_id: int, result: str, result_format: str = None) -> bool:
         """Solve a captcha.
 
         :param captcha_id: The ID of the captcha that is solved.

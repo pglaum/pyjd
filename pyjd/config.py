@@ -3,14 +3,13 @@ from typing import Any, List
 
 
 class Config:
-
     def __init__(self, device):
 
         self.device = device
-        self.endpoint = 'config'
+        self.endpoint = "config"
 
     def action(self, route: str, params: Any = None) -> Any:
-        route = f'/{self.endpoint}{route}'
+        route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
     def get(self, interface_name: str, storage: str, key: str) -> Any:
@@ -51,9 +50,14 @@ class Config:
         resp = self.action("/getDefault", params)
         return resp
 
-    def list(self, pattern: str = "", returnDescription: bool = True,
-             returnValues: bool = True, returnDefaultValues: bool = True,
-             returnEnumInfo: bool = True) -> List[AdvancedConfigAPIEntry]:
+    def list(
+        self,
+        pattern: str = "",
+        returnDescription: bool = True,
+        returnValues: bool = True,
+        returnDefaultValues: bool = True,
+        returnEnumInfo: bool = True,
+    ) -> List[AdvancedConfigAPIEntry]:
         """List all available config entries.
 
         :param pattern: A regex pattern to query by. If no pattern is given,
@@ -71,8 +75,13 @@ class Config:
         :rtype: List[AdvancedConfigAPIEntry]
         """
 
-        params = [pattern, returnDescription, returnValues,
-                  returnDefaultValues, returnEnumInfo]
+        params = [
+            pattern,
+            returnDescription,
+            returnValues,
+            returnDefaultValues,
+            returnEnumInfo,
+        ]
         resp = self.action("/list", params)
 
         config_api_entries = []
@@ -104,8 +113,9 @@ class Config:
 
         return enum_options
 
-    def query(self, advanced_config_query: AdvancedConfigQuery =
-              AdvancedConfigQuery()) -> List[AdvancedConfigAPIEntry]:
+    def query(
+        self, advanced_config_query: AdvancedConfigQuery = AdvancedConfigQuery()
+    ) -> List[AdvancedConfigAPIEntry]:
         """Query config entries with an :class:`AdvancedConfigQuery`.
 
         :param advanced_config_query: The query options
@@ -143,8 +153,7 @@ class Config:
         resp = self.action("/reset", params)
         return resp
 
-    def set(self, interface_name: str, storage: str,
-            key: str, value: str) -> bool:
+    def set(self, interface_name: str, storage: str, key: str, value: str) -> bool:
         """Set a config entry.
 
         :param interface_name: The name of the JDownloader interface

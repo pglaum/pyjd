@@ -1,17 +1,25 @@
-from .jd_types import AddLinksQuery, CrawledLink, CrawledLinkQuery, \
-    CrawledPackage, CrawledPackageQuery, DeleteAction, JobLinkCrawler, \
-    LinkCollectingJob, LinkCrawlerJobsQuery, LinkVariant
+from .jd_types import (
+    AddLinksQuery,
+    CrawledLink,
+    CrawledLinkQuery,
+    CrawledPackage,
+    CrawledPackageQuery,
+    DeleteAction,
+    JobLinkCrawler,
+    LinkCollectingJob,
+    LinkCrawlerJobsQuery,
+    LinkVariant,
+)
 from typing import Any
 
 
 class LinkGrabber:
-
     def __init__(self, device):
         self.device = device
-        self.endpoint = 'linkgrabberv2'
+        self.endpoint = "linkgrabberv2"
 
     def action(self, route: str, params: Any = None) -> Any:
-        route = f'/{self.endpoint}{route}'
+        route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
     def abort(self, job_id: int = None) -> bool:
@@ -30,8 +38,7 @@ class LinkGrabber:
         resp = self.action("/abort", params)
         return resp
 
-    def add_container(self, container_type: str,
-                      content: str) -> LinkCollectingJob:
+    def add_container(self, container_type: str, content: str) -> LinkCollectingJob:
         """Add a container of type and content.
 
         :param container_type: The type of the container
@@ -43,12 +50,13 @@ class LinkGrabber:
         """
 
         params = [container_type, content]
-        resp = self.action('/addContainer', params)
+        resp = self.action("/addContainer", params)
         job = LinkCollectingJob(resp)
         return job
 
-    def add_links(self, add_links_query: AddLinksQuery = AddLinksQuery()
-                  ) -> LinkCollectingJob:
+    def add_links(
+        self, add_links_query: AddLinksQuery = AddLinksQuery()
+    ) -> LinkCollectingJob:
         """
         Add links to the linkcollector
 
@@ -63,22 +71,32 @@ class LinkGrabber:
         job = LinkCollectingJob(resp)
         return job
 
-    def add_variant_copy(self, link_id: int,
-                         destination_after_link_id: int,
-                         destination_package_id: int,
-                         variant_id: int) -> Any:
+    def add_variant_copy(
+        self,
+        link_id: int,
+        destination_after_link_id: int,
+        destination_package_id: int,
+        variant_id: int,
+    ) -> Any:
         """Unkown."""
 
-        params = [link_id, destination_after_link_id, destination_package_id,
-                  variant_id]
+        params = [
+            link_id,
+            destination_after_link_id,
+            destination_package_id,
+            variant_id,
+        ]
         resp = self.action("/addVariantCopy", params)
         return resp
 
-    def cleanup(self, delete_action: DeleteAction,
-                mode,
-                selection_type,
-                link_ids=[],
-                package_ids=[]):
+    def cleanup(
+        self,
+        delete_action: DeleteAction,
+        mode,
+        selection_type,
+        link_ids=[],
+        package_ids=[],
+    ):
         """Clean packages and/or links of the linkgrabber list.
 
         Requires at least a ``package_ids`` or ``link_ids`` list, or both.
@@ -120,11 +138,10 @@ class LinkGrabber:
         :rtype: List[str]
         """
 
-        resp = self.action('/getDownloadFolderHistorySelectionBase')
+        resp = self.action("/getDownloadFolderHistorySelectionBase")
         return resp
 
-    def get_download_urls(self, link_ids, package_ids,
-                          url_display_types=['ORIGIN']):
+    def get_download_urls(self, link_ids, package_ids, url_display_types=["ORIGIN"]):
         """Gets download urls from Linkgrabber.
 
         :param package_ids: Package UUIDs.
@@ -214,8 +231,7 @@ class LinkGrabber:
         resp = self.action("/moveToDownloadlist", params)
         return resp
 
-    def move_to_new_package(self, link_ids, package_ids,
-                            new_pkg_name, download_path):
+    def move_to_new_package(self, link_ids, package_ids, new_pkg_name, download_path):
         """Moves packages and/or links to a new package
 
         :param link_ids: Link UUIDs.
@@ -232,8 +248,7 @@ class LinkGrabber:
         resp = self.action("/movetoNewPackage", params)
         return resp
 
-    def query_link_crawler_jobs(
-            self, link_crawler_jobs_query=LinkCrawlerJobsQuery()):
+    def query_link_crawler_jobs(self, link_crawler_jobs_query=LinkCrawlerJobsQuery()):
         """Query link crawler jobs.
 
         :param crawled_link_query: Query to filter by
@@ -281,7 +296,7 @@ class LinkGrabber:
         """
 
         params = [crawled_package_query.to_dict()]
-        resp = self.action('/queryPackages', params)
+        resp = self.action("/queryPackages", params)
 
         crawled_packages = []
         for package in resp:

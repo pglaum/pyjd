@@ -2,13 +2,12 @@ from typing import Any
 
 
 class System:
-
     def __init__(self, device):
         self.device = device
-        self.endpoint = 'system'
+        self.endpoint = "system"
 
     def action(self, route: str, params: Any = None) -> Any:
-        route = f'/{self.endpoint}{route}'
+        route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
     def exit_jd(self):

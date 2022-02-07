@@ -2,13 +2,12 @@ from typing import Any
 
 
 class Update:
-
     def __init__(self, device):
         self.device = device
-        self.endpoint = 'update'
+        self.endpoint = "update"
 
     def action(self, route: str, params: Any = None) -> Any:
-        route = f'/{self.endpoint}{route}'
+        route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
     def is_update_available(self):

@@ -33,18 +33,20 @@ from typing import Any, List
 
 
 class Events:
-
     def __init__(self, device):
         self.device = device
-        self.endpoint = 'events'
+        self.endpoint = "events"
 
     def action(self, route: str, params: Any = None) -> Any:
-        route = f'/{self.endpoint}{route}'
+        route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
     def add_subscription(
-            self, subscription_id: int, subscriptions: List[str] = [],
-            exclusions: List[str] = []) -> SubscriptionResponse:
+        self,
+        subscription_id: int,
+        subscriptions: List[str] = [],
+        exclusions: List[str] = [],
+    ) -> SubscriptionResponse:
         """Add subscriptions/exclusions to an existing Subscription.
 
         :param subscription_id: Subscription ID, handed out by
@@ -63,9 +65,9 @@ class Events:
         subscription_response = SubscriptionResponse(resp)
         return subscription_response
 
-    def change_subscription_timeouts(self, subscription_id: int,
-                                     poll_timeout: int, keep_alive: int
-                                     ) -> SubscriptionResponse:
+    def change_subscription_timeouts(
+        self, subscription_id: int, poll_timeout: int, keep_alive: int
+    ) -> SubscriptionResponse:
         """Change subscription timeouts for a subcription.
 
         :param subscription_id: Subscription ID, handed out by
@@ -123,8 +125,11 @@ class Events:
         return publisher_responses
 
     def remove_subscription(
-            self, subscription_id: int, subscriptions: List[str] = [],
-            exclusions: List[str] = []) -> SubscriptionResponse:
+        self,
+        subscription_id: int,
+        subscriptions: List[str] = [],
+        exclusions: List[str] = [],
+    ) -> SubscriptionResponse:
         """Remove subscriptions/exclusions to an existing Subscription.
 
         :param subscription_id: Subscription ID, handed out by
@@ -144,8 +149,11 @@ class Events:
         return subscription_response
 
     def set_subscription(
-            self, subscription_id: int, subscriptions: List[str] = [],
-            exclusions: List[str] = []) -> SubscriptionResponse:
+        self,
+        subscription_id: int,
+        subscriptions: List[str] = [],
+        exclusions: List[str] = [],
+    ) -> SubscriptionResponse:
         """Set subscriptions/exclusions for an existing Subscription.
 
         :param subscription_id: Subscription ID, handed out by
@@ -164,8 +172,9 @@ class Events:
         subscription_response = SubscriptionResponse(resp)
         return subscription_response
 
-    def subscribe(self, subscriptions: List[str] = [],
-                  exclusions: List[str] = []) -> SubscriptionResponse:
+    def subscribe(
+        self, subscriptions: List[str] = [], exclusions: List[str] = []
+    ) -> SubscriptionResponse:
         """Create a new subscription.
 
         :param subscriptions: A list of event publishers

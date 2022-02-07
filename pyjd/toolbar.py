@@ -3,13 +3,12 @@ from typing import Any
 
 
 class Toolbar:
-
     def __init__(self, device):
         self.device = device
-        self.endpoint = 'toolbar'
+        self.endpoint = "toolbar"
 
     def action(self, route: str, params: Any = None) -> Any:
-        route = f'/{self.endpoint}{route}'
+        route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
     def add_links_from_dom(self):

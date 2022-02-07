@@ -3,13 +3,12 @@ from typing import Any
 
 
 class Log:
-
     def __init__(self, device):
         self.device = device
-        self.endpoint = 'log'
+        self.endpoint = "log"
 
     def action(self, route: str, params: Any = None) -> Any:
-        route = f'/{self.endpoint}{route}'
+        route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
     def get_available_logs(self):

@@ -13,8 +13,8 @@ Local JDownloader setups can be easily accessed with this API.
 :license: GPLv2, see LICENSE for more details
 """
 
-__title__ = 'pyjd'
-__version__ = '2.0-alpha'
-__author__ = 'Philipp Glaum'
-__copyright__ = 'Copyright (c) 2021 Philipp Glaum'
-__license__ = 'GPLv2'
+__title__ = "pyjd"
+__version__ = "2.0-alpha"
+__author__ = "Philipp Glaum"
+__copyright__ = "Copyright (c) 2021 Philipp Glaum"
+__license__ = "GPLv2"

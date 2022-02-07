@@ -3,18 +3,16 @@ from typing import Any, Dict, List
 
 
 class Accounts:
-
     def __init__(self, device):
 
         self.device = device
-        self.endpoint = 'accountsV2'
+        self.endpoint = "accountsV2"
 
     def action(self, route: str, params: Any = None) -> Any:
-        route = f'/{self.endpoint}{route}'
+        route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
-    def add_account(self, premium_hoster: str, username: str, password: str
-                    ) -> None:
+    def add_account(self, premium_hoster: str, username: str, password: str) -> None:
         """Add a premium hoster account.
 
         .. warning:: The password is used in plain text, so beware...
@@ -31,10 +29,11 @@ class Accounts:
         """
 
         params = [premium_hoster, username, password]
-        self.action('/addAccount', params)
+        self.action("/addAccount", params)
 
-    def add_basic_auth(self, auth_type: BasicAuthType, hostmask: str,
-                       username: str, password: str) -> int:
+    def add_basic_auth(
+        self, auth_type: BasicAuthType, hostmask: str, username: str, password: str
+    ) -> int:
         """Add a basic auth account.
 
         These accounts are plain HTTP or FTP connections, with passwords.
@@ -55,7 +54,7 @@ class Accounts:
         """
 
         params = [auth_type.value, hostmask, username, password]
-        resp = self.action('/addBasicAuth', params)
+        resp = self.action("/addBasicAuth", params)
         return resp
 
     def disable_accounts(self, account_ids: List[int]) -> None:
@@ -68,7 +67,7 @@ class Accounts:
         """
 
         params = [account_ids]
-        self.action('/disableAccounts', params)
+        self.action("/disableAccounts", params)
 
     def enable_accounts(self, account_ids: List[int]) -> None:
         """Enable premium hoster accounts.
@@ -78,7 +77,7 @@ class Accounts:
         """
 
         params = [account_ids]
-        self.action('/enableAccounts', params)
+        self.action("/enableAccounts", params)
 
     def get_premium_hoster_url(self, hoster: str) -> str:
         """Get the url for a premium hoster.
@@ -92,11 +91,12 @@ class Accounts:
         """
 
         params = [hoster]
-        resp = self.action('/getPremiumHosterUrl', params)
+        resp = self.action("/getPremiumHosterUrl", params)
         return resp
 
-    def list_accounts(self, account_query: AccountQuery = AccountQuery()
-                      ) -> List[Account]:
+    def list_accounts(
+        self, account_query: AccountQuery = AccountQuery()
+    ) -> List[Account]:
         """List premium hoster accounts.
 
         :param params: An AccountQuery object.
@@ -106,7 +106,7 @@ class Accounts:
         """
 
         params = [account_query.to_dict()]
-        resp = self.action('/listAccounts', params)
+        resp = self.action("/listAccounts", params)
 
         accounts = []
         for acc in resp:
@@ -122,7 +122,7 @@ class Accounts:
         :rtype: list[BasicAuthentication]
         """
 
-        resp = self.action('/listBasicAuth')
+        resp = self.action("/listBasicAuth")
 
         basic_auths = []
         for auth in resp:
@@ -138,7 +138,7 @@ class Accounts:
         :rtype: List[str]
         """
 
-        resp = self.action('/listPremiumHoster')
+        resp = self.action("/listPremiumHoster")
         return resp
 
     def list_premium_hoster_urls(self) -> Dict[str, str]:
@@ -148,7 +148,7 @@ class Accounts:
         :rtype: Dict[str, str]
         """
 
-        resp = self.action('/listPremiumHosterUrls')
+        resp = self.action("/listPremiumHosterUrls")
         return resp
 
     def refresh_accounts(self, account_ids: List[int]) -> None:
@@ -161,7 +161,7 @@ class Accounts:
         """
 
         params = [account_ids]
-        self.action('/refreshAccounts', params)
+        self.action("/refreshAccounts", params)
 
     def remove_accounts(self, account_ids: List[int]) -> None:
         """Remove the accounts for ``account_ids``.
@@ -173,7 +173,7 @@ class Accounts:
         """
 
         params = [account_ids]
-        self.action('/removeAccounts', params)
+        self.action("/removeAccounts", params)
 
     def remove_basic_auths(self, basic_auth_ids: List[int]) -> bool:
         """Remove basic auths for ``basic_auth_ids``.
@@ -185,11 +185,12 @@ class Accounts:
         """
 
         params = [basic_auth_ids]
-        resp = self.action('/removeBasicAuths', params)
+        resp = self.action("/removeBasicAuths", params)
         return resp
 
-    def set_username_and_password(self, account_id: int, username: str,
-                                  password: str) -> bool:
+    def set_username_and_password(
+        self, account_id: int, username: str, password: str
+    ) -> bool:
         """Set a new username and password for a premium hoster account.
 
         :param account_id: The ID of the account.
@@ -203,7 +204,7 @@ class Accounts:
         """
 
         params = [account_id, username, password]
-        resp = self.action('/setUserNameAndPassword', params)
+        resp = self.action("/setUserNameAndPassword", params)
         return resp
 
     def update_basic_auth(self, basic_authentication: BasicAuth) -> bool:
@@ -222,5 +223,5 @@ class Accounts:
         """
 
         params = [basic_authentication.to_dict()]
-        resp = self.action('/updateBasicAuth', params)
+        resp = self.action("/updateBasicAuth", params)
         return resp
