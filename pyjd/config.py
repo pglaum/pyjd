@@ -1,10 +1,12 @@
 from .jd_types import AdvancedConfigAPIEntry, AdvancedConfigQuery, EnumOption
-from typing import Any, List
+from typing import Any, List, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .jd_device import JDDevice
 
 
 class Config:
-    def __init__(self, device):
-
+    def __init__(self, device: "JDDevice") -> None:
         self.device = device
         self.endpoint = "config"
 
@@ -114,8 +116,7 @@ class Config:
         return enum_options
 
     def query(
-        self, advanced_config_query: AdvancedConfigQuery =
-            AdvancedConfigQuery.default()
+        self, advanced_config_query: AdvancedConfigQuery = AdvancedConfigQuery.default()
     ) -> List[AdvancedConfigAPIEntry]:
         """Query config entries with an :class:`AdvancedConfigQuery`.
 
@@ -154,8 +155,7 @@ class Config:
         resp = self.action("/reset", params)
         return resp
 
-    def set(self, interface_name: str, storage: str,
-            key: str, value: str) -> bool:
+    def set(self, interface_name: str, storage: str, key: str, value: str) -> bool:
         """Set a config entry.
 
         :param interface_name: The name of the JDownloader interface

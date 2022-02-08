@@ -1,9 +1,12 @@
 import time
-from typing import List
+from typing import List, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .jd_device import JDDevice
 
 
 class MyJDConnectionHelper:
-    def __init__(self, device):
+    def __init__(self, device: "JDDevice") -> None:
 
         self.device = device
 

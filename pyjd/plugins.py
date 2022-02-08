@@ -1,5 +1,4 @@
-from .jd_types import AdvancedConfigQuery, AdvancedConfigAPIEntry, Plugin, \
-    PluginsQuery
+from .jd_types import AdvancedConfigQuery, AdvancedConfigAPIEntry, Plugin, PluginsQuery
 from typing import Any
 
 

@@ -1,9 +1,12 @@
 from .jd_types import Account, AccountQuery, BasicAuth, BasicAuthType
-from typing import Any, Dict, List
+from typing import Any, Dict, List, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .jd_device import JDDevice
 
 
 class Accounts:
-    def __init__(self, device):
+    def __init__(self, device: "JDDevice"):
 
         self.device = device
         self.endpoint = "accountsV2"
@@ -12,8 +15,7 @@ class Accounts:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
-    def add_account(self, premium_hoster: str, username: str,
-                    password: str) -> None:
+    def add_account(self, premium_hoster: str, username: str, password: str) -> None:
         """Add a premium hoster account.
 
         .. warning:: The password is used in plain text, so beware...
@@ -33,8 +35,8 @@ class Accounts:
         self.action("/addAccount", params)
 
     def add_basic_auth(
-            self, auth_type: BasicAuthType, hostmask: str, username: str,
-            password: str) -> int:
+        self, auth_type: BasicAuthType, hostmask: str, username: str, password: str
+    ) -> int:
         """Add a basic auth account.
 
         These accounts are plain HTTP or FTP connections, with passwords.

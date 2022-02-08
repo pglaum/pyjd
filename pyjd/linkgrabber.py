@@ -54,9 +54,7 @@ class LinkGrabber:
         job = LinkCollectingJob(**resp)
         return job
 
-    def add_links(
-        self, add_links_query: AddLinksQuery
-    ) -> LinkCollectingJob:
+    def add_links(self, add_links_query: AddLinksQuery) -> LinkCollectingJob:
         """
         Add links to the linkcollector
 
@@ -248,7 +246,9 @@ class LinkGrabber:
         resp = self.action("/movetoNewPackage", params)
         return resp
 
-    def query_link_crawler_jobs(self, link_crawler_jobs_query=LinkCrawlerJobsQuery.default()):
+    def query_link_crawler_jobs(
+        self, link_crawler_jobs_query=LinkCrawlerJobsQuery.default()
+    ):
         """Query link crawler jobs.
 
         :param crawled_link_query: Query to filter by

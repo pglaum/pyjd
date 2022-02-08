@@ -13,7 +13,7 @@ import time
 BS = 16
 
 
-def PAD(s: str) -> str:
+def PAD(s: bytes) -> bytes:
     """Pad a string
 
     :param s: String to pad
@@ -25,7 +25,7 @@ def PAD(s: str) -> str:
     return s + ((BS - len(s) % BS) * chr(BS - len(s) % BS)).encode()
 
 
-def UNPAD(s: str) -> str:
+def UNPAD(s: bytes) -> bytes:
     """Unpad a string.
 
     :param s: String to unpad
@@ -40,7 +40,7 @@ def UNPAD(s: str) -> str:
 class MyJDConnector:
     """Main class for connecting to the MyJD API."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize MyJD connector."""
 
         self.__request_id = int(time.time() * 1000)
@@ -87,7 +87,7 @@ class MyJDConnector:
 
         self.__app_key = app_key
 
-    def __create_secret(self, email: str, password: str, domain: str) -> str:
+    def __create_secret(self, email: str, password: str, domain: str) -> bytes:
         """Create the login_secret and device_secret.
 
         :param email: MyJDownloader user email
@@ -126,7 +126,7 @@ class MyJDConnector:
         new_token.update(self.__device_secret + bytearray.fromhex(self.__session_token))
         self.__device_encryption_token = new_token.digest()
 
-    def __create_signature(self, key: str, data: str) -> None:
+    def __create_signature(self, key: str, data: str) -> bytes:
         """Calculate the signature for the data, given a key.
 
         :param key: Key for the signature

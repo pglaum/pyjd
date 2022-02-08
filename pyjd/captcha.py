@@ -1,9 +1,12 @@
 from .jd_types import CaptchaJob, SkipRequest
-from typing import Any, List
+from typing import Any, List, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .jd_device import JDDevice
 
 
 class Captcha:
-    def __init__(self, device):
+    def __init__(self, device: "JDDevice") -> None:
 
         self.device = device
         self.endpoint = "captcha"

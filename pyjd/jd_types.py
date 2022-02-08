@@ -190,24 +190,33 @@ class AccountQuery(BaseModel):
     By default all possible data is queried.
     """
 
-    enabled: bool = True,
-    error: bool = True,
-    maxResults: int = -1,
-    startAt: int = 0,
-    trafficLeft: bool = True,
-    trafficMax: bool = True,
-    userName: bool = True,
+    enabled: bool = (True,)
+    error: bool = (True,)
+    maxResults: int = (-1,)
+    startAt: int = (0,)
+    trafficLeft: bool = (True,)
+    trafficMax: bool = (True,)
+    userName: bool = (True,)
     uuidlist: Optional[List[int]]
-    valid: bool = True,
-    validUntil: bool = True,
+    valid: bool = (True,)
+    validUntil: bool = (True,)
 
     def __repr__(self):
         return f"<AccountQuery ({self.uuid_list})>"
 
     def default():
-        return AccountQuery(enabled=True, error=True, maxResults=-1, startAt=0,
-                            trafficLeft=True, trafficMax=True, userName=True,
-                            uuidlist=None, valid=True, validUntil=True)
+        return AccountQuery(
+            enabled=True,
+            error=True,
+            maxResults=-1,
+            startAt=0,
+            trafficLeft=True,
+            trafficMax=True,
+            userName=True,
+            uuidlist=None,
+            valid=True,
+            validUntil=True,
+        )
 
 
 class AdvancedConfigAPIEntry(BaseModel):
@@ -241,10 +250,15 @@ class AdvancedConfigQuery(BaseModel):
         return f"<AdvancedConfigQuery ({self.config_interface})>"
 
     def default():
-        return AdvancedConfigQuery(configInterface=None, defaultValues=True,
-                                   description=True, enumInfo=True,
-                                   includeExtensions=True, pattern=None,
-                                   values=True)
+        return AdvancedConfigQuery(
+            configInterface=None,
+            defaultValues=True,
+            description=True,
+            enumInfo=True,
+            includeExtensions=True,
+            pattern=None,
+            values=True,
+        )
 
 
 class BasicAuth(BaseModel):
@@ -370,10 +384,24 @@ class CrawledLinkQuery(BaseModel):
 
     def default():
         return CrawledLinkQuery(
-            availability=True, bytesTotal=True, comment=True, enabled=True,
-            host=True, jobUUIDs=None, maxResults=-1, packageUUIDs=None,
-            password=True, priority=True, startAt=0, status=True, url=True,
-            variantID=True, variantIcon=True, variantName=True, variants=True)
+            availability=True,
+            bytesTotal=True,
+            comment=True,
+            enabled=True,
+            host=True,
+            jobUUIDs=None,
+            maxResults=-1,
+            packageUUIDs=None,
+            password=True,
+            priority=True,
+            startAt=0,
+            status=True,
+            url=True,
+            variantID=True,
+            variantIcon=True,
+            variantName=True,
+            variants=True,
+        )
 
 
 class CrawledPackage(BaseModel):
@@ -420,11 +448,22 @@ class CrawledPackageQuery(BaseModel):
 
     def default():
         return CrawledPackageQuery(
-            availableOfflineCount=True, availableOnlineCount=True,
-            availableTempUnknownCount=True, availableUnknownCount=True,
-            bytesTotal=True, childCount=True, comment=True, enabled=True,
-            hosts=True, maxResults=-1, packageUUIDs=None, priority=True,
-            saveTo=True, startAt=0, status=True)
+            availableOfflineCount=True,
+            availableOnlineCount=True,
+            availableTempUnknownCount=True,
+            availableUnknownCount=True,
+            bytesTotal=True,
+            childCount=True,
+            comment=True,
+            enabled=True,
+            hosts=True,
+            maxResults=-1,
+            packageUUIDs=None,
+            priority=True,
+            saveTo=True,
+            startAt=0,
+            status=True,
+        )
 
 
 class DownloadLink(BaseModel):
@@ -493,8 +532,14 @@ class ExtensionQuery(BaseModel):
 
     def default():
         return ExtensionQuery(
-            configInterface=True, description=True, enabled=True,
-            iconKey=True, installed=True, name=True, pattern=None)
+            configInterface=True,
+            description=True,
+            enabled=True,
+            iconKey=True,
+            installed=True,
+            name=True,
+            pattern=None,
+        )
 
 
 class FilePackage(BaseModel):
@@ -522,7 +567,7 @@ class FilePackage(BaseModel):
         return f"<FilePackage ({self.uuid})>"
 
 
-IconDescriptor = ForwardRef('IconDescriptor')
+IconDescriptor = ForwardRef("IconDescriptor")
 
 
 class IconDescriptor(BaseModel):
@@ -622,11 +667,28 @@ class LinkQuery(BaseModel):
 
     def default():
         return LinkQuery(
-            addedDate=True, bytesLoaded=True, bytesTotal=True, comment=True,
-            enabled=True, eta=True, extractionStatus=True, finished=True,
-            finishedDate=True, host=True, jobUUIDs=None, maxResults=-1,
-            packageUUIDs=None, password=True, priority=True, running=True,
-            skipped=True, speed=True, startAt=0, status=True, url=True)
+            addedDate=True,
+            bytesLoaded=True,
+            bytesTotal=True,
+            comment=True,
+            enabled=True,
+            eta=True,
+            extractionStatus=True,
+            finished=True,
+            finishedDate=True,
+            host=True,
+            jobUUIDs=None,
+            maxResults=-1,
+            packageUUIDs=None,
+            password=True,
+            priority=True,
+            running=True,
+            skipped=True,
+            speed=True,
+            startAt=0,
+            status=True,
+            url=True,
+        )
 
 
 class LogFolder(BaseModel):
@@ -639,7 +701,7 @@ class LogFolder(BaseModel):
         return "<LogFolder>"
 
 
-MenuStructure = ForwardRef('MenuStructure')
+MenuStructure = ForwardRef("MenuStructure")
 
 
 class MenuStructure(BaseModel):
@@ -678,10 +740,23 @@ class PackageQuery(BaseModel):
 
     def default():
         return PackageQuery(
-            bytesLoaded=True, bytesTotal=True, childCount=True,
-            comment=True, enabled=True, eta=True, finished=True, hosts=True,
-            maxResults=-1, packageUUIDs=None, priority=True, running=True,
-            saveTo=True, speed=True, startAt=0, status=True)
+            bytesLoaded=True,
+            bytesTotal=True,
+            childCount=True,
+            comment=True,
+            enabled=True,
+            eta=True,
+            finished=True,
+            hosts=True,
+            maxResults=-1,
+            packageUUIDs=None,
+            priority=True,
+            running=True,
+            saveTo=True,
+            speed=True,
+            startAt=0,
+            status=True,
+        )
 
 
 class Plugin(BaseModel):
@@ -719,8 +794,8 @@ class PluginsQuery(BaseModel):
 
 class PublisherResponse(BaseModel):
 
-    eventids = Optional[List[str]]
-    publisher = Optional[str]
+    eventids: Optional[List[str]]
+    publisher: Optional[str]
 
     def __repr__(self):
         return f"<PublisherResponse ({self.publisher})>"
