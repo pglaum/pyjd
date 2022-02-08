@@ -51,7 +51,7 @@ class Extensions:
         return resp
 
     def list_extensions(
-        self, query: ExtensionQuery = ExtensionQuery()
+        self, query: ExtensionQuery = ExtensionQuery.default()
     ) -> List[Extension]:
         """List all extensions.
 
@@ -61,12 +61,12 @@ class Extensions:
         :rtype: List[jd_types.Extension]
         """
 
-        params = [query.to_dict()]
+        params = [query.dict()]
         resp = list(self.action("/list", params))
 
         extensions = []
         for ext in resp:
-            extension = Extension(ext)
+            extension = Extension(**ext)
             extensions.append(extension)
 
         return extensions

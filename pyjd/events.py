@@ -62,7 +62,7 @@ class Events:
 
         params = [subscription_id, subscriptions, exclusions]
         resp = self.action("/addsubscription", params)
-        subscription_response = SubscriptionResponse(resp)
+        subscription_response = SubscriptionResponse(**resp)
         return subscription_response
 
     def change_subscription_timeouts(
@@ -84,7 +84,7 @@ class Events:
 
         params = [subscription_id, poll_timeout, keep_alive]
         resp = self.action("/changesubscriptiontimeouts", params)
-        subscription_response = SubscriptionResponse(resp)
+        subscription_response = SubscriptionResponse(**resp)
         return subscription_response
 
     def get_subscription(self, subscription_id: int) -> SubscriptionResponse:
@@ -96,7 +96,7 @@ class Events:
 
         params = [subscription_id]
         resp = self.action("/getsubscription", params)
-        subscription_response = SubscriptionResponse(resp)
+        subscription_response = SubscriptionResponse(**resp)
         return subscription_response
 
     def listen(self, subscription_id: int) -> List[dict]:
@@ -119,7 +119,7 @@ class Events:
 
         publisher_responses = []
         for response in resp:
-            publisher_response = PublisherResponse(response)
+            publisher_response = PublisherResponse(**response)
             publisher_responses.append(publisher_response)
 
         return publisher_responses
@@ -145,7 +145,7 @@ class Events:
 
         params = [subscription_id, subscriptions, exclusions]
         resp = self.action("/removesubscription", params)
-        subscription_response = SubscriptionResponse(resp)
+        subscription_response = SubscriptionResponse(**resp)
         return subscription_response
 
     def set_subscription(
@@ -169,7 +169,7 @@ class Events:
 
         params = [subscription_id, subscriptions, exclusions]
         resp = self.action("/setsubscription", params)
-        subscription_response = SubscriptionResponse(resp)
+        subscription_response = SubscriptionResponse(**resp)
         return subscription_response
 
     def subscribe(
@@ -187,7 +187,7 @@ class Events:
 
         params = [subscriptions, exclusions]
         resp = self.action("/subscribe", params)
-        subscription_response = SubscriptionResponse(resp)
+        subscription_response = SubscriptionResponse(**resp)
         return subscription_response
 
     def unsubscribe(self, subscription_id: int) -> SubscriptionResponse:
@@ -201,5 +201,5 @@ class Events:
 
         params = [subscription_id]
         resp = self.action("/unsubscribe", params)
-        subscription_response = SubscriptionResponse(resp)
+        subscription_response = SubscriptionResponse(**resp)
         return subscription_response

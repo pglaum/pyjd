@@ -42,7 +42,7 @@ class Captcha:
 
         params = [job_id]
         resp = self.action("/getCaptchaJob", params)
-        captcha_job = CaptchaJob(resp)
+        captcha_job = CaptchaJob(**resp)
         return captcha_job
 
     def list(self) -> List[CaptchaJob]:
@@ -55,7 +55,7 @@ class Captcha:
         resp = self.action("/list", None)
         captcha_jobs = []
         for job in resp:
-            captcha_job = CaptchaJob(job)
+            captcha_job = CaptchaJob(**job)
             captcha_jobs.append(captcha_job)
 
         return captcha_jobs

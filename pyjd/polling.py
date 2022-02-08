@@ -11,9 +11,9 @@ class Polling:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
-    def poll(self, query_params=APIQuery()):
+    def poll(self, query_params=APIQuery.default()):
         """Poll for APIQuery."""
 
-        params = [query_params.to_dict()]
+        params = [query_params.dict()]
         resp = self.action("/poll", params)
         return resp

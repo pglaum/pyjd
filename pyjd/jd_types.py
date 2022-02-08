@@ -7,8 +7,7 @@ For more information, see here:
 
 from enum import Enum
 from pydantic import BaseModel
-from typing import Any, List, Optional
-import json
+from typing import Any, ForwardRef, List, Optional
 
 
 #
@@ -283,909 +282,458 @@ class AddLinksQuery(BaseModel):
         return f"<AddLinksQuery ({self.packageName})>"
 
 
-class APIQuery:
+class APIQuery(BaseModel):
     """A standard api query.
 
     Most endpoint use a specialized version.
     """
 
-    def __init__(self, empty=False, for_null_key="",
-                 max_results=-1, start_at=0):
-        self.empty = empty
-        self.for_null_key = for_null_key
-        self.max_results = max_results
-        self.start_at = start_at
+    empty: bool
+    forNullKey: Optional[str]
+    maxResults: int
+    startAt: int
 
     def __repr__(self):
         return "<APIQuery>"
 
-    def to_dict(self):
-        return {
-            "empty": self.empty,
-            "forNullKey": self.for_null_key,
-            "maxResults": self.max_results,
-            "startAt": self.start_at,
-        }
+    def default():
+        return APIQuery(empty=False, forNullKey="", maxResults=-1, startAt=0)
 
 
-class CaptchaJob:
-    def __init__(self, qdict):
-        self.captcha_category = (
-            qdict["captchaCategory"] if "captchaCategory" in qdict else None
-        )
-        self.created = qdict["created"] if "created" in qdict else None
-        self.explain = qdict["explain"] if "explain" in qdict else None
-        self.hoster = qdict["hoster"] if "hoster" in qdict else None
-        self.captcha_id = qdict["id"] if "id" in qdict else None
-        self.link = qdict["link"] if "link" in qdict else None
-        self.timeout = qdict["timeout"] if "timeout" in qdict else None
-        self.captcha_type = qdict["type"] if "type" in qdict else None
+class CaptchaJob(BaseModel):
+
+    captchaCategory: Optional[str]
+    created: Optional[int]
+    explain: Optional[str]
+    hoster: Optional[str]
+    id: Optional[int]
+    link: Optional[int]
+    timeout: Optional[int]
+    type: Optional[str]
 
     def __repr__(self):
         return f"<CaptchaJob ({self.captcha_id})>"
 
-    def to_dict(self):
-        return {
-            "captchaCategory": self.captcha_category,
-            "created": self.created,
-            "explain": self.explain,
-            "hoster": self.hoster,
-            "id": self.captcha_id,
-            "link": self.link,
-            "timeout": self.timeout,
-            "type": self.captcha_type,
-        }
 
+class LinkVariant(BaseModel):
 
-class CrawledLink:
-    def __init__(self, qdict):
-        self.availability = (
-            AvailableLinkState(qdict["availability"])
-            if "availability" in qdict
-            else None
-        )
-        self.bytes_total = qdict["bytesTotal"] if "bytesTotal" in qdict else None
-        self.comment = qdict["comment"] if "comment" in qdict else None
-        self.download_password = (
-            qdict["downloadPassword"] if "downloadPassword" in qdict else None
-        )
-        self.enabled = qdict["enabled"] if "enabled" in qdict else None
-        self.host = qdict["host"] if "host" in qdict else None
-        self.name = qdict["name"] if "name" in qdict else None
-        self.package_uuid = qdict["packageUUID"] if "packageUUID" in qdict else None
-        self.priority = Priority(
-            qdict["priority"]) if "priority" in qdict else None
-        self.url = qdict["url"] if "url" in qdict else None
-        self.uuid = qdict["uuid"] if "uuid" in qdict else None
-        self.variant = LinkVariant(
-            qdict["variant"]) if "variant" in qdict else None
-        self.variants = qdict["variants"] if "variants" in qdict else None
-
-    def __repr__(self):
-        return f"<CrawledLink ({self.uuid})>"
-
-    def to_dict(self):
-        result = {
-            "availability": self.availability.value,
-            "bytesTotal": self.bytes_total,
-            "comment": self.comment,
-            "downloadPassword": self.download_password,
-            "enabled": self.enabled,
-            "host": self.host,
-            "name": self.name,
-            "packageUUID": self.package_uuid,
-            "url": self.url,
-            "uuid": self.uuid,
-            "variants": self.variants,
-        }
-
-        if self.priority:
-            result["priority"] = self.priority.value
-
-        if self.variant:
-            result["variant"] = self.variant.to_json()
-
-        return result
-
-
-class CrawledLinkQuery:
-    def __init__(
-        self,
-        availability=True,
-        bytes_total=True,
-        comment=True,
-        enabled=True,
-        host=True,
-        job_uuids=None,
-        max_results=-1,
-        package_uuids=None,
-        password=True,
-        priority=True,
-        start_at=0,
-        status=True,
-        url=True,
-        variant_id=True,
-        variant_icon=True,
-        variant_name=True,
-        variants=True,
-    ):
-        self.availability = availability
-        self.bytes_total = bytes_total
-        self.comment = comment
-        self.enabled = enabled
-        self.host = host
-        self.job_uuids = job_uuids
-        self.max_results = max_results
-        self.package_uuids = package_uuids
-        self.password = password
-        self.priority = priority
-        self.start_at = start_at
-        self.status = status
-        self.url = url
-        self.variant_id = variant_id
-        self.variant_icon = variant_icon
-        self.variant_name = variant_name
-        self.variants = variants
-
-    def __repr__(self):
-        return f"<CrawledLinkQuery>"
-
-    def to_dict(self):
-        return {
-            "availability": self.availability,
-            "bytesTotal": self.bytes_total,
-            "comment": self.comment,
-            "enabled": self.enabled,
-            "host": self.host,
-            "jobUUIDs": self.job_uuids,
-            "maxResults": self.max_results,
-            "packageUUIDs": self.package_uuids,
-            "password": self.password,
-            "priority": self.priority,
-            "startAt": self.start_at,
-            "status": self.status,
-            "url": self.url,
-            "variantID": self.variant_id,
-            "variantIcon": self.variant_icon,
-            "variantName": self.variant_name,
-            "variants": self.variants,
-        }
-
-
-class CrawledPackage:
-    def __init__(self, qdict):
-        self.bytes_total = qdict["bytesTotal"] if "bytesTotal" in qdict else None
-        self.child_count = qdict["childCount"] if "childCount" in qdict else None
-        self.comment = qdict["comment"] if "comment" in qdict else None
-        self.download_password = (
-            qdict["downloadPassword"] if "downloadPassword" in qdict else None
-        )
-        self.enabled = qdict["enabled"] if "enabled" in qdict else None
-        self.hosts = qdict["hosts"] if "hosts" in qdict else None
-        self.name = qdict["name"] if "name" in qdict else None
-        self.offline_count = qdict["offlineCount"] if "offlineCount" in qdict else None
-        self.online_count = qdict["onlineCount"] if "onlineCount" in qdict else None
-        self.priority = Priority(
-            qdict["priority"]) if "priority" in qdict else None
-        self.save_to = qdict["saveTo"] if "saveTo" in qdict else None
-        self.temp_unknown_count = (
-            qdict["tempUnknownCount"] if "tempUnknownCount" in qdict else None
-        )
-        self.unknown_count = qdict["unknownCount"] if "unknownCount" in qdict else None
-        self.uuid = qdict["uuid"] if "uuid" in qdict else None
-
-    def __repr__(self):
-        return f"<CrawledPackage ({self.uuid})"
-
-    def to_dict(self):
-        result = {
-            "bytesTotal": self.bytes_total,
-            "childCount": self.child_count,
-            "comment": self.comment,
-            "downloadPassword": self.download_password,
-            "enabled": self.enabled,
-            "hosts": self.hosts,
-            "name": self.name,
-            "offlineCount": self.offline_count,
-            "onlineCount": self.online_count,
-            "saveTo": self.save_to,
-            "tempUnknownCount": self.temp_unknown_count,
-            "unknownCount": self.unknown_count,
-            "uuid": self.uuid,
-        }
-
-        if self.priority:
-            result["priority"] = self.priority.value
-
-        return result
-
-
-class CrawledPackageQuery:
-    def __init__(
-        self,
-        available_offline_count=True,
-        available_online_count=True,
-        available_temp_unknown_count=True,
-        available_unknown_count=True,
-        bytes_total=True,
-        child_count=True,
-        comment=True,
-        enabled=True,
-        hosts=True,
-        max_results=-1,
-        package_uuids=None,
-        priority=True,
-        save_to=True,
-        start_at=0,
-        status=True,
-    ):
-        self.available_offline_count = available_offline_count
-        self.available_online_count = available_online_count
-        self.available_temp_unknown_count = available_temp_unknown_count
-        self.available_unknown_count = available_unknown_count
-        self.bytes_total = bytes_total
-        self.child_count = child_count
-        self.comment = comment
-        self.enabled = enabled
-        self.hosts = hosts
-        self.max_results = max_results
-        self.package_uuids = package_uuids
-        self.priority = priority
-        self.save_to = save_to
-        self.start_at = start_at
-        self.status = status
-
-    def __repr__(self):
-        return "<CrawledPackageQuery>"
-
-    def to_dict(self):
-        return {
-            "availableOfflineCount": self.available_offline_count,
-            "availableOnlineCount": self.available_online_count,
-            "availableTempUnknownCount": self.available_temp_unknown_count,
-            "availableUnknownCount": self.available_unknown_count,
-            "bytesTotal": self.bytes_total,
-            "childCount": self.child_count,
-            "comment": self.comment,
-            "enabled": self.enabled,
-            "hosts": self.hosts,
-            "maxResults": self.max_results,
-            "packageUUIDs": self.package_uuids,
-            "priority": self.priority,
-            "saveTo": self.save_to,
-            "startAt": self.start_at,
-            "status": self.status,
-        }
-
-
-class DownloadLink:
-    def __init__(self, qdict):
-        self.added_date = qdict["addedDate"] if "addedDate" in qdict else None
-        self.bytes_loaded = qdict["bytesLoaded"] if "bytesLoaded" in qdict else None
-        self.bytes_total = qdict["bytesTotal"] if "bytesTotal" in qdict else None
-        self.comment = qdict["comment"] if "comment" in qdict else None
-        self.download_password = (
-            qdict["downloadPassword"] if "downloadPassword" in qdict else None
-        )
-        self.enabled = qdict["enabled"] if "enabled" in qdict else None
-        self.eta = qdict["eta"] if "eta" in qdict else None
-        self.extraction_status = (
-            qdict["extractionStatus"] if "extractionStatus" in qdict else None
-        )
-        self.finished = qdict["finished"] if "finished" in qdict else None
-        self.finished_date = qdict["finishedDate"] if "finishedDate" in qdict else None
-        self.host = qdict["host"] if "host" in qdict else None
-        self.name = qdict["name"] if "name" in qdict else None
-        self.package_uuid = qdict["packageUUID"] if "packageUUID" in qdict else None
-        self.priority = Priority(
-            qdict["priority"]) if "priority" in qdict else None
-        self.running = qdict["running"] if "running" in qdict else None
-        self.skipped = qdict["skipped"] if "skipped" in qdict else None
-        self.speed = qdict["speed"] if "speed" in qdict else None
-        self.status = qdict["status"] if "status" in qdict else None
-        self.status_icon_key = (
-            qdict["statusIconKey"] if "statusIconKey" in qdict else None
-        )
-        self.url = qdict["url"] if "url" in qdict else None
-        self.uuid = qdict["uuid"] if "uuid" in qdict else None
-
-    def __repr__(self):
-        return f"<DownloadLink ({self.uuid})>"
-
-    def to_dict(self):
-        result = {
-            "addedDate": self.added_date,
-            "bytesLoaded": self.bytes_loaded,
-            "bytesTotal": self.bytes_total,
-            "comment": self.comment,
-            "downloadPassword": self.download_password,
-            "enabled": self.enabled,
-            "eta": self.eta,
-            "extractionStatus": self.extraction_status,
-            "finished": self.finished,
-            "finishedDate": self.finished_date,
-            "host": self.host,
-            "name": self.name,
-            "packageUUID": self.package_uuid,
-            "running": self.running,
-            "skipped": self.skipped,
-            "speed": self.speed,
-            "status": self.status,
-            "statusIconKey": self.status_icon_key,
-            "url": self.url,
-            "uuid": self.uuid,
-        }
-
-        if self.priority:
-            result["priority"] = self.priority.value
-
-        return result
-
-
-class EnumOption:
-    def __init__(self, qdict):
-        self.label = qdict["label"] if "label" in qdict else None
-        self.name = qdict["name"] if "name" in qdict else None
-
-    def __repr__(self):
-        return f"<EnumOption ({self.name})>"
-
-    def to_dict(self):
-        return {
-            "label": self.label,
-            "name": self.name,
-        }
-
-
-class Extension:
-    def __init__(self, qdict):
-        self.config_interface = (
-            qdict["configInterface"] if "configInterface" in qdict else None
-        )
-        self.description = qdict["description"] if "description" in qdict else None
-        self.enabled = qdict["enabled"] if "enabled" in qdict else None
-        self.icon_key = qdict["iconKey"] if "iconKey" in qdict else None
-        self.extension_id = qdict["id"] if "id" in qdict else None
-        self.installed = qdict["installed"] if "installed" in qdict else None
-        self.name = qdict["name"] if "name" in qdict else None
-
-    def __repr__(self):
-        return f"<Extension ({self.extension_id})>"
-
-    def to_dict(self):
-        return {
-            "configInterface": self.config_interface,
-            "description": self.description,
-            "enabled": self.enabled,
-            "iconKey": self.icon_key,
-            "id": self.extension_id,
-            "installed": self.installed,
-            "name": self.name,
-        }
-
-
-class ExtensionQuery:
-    def __init__(
-        self,
-        config_interface=True,
-        description=True,
-        enabled=True,
-        icon_key=True,
-        installed=True,
-        name=True,
-        pattern=None,
-    ):
-        self.config_interface = config_interface
-        self.description = description
-        self.enabled = enabled
-        self.icon_key = icon_key
-        self.installed = installed
-        self.name = name
-        self.pattern = pattern
-
-    def __repr__(self):
-        return "<ExtensionQuery>"
-
-    def to_dict(self):
-        return {
-            "configInterface": self.config_interface,
-            "description": self.description,
-            "enabled": self.enabled,
-            "iconKey": self.icon_key,
-            "installed": self.installed,
-            "name": self.name,
-            "pattern": self.pattern,
-        }
-
-
-class FilePackage:
-    def __init__(self, qdict):
-        self.active_task = qdict["activeTask"] if "activeTask" in qdict else None
-        self.bytes_loaded = qdict["bytesLoaded"] if "bytesLoaded" in qdict else None
-        self.bytes_total = qdict["bytesTotal"] if "bytesTotal" in qdict else None
-        self.child_count = qdict["childCount"] if "childCount" in qdict else None
-        self.comment = qdict["comment"] if "comment" in qdict else None
-        self.download_password = (
-            qdict["downloadPassword"] if "downloadPassword" in qdict else None
-        )
-        self.enabled = qdict["enabled"] if "enabled" in qdict else None
-        self.eta = qdict["eta"] if "eta" in qdict else None
-        self.finished = qdict["finished"] if "finished" in qdict else None
-        self.hosts = qdict["hosts"] if "hosts" in qdict else None
-        self.name = qdict["name"] if "name" in qdict else None
-        self.priority = Priority(
-            qdict["priority"]) if "priority" in qdict else None
-        self.running = qdict["running"] if "running" in qdict else None
-        self.save_to = qdict["saveTo"] if "saveTo" in qdict else None
-        self.speed = qdict["speed"] if "speed" in qdict else None
-        self.status = qdict["status"] if "status" in qdict else None
-        self.status_icon_key = (
-            qdict["statusIconKey"] if "statusIconKey" in qdict else None
-        )
-        self.uuid = qdict["uuid"] if "uuid" in qdict else None
-
-    def __repr__(self):
-        return f"<FilePackage ({self.uuid})>"
-
-    def to_dict(self):
-        result = {
-            "activeTask": self.active_task,
-            "bytesLoaded": self.bytes_loaded,
-            "bytesTotal": self.bytes_total,
-            "childCount": self.child_count,
-            "comment": self.comment,
-            "downloadPassword": self.download_password,
-            "enabled": self.enabled,
-            "eta": self.eta,
-            "finished": self.finished,
-            "hosts": self.hosts,
-            "name": self.name,
-            "running": self.running,
-            "saveTo": self.save_to,
-            "speed": self.speed,
-            "status": self.status,
-            "statusIconKey": self.status_icon_key,
-            "uuid": self.uuid,
-        }
-
-        if self.priority:
-            result["priority"] = self.priority.value
-
-        return result
-
-
-class IconDescriptor:
-    def __init__(self, qdict):
-        self.icon_cls = qdict["cls"] if "cls" in qdict else None
-        self.key = qdict["key"] if "key" in qdict else None
-        self.prps = qdict["prps"] if "prps" in qdict else None
-        self.rsc = [IconDescriptor(x)
-                    for x in qdict["rsc"]] if "rsc" in qdict else None
-
-    def __repr__(self):
-        return f"<IconDescriptor ({self.key})>"
-
-    def to_dict(self):
-        result = {
-            "cls": self.icon_cls,
-            "key": self.key,
-            "prps": self.prps,
-        }
-
-        if self.rsc:
-            result["rsc"] = [x.to_dict() for x in self.rsc]
-
-        return result
-
-
-class JobLinkCrawler:
-    def __init__(self, qdict):
-        self.broken = qdict["broken"] if "broken" in qdict else None
-        self.checking = qdict["checking"] if "checking" in qdict else None
-        self.crawled = qdict["crawled"] if "crawled" in qdict else None
-        self.crawler_id = qdict["crawledId"] if "crawledId" in qdict else None
-        self.crawling = qdict["crawling"] if "crawling" in qdict else None
-        self.filtered = qdict["filtered"] if "filtered" in qdict else None
-        self.job_id = qdict["jobId"] if "jobId" in qdict else None
-        self.unhandled = qdict["unhandled"] if "unhandled" in qdict else None
-
-    def __repr__(self):
-        return f"<JobLinkCrawler ({self.crawler_id})>"
-
-    def to_dict(self):
-        return {
-            "broken": self.broken,
-            "checking": self.checking,
-            "crawled": self.crawled,
-            "crawlerId": self.crawler_id,
-            "crawling": self.crawling,
-            "filtered": self.filtered,
-            "jobId": self.job_id,
-            "unhandled": self.unhandled,
-        }
-
-
-class LinkCheckResult:
-    def __init__(self, qdict):
-        self.links = (
-            [LinkStatus(x) for x in qdict["links"]]
-            if "links" in qdict else None)
-        self.status = Status(qdict["status"]) if "status" in qdict else None
-
-    def __repr__(self):
-        return f"<LinkCheckResult>"
-
-    def to_dict(self):
-        return {
-            "links": [x.to_dict() for x in self.links],
-            "status": self.status.value,
-        }
-
-
-class LinkCollectingJob:
-    def __init__(self, qdict):
-        self.id = qdict["id"] if "id" in qdict else None
-
-    def __repr__(self):
-        return f"<LinkCollectingJob ({self.id})>"
-
-    def to_dict(self):
-        return {"id": self.id}
-
-
-class LinkCrawlerJobsQuery:
-    def __init__(self, collector_info=True, job_ids=None):
-        self.collector_info = collector_info
-        self.job_ids = job_ids
-
-    def __repr__(self):
-        return f"<LinkCrawlerJobsQuery>"
-
-    def to_dict(self):
-        return {
-            "collectorInfo": self.collector_info,
-            "jobIds": self.job_ids,
-        }
-
-
-class LinkQuery:
-    def __init__(
-        self,
-        added_date=True,
-        bytes_loaded=True,
-        bytes_total=True,
-        comment=True,
-        enabled=True,
-        eta=True,
-        extraction_status=True,
-        finished=True,
-        finished_date=True,
-        host=True,
-        job_uuids=None,
-        max_results=-1,
-        package_uuids=None,
-        password=True,
-        priority=True,
-        running=True,
-        skipped=True,
-        speed=True,
-        start_at=0,
-        status=True,
-        url=True,
-    ):
-        self.added_date = added_date
-        self.bytes_loaded = bytes_loaded
-        self.bytes_total = bytes_total
-        self.comment = comment
-        self.enabled = enabled
-        self.eta = eta
-        self.extraction_status = extraction_status
-        self.finished = finished
-        self.finished_date = finished_date
-        self.host = host
-        self.job_uuids = job_uuids
-        self.max_results = max_results
-        self.package_uuids = package_uuids
-        self.password = password
-        self.priority = priority
-        self.running = running
-        self.skipped = skipped
-        self.speed = speed
-        self.start_at = start_at
-        self.status = status
-        self.url = url
-
-    def __repr__(self):
-        return "<LinkQuery>"
-
-    def to_dict(self):
-        return {
-            "addedDate": self.added_date,
-            "bytesLoaded": self.bytes_loaded,
-            "bytesTotal": self.bytes_total,
-            "comment": self.comment,
-            "enabled": self.enabled,
-            "eta": self.eta,
-            "extractionStatus": self.extraction_status,
-            "finished": self.finished,
-            "finishedDate": self.finished_date,
-            "host": self.host,
-            "jobUUIDs": self.job_uuids,
-            "maxResults": self.max_results,
-            "packageUUIDs": self.package_uuids,
-            "password": self.password,
-            "priority": self.priority,
-            "running": self.running,
-            "skipped": self.skipped,
-            "speed": self.speed,
-            "startAt": self.start_at,
-            "status": self.status,
-            "url": self.url,
-        }
-
-
-class LinkStatus:
-    def __init__(self, qdict):
-        self.host = qdict["host"] if "host" in qdict else None
-        self.link_check_id = qdict["linkCheckID"] if "linkCheckID" in qdict else None
-        self.name = qdict["name"] if "name" in qdict else None
-        self.size = qdict["size"] if "size" in qdict else None
-        self.status = AvailableLinkState(
-            qdict["status"]) if "status" in qdict else None
-        self.url = qdict["url"] if "url" in qdict else None
-
-    def __repr__(self):
-        return f"<LinkStatus ({self.link_check_id})>"
-
-    def to_dict(self):
-        result = {
-            "host": self.host,
-            "linkCheckID": self.link_check_id,
-            "name": self.name,
-            "size": self.size,
-            "url": self.url,
-        }
-
-        if self.status:
-            result["status"] = self.status.value
-
-        return result
-
-
-class LinkVariant:
-    def __init__(self, qdict):
-        self.icon_key = qdict["iconKey"] if "iconKey" in qdict else None
-        self.id = qdict["id"] if "id" in qdict else None
-        self.name = qdict["name"] if "name" in qdict else None
+    iconKey: Optional[str]
+    id: Optional[str]
+    name: Optional[str]
 
     def __repr__(self):
         return f"<LinkVariant ({self.id})>"
 
-    def to_dict(self):
-        return {
-            "iconKey": self.icon_key,
-            "id": self.id,
-            "name": self.name,
-        }
 
-    def to_json(self):
-        return json.dumps(self.to_dict())
+class CrawledLink(BaseModel):
 
-
-class LogFolder:
-    def __init__(self, qdict):
-        self.created = qdict["created"] if "created" in qdict else None
-        self.current = qdict["current"] if "current" in qdict else None
-        self.last_modified = qdict["lastModified"] if "lastModified" in qdict else None
-
-    def __repr__(self):
-        return f"<LogFolder>"
-
-    def to_dict(self):
-        return {
-            "created": self.created,
-            "current": self.current,
-            "lastModified": self.last_modified,
-        }
-
-
-class MenuStructure:
-    def __init__(self, qdict):
-        print("MenuStructure:")
-        print(qdict)
-
-        self.children = (
-            [MenuStructure(x) for x in qdict["children"]]
-            if "children" in qdict
-            else None
-        )
-        self.icon = qdict["icon"] if "icon" in qdict else None
-        self.menu_id = qdict["id"] if "id" in qdict else None
-        self.name = qdict["name"] if "name" in qdict else None
-        self.menu_type = MenuType(qdict["type"]) if "type" in qdict else None
+    availability: Optional[AvailableLinkState]
+    bytesTotal: Optional[int]
+    comment: Optional[str]
+    downloadPassword: Optional[str]
+    enabled: Optional[bool]
+    host: Optional[str]
+    name: Optional[str]
+    packageUUID: Optional[int]
+    priority: Optional[Priority]
+    url: Optional[str]
+    uuid: Optional[int]
+    variant: Optional[LinkVariant]
+    variants: Optional[bool]
 
     def __repr__(self):
-        return f"<MenuStructure ({self.menu_id})>"
-
-    def to_dict(self):
-        result = {
-            "icon": self.icon,
-            "id": self.menu_id,
-            "name": self.name,
-        }
-
-        if self.children:
-            result["children"] = [x.to_dict() for x in self.children]
-
-        if self.menu_type:
-            result["type"] = self.menu_type.value
-
-        return result
+        return f"<CrawledLink ({self.uuid})>"
 
 
-class PackageQuery:
-    def __init__(
-        self,
-        bytes_loaded=True,
-        bytes_total=True,
-        child_count=True,
-        comment=True,
-        enabled=True,
-        eta=True,
-        finished=True,
-        hosts=True,
-        max_results=-1,
-        package_uuids=None,
-        priority=True,
-        running=True,
-        save_to=True,
-        speed=True,
-        start_at=0,
-        status=True,
-    ):
-        self.bytes_loaded = bytes_loaded
-        self.bytes_total = bytes_total
-        self.child_count = child_count
-        self.comment = comment
-        self.enabled = enabled
-        self.eta = eta
-        self.finished = finished
-        self.hosts = hosts
-        self.max_results = max_results
-        self.package_uuids = package_uuids
-        self.priority = priority
-        self.running = running
-        self.save_to = save_to
-        self.speed = speed
-        self.start_at = start_at
-        self.status = status
+class CrawledLinkQuery(BaseModel):
+
+    availability: Optional[bool]
+    bytesTotal: Optional[bool]
+    comment: Optional[bool]
+    enabled: Optional[bool]
+    host: Optional[bool]
+    jobUUIDs: Optional[List[int]]
+    maxResults: Optional[int]
+    packageUUIDs: Optional[List[int]]
+    password: Optional[bool]
+    priority: Optional[bool]
+    startAt: Optional[int]
+    status: Optional[bool]
+    url: Optional[bool]
+    variantID: Optional[bool]
+    variantIcon: Optional[bool]
+    variantName: Optional[bool]
+    variants: Optional[bool]
+
+    def __repr__(self):
+        return "<CrawledLinkQuery>"
+
+    def default():
+        return CrawledLinkQuery(
+            availability=True, bytesTotal=True, comment=True, enabled=True,
+            host=True, jobUUIDs=None, maxResults=-1, packageUUIDs=None,
+            password=True, priority=True, startAt=0, status=True, url=True,
+            variantID=True, variantIcon=True, variantName=True, variants=True)
+
+
+class CrawledPackage(BaseModel):
+
+    bytesTotal: Optional[int]
+    childCount: Optional[int]
+    comment: Optional[str]
+    downloadPassword: Optional[str]
+    enabled: Optional[bool]
+    hosts: Optional[List[str]]
+    name: Optional[str]
+    offlineCount: Optional[int]
+    onlineCount: Optional[int]
+    priority: Optional[Priority]
+    saveTo: Optional[str]
+    tempUnknownCount: Optional[int]
+    unknownCount: Optional[int]
+    uuid: Optional[int]
+
+    def __repr__(self):
+        return f"<CrawledPackage ({self.uuid})"
+
+
+class CrawledPackageQuery(BaseModel):
+
+    availableOfflineCount: Optional[bool]
+    availableOnlineCount: Optional[bool]
+    availableTempUnknownCount: Optional[bool]
+    availableUnknownCount: Optional[bool]
+    bytesTotal: Optional[bool]
+    childCount: Optional[bool]
+    comment: Optional[bool]
+    enabled: Optional[bool]
+    hosts: Optional[bool]
+    maxResults: Optional[int]
+    packageUUIDs: Optional[List[int]]
+    priority: Optional[bool]
+    saveTo: Optional[bool]
+    startAt: Optional[int]
+    status: Optional[bool]
+
+    def __repr__(self):
+        return "<CrawledPackageQuery>"
+
+    def default():
+        return CrawledPackageQuery(
+            availableOfflineCount=True, availableOnlineCount=True,
+            availableTempUnknownCount=True, availableUnknownCount=True,
+            bytesTotal=True, childCount=True, comment=True, enabled=True,
+            hosts=True, maxResults=-1, packageUUIDs=None, priority=True,
+            saveTo=True, startAt=0, status=True)
+
+
+class DownloadLink(BaseModel):
+
+    addedDate: Optional[int]
+    bytesLoaded: Optional[int]
+    bytesTotal: Optional[int]
+    comment: Optional[str]
+    downloadPassword: Optional[str]
+    enabled: Optional[bool]
+    eta: Optional[int]
+    extractionStatus: Optional[str]
+    finished: Optional[bool]
+    finishedDate: Optional[int]
+    host: Optional[str]
+    name: Optional[str]
+    packageUUID: Optional[int]
+    priority: Optional[Priority]
+    running: Optional[int]
+    skipped: Optional[int]
+    speed: Optional[int]
+    status: Optional[str]
+    statusIconKey: Optional[str]
+    url: Optional[str]
+    uuid: Optional[int]
+
+    def __repr__(self):
+        return f"<DownloadLink ({self.uuid})>"
+
+
+class EnumOption(BaseModel):
+
+    label: Optional[str]
+    name: Optional[str]
+
+    def __repr__(self):
+        return f"<EnumOption ({self.name})>"
+
+
+class Extension(BaseModel):
+
+    configInterface: Optional[str]
+    description: Optional[str]
+    enabled: Optional[bool]
+    iconKey: Optional[str]
+    id: Optional[str]
+    installed: Optional[bool]
+    name: Optional[str]
+
+    def __repr__(self):
+        return f"<Extension ({self.id})>"
+
+
+class ExtensionQuery(BaseModel):
+
+    configInterface: Optional[bool]
+    description: Optional[bool]
+    enabled: Optional[bool]
+    iconKey: Optional[bool]
+    installed: Optional[bool]
+    name: Optional[bool]
+    pattern: Optional[str]
+
+    def __repr__(self):
+        return "<ExtensionQuery>"
+
+    def default():
+        return ExtensionQuery(
+            configInterface=True, description=True, enabled=True,
+            iconKey=True, installed=True, name=True, pattern=None)
+
+
+class FilePackage(BaseModel):
+
+    activeTask: Optional[str]
+    bytesLoaded: Optional[int]
+    bytesTotal: Optional[int]
+    childCount: Optional[int]
+    comment: Optional[str]
+    downloadPassword: Optional[str]
+    enabled: Optional[bool]
+    eta: Optional[int]
+    finished: Optional[bool]
+    hosts: Optional[List[str]]
+    name: Optional[str]
+    priority: Optional[Priority]
+    running: Optional[bool]
+    saveTo: Optional[str]
+    speed: Optional[int]
+    status: Optional[str]
+    statusIconKey: Optional[str]
+    uuid: Optional[int]
+
+    def __repr__(self):
+        return f"<FilePackage ({self.uuid})>"
+
+
+IconDescriptor = ForwardRef('IconDescriptor')
+
+
+class IconDescriptor(BaseModel):
+
+    cls: Optional[str]
+    key: Optional[str]
+    prps: Optional[Any]
+    rsc: Optional[IconDescriptor]
+
+    def __repr__(self):
+        return f"<IconDescriptor ({self.key})>"
+
+
+class JobLinkCrawler(BaseModel):
+
+    broken: Optional[int]
+    checking: Optional[bool]
+    crawled: Optional[int]
+    crawledId: Optional[int]
+    crawling: Optional[bool]
+    filtered: Optional[int]
+    jobId: Optional[int]
+    unhandled: Optional[int]
+
+    def __repr__(self):
+        return f"<JobLinkCrawler ({self.crawlerId})>"
+
+
+class LinkStatus(BaseModel):
+
+    host: Optional[str]
+    linkCheckID: Optional[str]
+    name: Optional[str]
+    size: Optional[int]
+    status: Optional[AvailableLinkState]
+    url: Optional[str]
+
+    def __repr__(self):
+        return f"<LinkStatus ({self.link_check_id})>"
+
+
+class LinkCheckResult(BaseModel):
+
+    link: Optional[List[LinkStatus]]
+    status: Optional[Status]
+
+    def __repr__(self):
+        return "<LinkCheckResult>"
+
+
+class LinkCollectingJob(BaseModel):
+
+    id: Optional[int]
+
+    def __repr__(self):
+        return f"<LinkCollectingJob ({self.id})>"
+
+
+class LinkCrawlerJobsQuery(BaseModel):
+
+    collectorInfo: Optional[bool]
+    jobIds: Optional[List[int]]
+
+    def __repr__(self):
+        return "<LinkCrawlerJobsQuery>"
+
+    def default():
+        return LinkCrawlerJobsQuery(collectorInfo=True, jobIds=None)
+
+
+class LinkQuery(BaseModel):
+
+    addedDate: Optional[bool]
+    bytesLoaded: Optional[bool]
+    bytesTotal: Optional[bool]
+    comment: Optional[bool]
+    enabled: Optional[bool]
+    eta: Optional[bool]
+    extractionStatus: Optional[bool]
+    finished: Optional[bool]
+    finishedDate: Optional[bool]
+    host: Optional[bool]
+    jobUUIDs: Optional[List[int]]
+    maxResults: Optional[int]
+    packageUUIDs: Optional[List[int]]
+    password: Optional[bool]
+    priority: Optional[bool]
+    running: Optional[bool]
+    skipped: Optional[bool]
+    speed: Optional[bool]
+    startAt: Optional[int]
+    status: Optional[bool]
+    url: Optional[bool]
+
+    def __repr__(self):
+        return "<LinkQuery>"
+
+    def default():
+        return LinkQuery(
+            addedDate=True, bytesLoaded=True, bytesTotal=True, comment=True,
+            enabled=True, eta=True, extractionStatus=True, finished=True,
+            finishedDate=True, host=True, jobUUIDs=None, maxResults=-1,
+            packageUUIDs=None, password=True, priority=True, running=True,
+            skipped=True, speed=True, startAt=0, status=True, url=True)
+
+
+class LogFolder(BaseModel):
+
+    created: Optional[int]
+    current: Optional[bool]
+    lastModified: Optional[int]
+
+    def __repr__(self):
+        return "<LogFolder>"
+
+
+MenuStructure = ForwardRef('MenuStructure')
+
+
+class MenuStructure(BaseModel):
+
+    children: Optional[List[MenuStructure]]
+    icon: Optional[str]
+    id: Optional[str]
+    name: Optional[str]
+    type: Optional[MenuType]
+
+    def __repr__(self):
+        return f"<MenuStructure ({self.menuId})>"
+
+
+class PackageQuery(BaseModel):
+
+    bytesLoaded: Optional[bool]
+    bytesTotal: Optional[bool]
+    childCount: Optional[bool]
+    comment: Optional[bool]
+    enabled: Optional[bool]
+    eta: Optional[bool]
+    finished: Optional[bool]
+    hosts: Optional[bool]
+    maxResults: Optional[int]
+    packageUUIDs: Optional[List[int]]
+    priority: Optional[bool]
+    running: Optional[bool]
+    saveTo: Optional[bool]
+    speed: Optional[bool]
+    startAt: Optional[int]
+    status: Optional[bool]
 
     def __repr__(self):
         return "<PackageQuery>"
 
-    def to_dict(self):
-        return {
-            "bytesLoaded": self.bytes_loaded,
-            "bytesTotal": self.bytes_total,
-            "childCount": self.child_count,
-            "comment": self.comment,
-            "enabled": self.enabled,
-            "eta": self.eta,
-            "finished": self.finished,
-            "hosts": self.hosts,
-            "maxResults": self.max_results,
-            "packageUUIDs": self.package_uuids,
-            "priority": self.priority,
-            "running": self.running,
-            "saveTo": self.save_to,
-            "speed": self.speed,
-            "startAt": self.start_at,
-            "status": self.status,
-        }
+    def default():
+        return PackageQuery(
+            bytesLoaded=True, bytesTotal=True, childCount=True,
+            comment=True, enabled=True, eta=True, finished=True, hosts=True,
+            maxResults=-1, packageUUIDs=None, priority=True, running=True,
+            saveTo=True, speed=True, startAt=0, status=True)
 
 
-class Plugin:
-    def __init__(self, qdict):
-        self.abstract_type = (
-            AbstractType(qdict["abstract_type"])
-            if "abstract_type" in qdict else None)
-        self.class_name = qdict["className"] if "className" in qdict else None
-        self.default_value = qdict["defaultValue"] if "defaultValue" in qdict else None
-        self.display_name = qdict["displayName"] if "displayName" in qdict else None
-        self.docs = qdict["docs"] if "docs" in qdict else None
-        self.enum_label = qdict["enumLabel"] if "enumLabel" in qdict else None
-        self.enum_options = qdict["enumOptions"] if "enumOptions" in qdict else None
-        self.interface_name = (
-            qdict["interfaceName"] if "interfaceName" in qdict else None
-        )
-        self.key = qdict["key"] if "key" in qdict else None
-        self.pattern = qdict["pattern"] if "pattern" in qdict else None
-        self.storage = qdict["storage"] if "storage" in qdict else None
-        self.plugin_type = qdict["type"] if "type" in qdict else None
-        self.value = qdict["value"] if "value" in qdict else None
-        self.version = qdict["version"] if "version" in qdict else None
+class Plugin(BaseModel):
+
+    abstractType: Optional[AbstractType]
+    className: Optional[str]
+    defaultValue: Optional[Any]
+    displayName: Optional[str]
+    docs: Optional[str]
+    enumLabel: Optional[str]
+    enumOptions: Optional[Any]
+    interfaceName: Optional[str]
+    key: Optional[str]
+    pattern: Optional[str]
+    storage: Optional[str]
+    type: Optional[str]
+    value: Optional[Any]
+    version: Optional[str]
 
     def __repr__(self):
-        return f"<Plugin ({self.class_name})>"
-
-    def to_dict(self):
-        result = {
-            "className": self.class_name,
-            "defaultValue": self.default_value,
-            "displayName": self.display_name,
-            "docs": self.docs,
-            "enumLabel": self.enum_label,
-            "enumOptions": self.enum_options,
-            "interfaceName": self.interface_name,
-            "key": self.key,
-            "pattern": self.pattern,
-            "storage": self.storage,
-            "type": self.plugin_type,
-            "value": self.value,
-            "version": self.version,
-        }
-
-        result["abstractType"] = (
-            self.abstract_type.value if self.abstract_type else None
-        )
-
-        return result
+        return f"<Plugin ({self.className})>"
 
 
-class PluginsQuery:
-    def __init__(self, pattern="", version=None):
-        self.pattern = pattern
-        self.version = version
+class PluginsQuery(BaseModel):
+
+    pattern: Optional[str]
+    version: Optional[str]
 
     def __repr__(self):
         return f"<PluginsQuery ({self.pattern})>"
 
-    def to_dict(self):
-        return {
-            "pattern": self.pattern,
-            "version": self.version,
-        }
+    def default():
+        return PluginsQuery(pattern="", version=None)
 
 
-class PublisherResponse:
-    def __init__(self, qdict):
-        self.event_ids = qdict["eventids"] if "eventids" in qdict else None
-        self.publisher = qdict["publisher"] if "publisher" in qdict else None
+class PublisherResponse(BaseModel):
+
+    eventids = Optional[List[str]]
+    publisher = Optional[str]
 
     def __repr__(self):
         return f"<PublisherResponse ({self.publisher})>"
 
-    def to_dict(self):
-        return {
-            "eventids": self.event_ids,
-            "publisher": self.publisher,
-        }
 
+class SubscriptionResponse(BaseModel):
 
-class SubscriptionResponse:
-    def __init__(self, qdict):
-        self.exclusions = qdict["exclusions"] if "exclusions" in qdict else None
-        self.max_keep_alive = qdict["maxKeepalive"] if "maxKeepalive" in qdict else None
-        self.max_poll_timeout = (
-            qdict["maxPolltimeout"] if "maxPolltimeout" in qdict else None
-        )
-        self.subscribed = qdict["subscribed"] if "subscribed" in qdict else None
-        self.subscription_id = (
-            qdict["subscriptionid"] if "subscriptionid" in qdict else None
-        )
-        self.subscriptions = (
-            qdict["subscriptions"] if "subscriptions" in qdict else None
-        )
+    exclusions: Optional[List[str]]
+    maxKeepalive: Optional[int]
+    maxPolltimeout: Optional[int]
+    subscribed: Optional[bool]
+    subscriptionid: Optional[int]
+    subscriptions: Optional[List[str]]
 
     def __repr__(self):
         return f"<SubscriptionResponse ({self.subscription_id})>"
-
-    def to_dict(self):
-        return {
-            "exclusions": self.exclusions,
-            "maxKeepalive": self.max_keep_alive,
-            "maxPolltimeout": self.max_poll_timeout,
-            "subscribed": self.subscribed,
-            "subscriptionid": self.subscription_id,
-            "subscriptions": self.subscriptions,
-        }

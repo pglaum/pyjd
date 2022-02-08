@@ -106,8 +106,7 @@ class Accounts:
         :rtype: List[Account]
         """
 
-        print(account_query.dict(exclude_none=True))
-        params = [account_query.dict(exclude_none=True)]
+        params = [account_query.dict()]
         resp = self.action("/listAccounts", params)
 
         accounts = []
@@ -224,6 +223,6 @@ class Accounts:
         :rtype: bool
         """
 
-        params = [basic_authentication.dict(exclude_none=True)]
+        params = [basic_authentication.dict()]
         resp = self.action("/updateBasicAuth", params)
         return resp

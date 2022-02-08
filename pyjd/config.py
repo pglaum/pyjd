@@ -108,7 +108,7 @@ class Config:
 
         enum_options = []
         for entry in resp:
-            enum_option = EnumOption(entry)
+            enum_option = EnumOption(**entry)
             enum_options.append(enum_option)
 
         return enum_options
@@ -125,7 +125,7 @@ class Config:
         :rtype: List[AdvancedConfigAPIEntry]
         """
 
-        params = [advanced_config_query.dict(exclude_none=True)]
+        params = [advanced_config_query.dict()]
         resp = self.action("/query", params=params)
 
         config_api_entries = []

@@ -1,5 +1,5 @@
 from .jd_types import LogFolder
-from typing import Any
+from typing import Any, List
 
 
 class Log:
@@ -11,7 +11,7 @@ class Log:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
-    def get_available_logs(self):
+    def get_available_logs(self) -> List[LogFolder]:
         """Returns a list of available logs.
 
         :return: List of log folders
@@ -22,12 +22,12 @@ class Log:
 
         log_folders = []
         for folder in resp:
-            log_folder = LogFolder(folder)
+            log_folder = LogFolder(**folder)
             log_folders.append(log_folder)
 
         return log_folders
 
-    def send_log_file(self, log_folders):
+    def send_log_file(self, log_folders) -> str:
         """Returns a log file.
 
         :return: The log file

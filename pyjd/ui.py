@@ -16,7 +16,7 @@ class UI:
 
         params = [context.value]
         resp = self.action("/getMenu", params)
-        menu_item = MenuStructure(resp)
+        menu_item = MenuStructure(**resp)
         return menu_item
 
     def invoke_action(self, context, action_id, link_ids, package_ids):

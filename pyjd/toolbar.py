@@ -61,7 +61,7 @@ class Toolbar:
 
         params = [check_id]
         resp = self.action("/pollCheckedLinksFromDOM", params)
-        link_check_result = LinkCheckResult(resp)
+        link_check_result = LinkCheckResult(**resp)
         return link_check_result
 
     def special_url_handling(self, url):

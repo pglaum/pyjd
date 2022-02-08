@@ -8,9 +8,11 @@ class Content:
         self.device = device
         self.endpoint = "contentV2"
 
-    def action(self, route: str, params: Any = None, binary: bool = False) -> Any:
+    def action(self, route: str, params: Any = None,
+               binary: bool = False) -> Any:
         route = f"/{self.endpoint}{route}"
-        return self.device.connection_helper.action(route, params, binary=binary)
+        return self.device.connection_helper.action(
+            route, params, binary=binary)
 
     def get_fav_icon(self, hostername: str) -> bytes:
         """Get the fav icon for a hoster.
@@ -65,5 +67,5 @@ class Content:
 
         params = [key]
         resp = self.action("/getIconDescription", params)
-        descriptor = IconDescriptor(resp)
+        descriptor = IconDescriptor(**resp)
         return descriptor

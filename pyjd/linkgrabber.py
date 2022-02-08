@@ -51,7 +51,7 @@ class LinkGrabber:
 
         params = [container_type, content]
         resp = self.action("/addContainer", params)
-        job = LinkCollectingJob(resp)
+        job = LinkCollectingJob(**resp)
         return job
 
     def add_links(
@@ -66,9 +66,9 @@ class LinkGrabber:
         :rtype: LinkCollectingJob
         """
 
-        params = [add_links_query.dict(exclude_none=True)]
+        params = [add_links_query.dict()]
         resp = self.action("/addLinks", params)
-        job = LinkCollectingJob(resp)
+        job = LinkCollectingJob(**resp)
         return job
 
     def add_variant_copy(
@@ -248,7 +248,7 @@ class LinkGrabber:
         resp = self.action("/movetoNewPackage", params)
         return resp
 
-    def query_link_crawler_jobs(self, link_crawler_jobs_query=LinkCrawlerJobsQuery()):
+    def query_link_crawler_jobs(self, link_crawler_jobs_query=LinkCrawlerJobsQuery.default()):
         """Query link crawler jobs.
 
         :param crawled_link_query: Query to filter by
@@ -257,17 +257,17 @@ class LinkGrabber:
         :rtype: List[jd_types.JobLinkCrawler]
         """
 
-        params = [link_crawler_jobs_query.to_dict()]
+        params = [link_crawler_jobs_query.dict()]
         resp = self.action("/queryLinkCrawlerJobs", params)
 
         crawler_jobs = []
         for job in resp:
-            crawler_job = JobLinkCrawler(job)
+            crawler_job = JobLinkCrawler(**job)
             crawler_jobs.append(crawler_job)
 
         return crawler_jobs
 
-    def query_links(self, crawled_link_query=CrawledLinkQuery()):
+    def query_links(self, crawled_link_query=CrawledLinkQuery.default()):
         """Get the links in the linkcollector/linkgrabber
 
         :param params: A CrawledLinkQuery object with options.
@@ -277,17 +277,17 @@ class LinkGrabber:
 
         """
 
-        params = [crawled_link_query.to_dict()]
+        params = [crawled_link_query.dict()]
         resp = self.action("/queryLinks", params)
 
         crawled_links = []
         for link in resp:
-            crawled_link = CrawledLink(link)
+            crawled_link = CrawledLink(**link)
             crawled_links.append(crawled_link)
 
         return crawled_links
 
-    def query_packages(self, crawled_package_query=CrawledPackageQuery()):
+    def query_packages(self, crawled_package_query=CrawledPackageQuery.default()):
         """Get the crawled packages in the linkgrabber
 
         :param params: A dictionary of parameters to pass.
@@ -295,12 +295,12 @@ class LinkGrabber:
         :return: A list of crawled packages:
         """
 
-        params = [crawled_package_query.to_dict()]
+        params = [crawled_package_query.dict()]
         resp = self.action("/queryPackages", params)
 
         crawled_packages = []
         for package in resp:
-            crawled_package = CrawledPackage(package)
+            crawled_package = CrawledPackage(**package)
             crawled_packages.append(crawled_package)
 
         return crawled_packages

@@ -1,4 +1,5 @@
-from .jd_types import AdvancedConfigQuery, AdvancedConfigAPIEntry, Plugin, PluginsQuery
+from .jd_types import AdvancedConfigQuery, AdvancedConfigAPIEntry, Plugin, \
+    PluginsQuery
 from typing import Any
 
 
@@ -34,15 +35,15 @@ class Plugins:
 
         return resp
 
-    def list(self, plugins_query=PluginsQuery()):
+    def list(self, plugins_query=PluginsQuery.default()):
         """List plugins with query."""
 
-        params = [plugins_query.to_dict()]
+        params = [plugins_query.dict()]
         resp = self.action("/list", params)
 
         plugins = []
         for p in resp:
-            plugin = Plugin(p)
+            plugin = Plugin(**p)
             plugins.append(plugin)
 
         return plugins
@@ -50,7 +51,7 @@ class Plugins:
     def query(self, config_query=AdvancedConfigQuery.default()):
         """Query plugin configurations."""
 
-        params = [config_query.dict(exclude_none=True)]
+        params = [config_query.dict()]
         resp = self.action("/query", params)
 
         entries = []
