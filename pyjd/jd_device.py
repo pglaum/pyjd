@@ -2,6 +2,7 @@ from .accounts import Accounts
 from .captcha import Captcha
 from .config import Config
 from .content import Content
+from .device import Device
 from .downloads import Downloads
 from .events import Events
 from .extensions import Extensions
@@ -41,6 +42,7 @@ class JDDevice:
         self.captcha = Captcha(self)
         self.config = Config(self)
         self.content = Content(self)
+        self.device = Device(self)
         self.downloads = Downloads(self)
         self.events = Events(self)
         self.extensions = Extensions(self)

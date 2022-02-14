@@ -812,3 +812,16 @@ class SubscriptionResponse(BaseModel):
 
     def __repr__(self):
         return f"<SubscriptionResponse ({self.subscription_id})>"
+
+
+class IPandPort(BaseModel):
+
+    port: int
+    ip: str
+
+
+class DirectConnectionInfos(BaseModel):
+
+    infos: Optional[List[IPandPort]]
+    rebindProtectionDetected: Optional[bool]
+    mode: Optional[str]
