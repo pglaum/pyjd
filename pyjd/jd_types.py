@@ -287,7 +287,7 @@ class AddLinksQuery(BaseModel):
     downloadPassword: Optional[str]
     extractPassword: Optional[str]
     links: Optional[str]
-    overwritePackagizerRulse: Optional[bool]
+    overwritePackagizerRules: Optional[bool]
     packageName: Optional[str]
     priority: Optional[Priority] = Priority.DEFAULT
     sourceUrl: Optional[str]
