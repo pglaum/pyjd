@@ -17,7 +17,7 @@ class Downloads:
         self.device = device
         self.endpoint = "downloadsV2"
 
-    def action(self, route: str, params: Any = None) -> Any:
+    def action(self, route: str, params: Optional[Any] = None) -> Any:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
@@ -374,7 +374,7 @@ class Downloads:
         params = [priority.value, link_ids, package_ids]
         self.action("/setPriority", params)
 
-    def set_stop_mark(self, link_id: int = None, package_id: int = None) -> None:
+    def set_stop_mark(self, link_id: Optional[int] = None, package_id: Optional[int] = None) -> None:
         """Set the stop mark to the specified id.
 
         Only one of link_id and package_id has to be given.

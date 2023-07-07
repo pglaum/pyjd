@@ -1,4 +1,4 @@
-from typing import Any, TYPE_CHECKING
+from typing import Optional, Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .jd_device import JDDevice
@@ -9,7 +9,7 @@ class System:
         self.device = device
         self.endpoint = "system"
 
-    def action(self, route: str, params: Any = None) -> Any:
+    def action(self, route: str, params: Optional[Any] = None) -> Any:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
@@ -19,7 +19,7 @@ class System:
         resp = self.action("/exitJD")
         return resp
 
-    def get_storage_infos(self, path: str = None) -> dict:
+    def get_storage_infos(self, path: Optional[str] = None) -> dict:
         """Get storage information."""
 
         params = [path]

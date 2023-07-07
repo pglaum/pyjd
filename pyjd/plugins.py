@@ -1,5 +1,5 @@
 from .jd_types import AdvancedConfigQuery, AdvancedConfigAPIEntry, Plugin, PluginsQuery
-from typing import Any
+from typing import Optional, Any
 
 
 class Plugins:
@@ -7,7 +7,7 @@ class Plugins:
         self.device = device
         self.endpoint = "plugins"
 
-    def action(self, route: str, params: Any = None) -> Any:
+    def action(self, route: str, params: Optional[Any] = None) -> Any:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 

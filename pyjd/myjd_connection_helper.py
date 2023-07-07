@@ -1,5 +1,5 @@
 import time
-from typing import List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from .jd_device import JDDevice
@@ -10,7 +10,7 @@ class MyJDConnectionHelper:
 
         self.device = device
 
-        self.__direct_connection_info = None
+        self.__direct_connection_info: Optional[list] = None
         self.__refresh_direct_connections()
         self.__direct_connection_enabled = True
         self.__direct_connection_cooldown = 0
@@ -32,7 +32,7 @@ class MyJDConnectionHelper:
 
             self.__update_direct_connections(response["data"]["infos"])
 
-    def __update_direct_connections(self, direct_info: dict) -> None:
+    def __update_direct_connections(self, direct_info: list) -> None:
         """Update the direct_connection info while keeping the correct order.
 
         :param direct_info: Information about direct connections
@@ -78,7 +78,7 @@ class MyJDConnectionHelper:
         params: List = [],
         http_action: str = "POST",
         binary: bool = False,
-    ) -> None:
+    ) -> Optional[dict]:
         """Execute any action for the device using the params.
 
         All the information about the parameters and their default values,
@@ -113,7 +113,7 @@ class MyJDConnectionHelper:
             )
 
             if response is None:
-                return False
+                return None
             else:
                 if (
                     self.__direct_connection_enabled
@@ -156,8 +156,8 @@ class MyJDConnectionHelper:
             # None of the direct connections worked, set a cooldown for all
             # direct connections
             self.__direct_connection_consecutive_failures += 1
-            self.__direct_connection_cooldown = time.time() + (
-                60 * self.__direct_connection_consecutive_failures
+            self.__direct_connection_cooldown = int(
+                time.time() + (60 * self.__direct_connection_consecutive_failures)
             )
 
             # Use the MyJD API instead
@@ -166,7 +166,7 @@ class MyJDConnectionHelper:
             )
 
             if response is None:
-                return False
+                return None
 
             self.__refresh_direct_connections()
 

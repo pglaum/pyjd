@@ -1,5 +1,5 @@
 from .jd_types import LogFolder
-from typing import Any, List
+from typing import Optional, Any, List
 
 
 class Log:
@@ -7,7 +7,7 @@ class Log:
         self.device = device
         self.endpoint = "log"
 
-    def action(self, route: str, params: Any = None) -> Any:
+    def action(self, route: str, params: Optional[Any] = None) -> Any:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 

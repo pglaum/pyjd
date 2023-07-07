@@ -1,5 +1,5 @@
 from .jd_types import Context, MenuStructure
-from typing import Any, List, TYPE_CHECKING
+from typing import Optional, Any, List, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .jd_device import JDDevice
@@ -10,7 +10,7 @@ class UI:
         self.device = device
         self.endpoint = "ui"
 
-    def action(self, route: str, params: Any = None) -> Any:
+    def action(self, route: str, params: Optional[Any] = None) -> Any:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 

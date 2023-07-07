@@ -10,7 +10,7 @@ from .jd_types import (
     LinkCrawlerJobsQuery,
     LinkVariant,
 )
-from typing import Any
+from typing import Optional, Any
 
 
 class LinkGrabber:
@@ -18,11 +18,11 @@ class LinkGrabber:
         self.device = device
         self.endpoint = "linkgrabberv2"
 
-    def action(self, route: str, params: Any = None) -> Any:
+    def action(self, route: str, params: Optional[Any] = None) -> Any:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
-    def abort(self, job_id: int = None) -> bool:
+    def abort(self, job_id: int = -1) -> bool:
         """Abort one or all jobs.
 
         :param job_id: If this is given, only the job `job_id` will be aborted.
@@ -32,7 +32,7 @@ class LinkGrabber:
         """
 
         params = None
-        if job_id:
+        if job_id > -1:
             params = [job_id]
 
         resp = self.action("/abort", params)

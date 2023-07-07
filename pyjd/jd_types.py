@@ -5,9 +5,11 @@ For more information, see here:
     https://my.jdownloader.org/developers/index.html#tag_342
 """
 
+from __future__ import annotations
+
 from enum import Enum
 from pydantic import BaseModel
-from typing import Any, ForwardRef, List, Optional
+from typing import Any, List, Optional
 
 
 #
@@ -190,20 +192,21 @@ class AccountQuery(BaseModel):
     By default all possible data is queried.
     """
 
-    enabled: bool = (True,)
-    error: bool = (True,)
-    maxResults: int = (-1,)
-    startAt: int = (0,)
-    trafficLeft: bool = (True,)
-    trafficMax: bool = (True,)
-    userName: bool = (True,)
+    enabled: bool = True
+    error: bool = True
+    maxResults: int = -1
+    startAt: int = 0
+    trafficLeft: bool = True
+    trafficMax: bool = True
+    userName: bool = True
     uuidlist: Optional[List[int]]
-    valid: bool = (True,)
-    validUntil: bool = (True,)
+    valid: bool = True
+    validUntil: bool = True
 
     def __repr__(self):
-        return f"<AccountQuery ({self.uuid_list})>"
+        return f"<AccountQuery ({self.uuidlist})>"
 
+    @staticmethod
     def default():
         return AccountQuery(
             enabled=True,
@@ -247,8 +250,9 @@ class AdvancedConfigQuery(BaseModel):
     values: bool
 
     def __repr__(self):
-        return f"<AdvancedConfigQuery ({self.config_interface})>"
+        return f"<AdvancedConfigQuery ({self.configInterface})>"
 
+    @staticmethod
     def default():
         return AdvancedConfigQuery(
             configInterface=None,
@@ -310,6 +314,7 @@ class APIQuery(BaseModel):
     def __repr__(self):
         return "<APIQuery>"
 
+    @staticmethod
     def default():
         return APIQuery(empty=False, forNullKey="", maxResults=-1, startAt=0)
 
@@ -326,7 +331,7 @@ class CaptchaJob(BaseModel):
     type: Optional[str]
 
     def __repr__(self):
-        return f"<CaptchaJob ({self.captcha_id})>"
+        return f"<CaptchaJob ({self.id})>"
 
 
 class LinkVariant(BaseModel):
@@ -382,6 +387,7 @@ class CrawledLinkQuery(BaseModel):
     def __repr__(self):
         return "<CrawledLinkQuery>"
 
+    @staticmethod
     def default():
         return CrawledLinkQuery(
             availability=True,
@@ -446,6 +452,7 @@ class CrawledPackageQuery(BaseModel):
     def __repr__(self):
         return "<CrawledPackageQuery>"
 
+    @staticmethod
     def default():
         return CrawledPackageQuery(
             availableOfflineCount=True,
@@ -530,6 +537,7 @@ class ExtensionQuery(BaseModel):
     def __repr__(self):
         return "<ExtensionQuery>"
 
+    @staticmethod
     def default():
         return ExtensionQuery(
             configInterface=True,
@@ -567,15 +575,12 @@ class FilePackage(BaseModel):
         return f"<FilePackage ({self.uuid})>"
 
 
-IconDescriptor = ForwardRef("IconDescriptor")
-
-
 class IconDescriptor(BaseModel):
 
     cls: Optional[str]
     key: Optional[str]
     prps: Optional[Any]
-    rsc: Optional[IconDescriptor]
+    rsc: Optional[List[IconDescriptor]]
 
     def __repr__(self):
         return f"<IconDescriptor ({self.key})>"
@@ -593,7 +598,7 @@ class JobLinkCrawler(BaseModel):
     unhandled: Optional[int]
 
     def __repr__(self):
-        return f"<JobLinkCrawler ({self.crawlerId})>"
+        return f"<JobLinkCrawler ({self.crawledId})>"
 
 
 class LinkStatus(BaseModel):
@@ -606,7 +611,7 @@ class LinkStatus(BaseModel):
     url: Optional[str]
 
     def __repr__(self):
-        return f"<LinkStatus ({self.link_check_id})>"
+        return f"<LinkStatus ({self.linkCheckID})>"
 
 
 class LinkCheckResult(BaseModel):
@@ -634,6 +639,7 @@ class LinkCrawlerJobsQuery(BaseModel):
     def __repr__(self):
         return "<LinkCrawlerJobsQuery>"
 
+    @staticmethod
     def default():
         return LinkCrawlerJobsQuery(collectorInfo=True, jobIds=None)
 
@@ -665,6 +671,7 @@ class LinkQuery(BaseModel):
     def __repr__(self):
         return "<LinkQuery>"
 
+    @staticmethod
     def default():
         return LinkQuery(
             addedDate=True,
@@ -701,9 +708,6 @@ class LogFolder(BaseModel):
         return "<LogFolder>"
 
 
-MenuStructure = ForwardRef("MenuStructure")
-
-
 class MenuStructure(BaseModel):
 
     children: Optional[List[MenuStructure]]
@@ -713,7 +717,7 @@ class MenuStructure(BaseModel):
     type: Optional[MenuType]
 
     def __repr__(self):
-        return f"<MenuStructure ({self.menuId})>"
+        return f"<MenuStructure ({self.id})>"
 
 
 class PackageQuery(BaseModel):
@@ -738,6 +742,7 @@ class PackageQuery(BaseModel):
     def __repr__(self):
         return "<PackageQuery>"
 
+    @staticmethod
     def default():
         return PackageQuery(
             bytesLoaded=True,
@@ -788,6 +793,7 @@ class PluginsQuery(BaseModel):
     def __repr__(self):
         return f"<PluginsQuery ({self.pattern})>"
 
+    @staticmethod
     def default():
         return PluginsQuery(pattern="", version=None)
 
@@ -811,7 +817,7 @@ class SubscriptionResponse(BaseModel):
     subscriptions: Optional[List[str]]
 
     def __repr__(self):
-        return f"<SubscriptionResponse ({self.subscription_id})>"
+        return f"<SubscriptionResponse ({self.subscriptionid})>"
 
 
 class IPandPort(BaseModel):

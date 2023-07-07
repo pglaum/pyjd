@@ -4,7 +4,9 @@ This is a wrapper for the JDownloader API.
 
 ## Installation
 
-Run `pip install .` in the repository folder.
+```shell
+pip install pyjd
+```
 
 ## Usage
 
@@ -13,7 +15,7 @@ The documentation of the JDownloader API can be found here
 documented functions (but uses underscores instead of CamelCase).
 
 For examples, check out the sample scripts in the repository
-([see here](https://git.sr.ht/~pglaum/pyjd/tree/master/item/examples)).
+([see here](https://github.com/pglaum/pyjd/tree/master/examples)).
 
 ## Building auto-docs
 

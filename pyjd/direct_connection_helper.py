@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Optional, Any
 import json
 import requests
 
@@ -11,7 +11,7 @@ class DirectConnectionHelper:
     def action(
         self,
         path: str,
-        params: Any = None,
+        params: Optional[Any] = None,
         http_action: str = "POST",
         binary: bool = False,
     ) -> Any:

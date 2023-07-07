@@ -1,5 +1,5 @@
 from .jd_types import LinkCheckResult
-from typing import Any
+from typing import Optional, Any
 
 
 class Toolbar:
@@ -7,7 +7,7 @@ class Toolbar:
         self.device = device
         self.endpoint = "toolbar"
 
-    def action(self, route: str, params: Any = None) -> Any:
+    def action(self, route: str, params: Optional[Any] = None) -> Any:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 

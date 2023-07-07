@@ -1,5 +1,5 @@
 from .jd_types import CaptchaJob, SkipRequest
-from typing import Any, List, TYPE_CHECKING
+from typing import Optional, Any, List, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .jd_device import JDDevice
@@ -11,11 +11,11 @@ class Captcha:
         self.device = device
         self.endpoint = "captcha"
 
-    def action(self, route: str, params: Any = None, binary: bool = False) -> Any:
+    def action(self, route: str, params: Optional[Any] = None, binary: bool = False) -> Any:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params, binary=binary)
 
-    def get(self, captcha_id: int, c_format: str = None) -> str:
+    def get(self, captcha_id: int, c_format: Optional[str] = None) -> str:
         """Get the base64 captcha image.
 
         The result is a captcha image as base64 encoded data url.
@@ -80,7 +80,7 @@ class Captcha:
         resp = self.action("/skip", params)
         return resp
 
-    def solve(self, captcha_id: int, result: str, result_format: str = None) -> bool:
+    def solve(self, captcha_id: int, result: str, result_format: Optional[str] = None) -> bool:
         """Solve a captcha.
 
         :param captcha_id: The ID of the captcha that is solved.

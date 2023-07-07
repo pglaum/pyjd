@@ -29,7 +29,7 @@ The workflow for using events is this:
 """
 
 from .jd_types import SubscriptionResponse, PublisherResponse
-from typing import Any, List
+from typing import Optional, Any, List
 
 
 class Events:
@@ -37,7 +37,7 @@ class Events:
         self.device = device
         self.endpoint = "events"
 
-    def action(self, route: str, params: Any = None) -> Any:
+    def action(self, route: str, params: Optional[Any] = None) -> Any:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 

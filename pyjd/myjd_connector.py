@@ -1,7 +1,7 @@
 from .jd_device import JDDevice
 from .myjd_connection_helper import MyJDConnectionHelper
 from Crypto.Cipher import AES
-from typing import Any, Dict, List
+from typing import Optional, Any, Dict, List
 from urllib.parse import quote
 import base64
 import hashlib
@@ -17,9 +17,9 @@ def PAD(s: bytes) -> bytes:
     """Pad a string
 
     :param s: String to pad
-    :type s: str
+    :type s: bytes
     :return: Padded ``s``.
-    :rtype: str
+    :rtype: bytes
     """
 
     return s + ((BS - len(s) % BS) * chr(BS - len(s) % BS)).encode()
@@ -29,9 +29,9 @@ def UNPAD(s: bytes) -> bytes:
     """Unpad a string.
 
     :param s: String to unpad
-    :type s: str
+    :type s: bytes
     :return: Unpadded ``s``.
-    :rtype: str
+    :rtype: bytes
     """
 
     return s[0 : -s[-1]]
@@ -47,18 +47,18 @@ class MyJDConnector:
         self.__api_url = "https://api.jdownloader.org"
         self.__app_key = "https://pglaum.srht.site/pyjd-api"
         self.__api_version = 1
-        self.__devices = None
+        self.__devices: List[dict] = []
 
-        self.__login_secret = None
-        self.__device_secret = None
-        self.__session_token = None
+        self.__login_secret: Optional[bytes] = None
+        self.__device_secret: Optional[bytes] = None
+        self.__session_token: Optional[str] = None
         self.__regain_token = None
-        self.__server_encryption_token = None
-        self.__device_encryption_token = None
+        self.__server_encryption_token: Optional[bytes] = None
+        self.__device_encryption_token: Optional[bytes] = None
 
         self.__connected = False
 
-    def get_session_token(self) -> str:
+    def get_session_token(self) -> Optional[str]:
         """Get the session token
 
         :return: Returns ``self.__session_token``.
@@ -119,6 +119,16 @@ class MyJDConnector:
             old_token = self.__login_secret
         else:
             old_token = self.__server_encryption_token
+
+        if not old_token:
+            raise Exception("No old token available")
+
+        if not self.__session_token:
+            raise Exception("No session token available")
+
+        if not self.__device_secret:
+            raise Exception("No device secret available")
+
         new_token = hashlib.sha256()
         new_token.update(old_token + bytearray.fromhex(self.__session_token))
         self.__server_encryption_token = new_token.digest()
@@ -126,7 +136,7 @@ class MyJDConnector:
         new_token.update(self.__device_secret + bytearray.fromhex(self.__session_token))
         self.__device_encryption_token = new_token.digest()
 
-    def __create_signature(self, key: str, data: str) -> bytes:
+    def __create_signature(self, key: bytes, data: str) -> str:
         """Calculate the signature for the data, given a key.
 
         :param key: Key for the signature
@@ -140,7 +150,7 @@ class MyJDConnector:
         signature = hmac.new(key, data.encode("utf-8"), hashlib.sha256)
         return signature.hexdigest()
 
-    def __decrypt(self, secret_token: str, data: str) -> str:
+    def __decrypt(self, secret_token: bytes, data: str) -> bytes:
         """Decrypt data from the server using the provided token.
 
         :param secret_token: Token for the server
@@ -159,7 +169,7 @@ class MyJDConnector:
 
         return decrypted_data
 
-    def __encrypt(self, secret_token: str, data: str) -> str:
+    def __encrypt(self, secret_token: bytes, data: bytes) -> str:
         """Encrypt data for the server using the provided token.
 
         :param secret_token: Token for the server
@@ -170,7 +180,7 @@ class MyJDConnector:
         :rtype: str
         """
 
-        data = PAD(data.encode("utf-8"))
+        data = PAD(data)
         init_vector = secret_token[: len(secret_token) // 2]
         key = secret_token[len(secret_token) // 2 :]
         encryptor = AES.new(key, AES.MODE_CBC, init_vector)
@@ -204,7 +214,7 @@ class MyJDConnector:
         self.__regain_token = None
         self.__server_encryption_token = None
         self.__device_encryption_token = None
-        self.__devices = None
+        self.__devices = []
         self.__connected = False
 
         self.__login_secret = self.__create_secret(email, password, "server")
@@ -260,7 +270,7 @@ class MyJDConnector:
         self.__regain_token = None
         self.__server_encryption_token = None
         self.__device_encryption_token = None
-        self.__devices = None
+        self.__devices = []
         self.__connected = False
 
         return response
@@ -304,7 +314,9 @@ class MyJDConnector:
 
         return self.__devices
 
-    def get_device(self, device_name: str = None, device_id: str = None) -> JDDevice:
+    def get_device(
+        self, device_name: Optional[str] = None, device_id: Optional[str] = None
+    ) -> JDDevice:
         """Get a JDDevice instance for a device
 
         Will search for ``device_id`` first and then for ``device_name``.
@@ -336,9 +348,9 @@ class MyJDConnector:
         self,
         path: str,
         http_method: str = "GET",
-        params: Any = None,
-        action: str = None,
-        api: str = None,
+        params: Optional[Any] = None,
+        action: Optional[str] = None,
+        api: Optional[str] = None,
         binary: bool = False,
     ) -> Any:
         """Make a request to the MyJD API.
@@ -371,6 +383,7 @@ class MyJDConnector:
             api = self.__api_url
 
         data = None
+        query = None
         if not self.is_connected() and path != "/my/connect":
             raise (Exception("No connection established\n"))
 
@@ -385,6 +398,9 @@ class MyJDConnector:
             query += ["rid=" + str(self.__request_id)]
 
             if self.__server_encryption_token is None:
+                if not self.__login_secret:
+                    raise Exception("No login secret\n")
+
                 query += [
                     "signature="
                     + str(
@@ -405,21 +421,21 @@ class MyJDConnector:
                     )
                 ]
 
-            query = query[0] + "&".join(query[1:])
-            encrypted_response = requests.get(api + query, timeout=3)
+            s_query = query[0] + "&".join(query[1:])
+            encrypted_response = requests.get(api + s_query, timeout=3)
         else:
-            params_request = []
+            params_list: List[Any] = []
             if params is not None:
                 for param in params:
                     if not isinstance(param, list):
-                        params_request += [json.dumps(param)]
+                        params_list += [json.dumps(param)]
                     else:
-                        params_request += [param]
+                        params_list += [param]
 
             params_request = {
                 "apiVer": self.__api_version,
                 "url": path,
-                "params": params_request,
+                "params": params_list,
                 "rid": self.__request_id,
             }
 
@@ -427,7 +443,11 @@ class MyJDConnector:
             # Removing quotes around null elements.
             data = data.replace('"null"', "null")
             data = data.replace("'null'", "null")
-            encrypted_data = self.__encrypt(self.__device_encryption_token, data)
+            b_data = data.encode("utf-8")
+            if not self.__device_encryption_token:
+                raise Exception("No device encryption token\n")
+
+            encrypted_data = self.__encrypt(self.__device_encryption_token, b_data)
 
             if action is not None:
                 request_url = api + action + path
@@ -450,6 +470,9 @@ class MyJDConnector:
                 error_msg = json.loads(encrypted_response.text)
             except json.JSONDecodeError:
                 try:
+                    if not self.__device_encryption_token:
+                        raise Exception("No device encryption token\n")
+
                     error_msg = json.loads(
                         self.__decrypt(
                             self.__device_encryption_token, encrypted_response.text
@@ -470,7 +493,7 @@ class MyJDConnector:
                 + path
             )
 
-            if http_method == "GET":
+            if http_method == "GET" and query:
                 msg += query
 
             msg += "\n"
@@ -488,6 +511,9 @@ class MyJDConnector:
 
         if action is None:
             if not self.__server_encryption_token:
+                if not self.__login_secret:
+                    raise Exception("No login secret\n")
+
                 response = self.__decrypt(self.__login_secret, encrypted_response.text)
             else:
                 response = self.__decrypt(
@@ -495,6 +521,9 @@ class MyJDConnector:
                 )
 
         else:
+            if not self.__device_encryption_token:
+                raise Exception("No device encryption token\n")
+
             response = self.__decrypt(
                 self.__device_encryption_token, encrypted_response.text
             )

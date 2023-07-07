@@ -1,4 +1,4 @@
-from typing import Any, TYPE_CHECKING
+from typing import Optional, Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .jd_device import JDDevice
@@ -9,7 +9,7 @@ class Update:
         self.device = device
         self.endpoint = "update"
 
-    def action(self, route: str, params: Any = None) -> Any:
+    def action(self, route: str, params: Optional[Any] = None) -> Any:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
