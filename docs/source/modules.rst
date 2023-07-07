@@ -6,3 +6,4 @@ pyjd
 
    pyjd
    setup
+   test

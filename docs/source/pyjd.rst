@@ -36,6 +36,14 @@ pyjd.content module
    :undoc-members:
    :show-inheritance:
 
+pyjd.device module
+------------------
+
+.. automodule:: pyjd.device
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyjd.direct\_connection\_helper module
 --------------------------------------
 
@@ -171,7 +179,6 @@ pyjd.update module
    :members:
    :undoc-members:
    :show-inheritance:
-
 
 Module contents
 ---------------
