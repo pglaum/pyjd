@@ -12,7 +12,7 @@ def read(fname):
 
 setup(
     name="pyjd",
-    version="1.0.4",
+    version="1.0.5",
     author="Philipp Glaum",
     author_email="p@pglaum.de",
     description=("A wapper for the JDownloader API"),
@@ -20,7 +20,7 @@ setup(
     keywords="api jdownloader",
     url="https://git.sr.ht/~pglaum/pyjd-api",
     packages=["pyjd"],
-    install_required=["requests", "pydantic===1.10.10", "pycryptodome"],
+    install_requires=["requests", "pydantic===1.10.10", "pycryptodome"],
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
     classifiers=[
