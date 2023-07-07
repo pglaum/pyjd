@@ -11,7 +11,9 @@ class Captcha:
         self.device = device
         self.endpoint = "captcha"
 
-    def action(self, route: str, params: Optional[Any] = None, binary: bool = False) -> Any:
+    def action(
+        self, route: str, params: Optional[Any] = None, binary: bool = False
+    ) -> Any:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params, binary=binary)
 
@@ -80,7 +82,9 @@ class Captcha:
         resp = self.action("/skip", params)
         return resp
 
-    def solve(self, captcha_id: int, result: str, result_format: Optional[str] = None) -> bool:
+    def solve(
+        self, captcha_id: int, result: str, result_format: Optional[str] = None
+    ) -> bool:
         """Solve a captcha.
 
         :param captcha_id: The ID of the captcha that is solved.
