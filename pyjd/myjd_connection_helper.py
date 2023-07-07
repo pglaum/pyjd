@@ -114,6 +114,8 @@ class MyJDConnectionHelper:
 
             if response is None:
                 return None
+            elif binary:
+                return response
             else:
                 if (
                     self.__direct_connection_enabled
@@ -138,8 +140,14 @@ class MyJDConnectionHelper:
                         path, http_action, params, action_url, api, binary=binary
                     )
 
-                    if response is not None:
+                    if response is None:
+                        # Don't try this connection for a minute.
+                        conn["cooldown"] = time.time() + 60
 
+                    elif binary:
+                        return response
+
+                    else:
                         # This connection worked, push it to the top of the
                         # list.
                         self.__direct_connection_info.remove(conn)
@@ -147,11 +155,6 @@ class MyJDConnectionHelper:
                         self.__direct_connection_consecutive_failures = 0
 
                         return response["data"]
-
-                    else:
-
-                        # Don't try this connection for a minute.
-                        conn["cooldown"] = time.time() + 60
 
             # None of the direct connections worked, set a cooldown for all
             # direct connections
