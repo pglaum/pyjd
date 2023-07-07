@@ -14,7 +14,7 @@ class Config:
         route = f"/{self.endpoint}{route}"
         return self.device.connection_helper.action(route, params)
 
-    def get(self, interface_name: str, storage: str, key: str) -> Any:
+    def get(self, interface_name: str, storage: Optional[str], key: str) -> Any:
         """Get value from interface by key.
 
         :param interface_name: The name of the JDownloader interface

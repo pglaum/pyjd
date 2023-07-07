@@ -123,7 +123,9 @@ class MyJDConnectionHelper:
                 ):
                     self.__refresh_direct_connections()
 
-                return response["data"]
+                if "data" in response:
+                    return response["data"]
+                return response
 
         else:
 
@@ -154,7 +156,9 @@ class MyJDConnectionHelper:
                         self.__direct_connection_info.insert(0, conn)
                         self.__direct_connection_consecutive_failures = 0
 
-                        return response["data"]
+                        if "data" in response:
+                            return response["data"]
+                        return response
 
             # None of the direct connections worked, set a cooldown for all
             # direct connections
@@ -173,7 +177,9 @@ class MyJDConnectionHelper:
 
             self.__refresh_direct_connections()
 
-            return response["data"]
+            if "data" in response:
+                return response["data"]
+            return response
 
     def __action_url(self) -> str:
         """Generate the action url for the device and session."""

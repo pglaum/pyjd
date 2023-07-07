@@ -44,6 +44,6 @@ class DirectConnectionHelper:
         robj = json.loads(rstr)
 
         if "data" in robj:
-            robj = robj["data"]
+            return robj["data"]
 
         return robj

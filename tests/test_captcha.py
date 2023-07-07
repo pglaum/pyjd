@@ -3,7 +3,7 @@ import pytest
 from . import get_jdownloader
 
 
-class TestContent:
+class TestCaptcha:
     @classmethod
     def setup_class(cls):
         cls.jdownloader = get_jdownloader()

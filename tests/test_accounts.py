@@ -5,7 +5,7 @@ from pyjd.jd_types import Account, AccountQuery, BasicAuth, BasicAuthType
 from . import get_jdownloader
 
 
-class TestContent:
+class TestAccounts:
     @classmethod
     def setup_class(cls):
         cls.jdownloader = get_jdownloader()
