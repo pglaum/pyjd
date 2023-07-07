@@ -11,20 +11,21 @@ def read(fname):
 
 
 setup(
-    name = "pyjd",
-    version = "1.0",
-    author = "Philipp Glaum",
-    author_email = "p@pglaum.de",
-    description = ("A wapper for the JDownloader (deprecated) API"),
-    license = "GPLv2",
-    keywords = "api jdownloader",
-    url = "https://git.sr.ht/~pglaum/pyjd-api",
-    packages=['pyjd'],
-    install_required=['requests'],
-    long_description=read('README.md'),
+    name="pyjd",
+    version="1.0",
+    author="Philipp Glaum",
+    author_email="p@pglaum.de",
+    description=("A wapper for the JDownloader API"),
+    license="GPLv3",
+    keywords="api jdownloader",
+    url="https://git.sr.ht/~pglaum/pyjd-api",
+    packages=["pyjd"],
+    install_required=["requests"],
+    long_description=read("README.md"),
+    long_description_content_type="text/markdown",
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
-        "License :: OSI Approved :: GPLv2 License",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     ],
 )
