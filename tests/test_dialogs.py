@@ -3,7 +3,7 @@ from . import get_jdownloader
 from time import sleep
 
 
-class TestContent:
+class TestDialogs:
     @classmethod
     def setup_class(cls):
         cls.jdownloader = get_jdownloader()

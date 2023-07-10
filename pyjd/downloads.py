@@ -23,12 +23,12 @@ class Downloads:
 
     def cleanup(
         self,
-        link_ids: List[int],
-        package_ids: List[int],
-        delete_action: DeleteAction,
-        mode: Mode,
-        selection_type: SelectionType,
-    ) -> Any:
+        link_ids: List[int] = [],
+        package_ids: List[int] = [],
+        delete_action: DeleteAction = DeleteAction.DELETE_DISABLED,
+        mode: Mode = Mode.REMOVE_LINKS_ONLY,
+        selection_type: SelectionType = SelectionType.ALL,
+    ) -> bool:
         """Cleanup the link_ids & package_ids in the download list.
 
         :param link_ids: Link IDs that are used
@@ -54,9 +54,13 @@ class Downloads:
             selection_type.value,
         ]
         resp = self.action("/cleanup", params)
-        return resp
+        if resp == "":
+            return True
+        return False
 
-    def force_download(self, link_ids: List[int], package_ids: List[int]) -> bool:
+    def force_download(
+        self, link_ids: List[int] = [], package_ids: List[int] = []
+    ) -> bool:
         """Force downloads for link_ids and package_ids.
 
         :param link_ids: Link IDs that are used
@@ -72,9 +76,12 @@ class Downloads:
         return resp
 
     def get_download_urls(
-        self, link_ids: List[int], package_ids: List[int], url_display_type: List[str]
+        self,
+        link_ids: List[int] = [],
+        package_ids: List[int] = [],
+        url_display_type: List[str] = ["ORIGIN"],
     ) -> Dict[str, List[int]]:
-        """Force downloads for link_ids and package_ids.
+        """Get the download urls for link_ids and package_ids.
 
         :param link_ids: Link IDs that are used
         :type link_ids: List[int]
@@ -118,7 +125,7 @@ class Downloads:
 
         return None
 
-    def get_structure_change_counter(self, old_counter_value: int) -> int:
+    def get_structure_change_counter(self, old_counter_value: int = 0) -> int:
         """Get the structure change counter.
 
         Update the application layout, if the structure_change_counter is
@@ -133,7 +140,10 @@ class Downloads:
         return resp
 
     def move_links(
-        self, link_ids: List[int], after_link_id: int, dest_package_id: int
+        self,
+        link_ids: List[int] = [],
+        after_link_id: int = -1,
+        dest_package_id: int = -1,
     ) -> Any:
         """Move links to a package.
 
@@ -151,7 +161,9 @@ class Downloads:
         resp = self.action("/moveLinks", params)
         return resp
 
-    def move_packages(self, package_ids: List[int], after_dest_package_id: int) -> Any:
+    def move_packages(
+        self, package_ids: List[int] = [], after_dest_package_id: int = -1
+    ) -> Any:
         """Move packages.
 
         :param package_ids: Package IDs that are used
@@ -168,10 +180,10 @@ class Downloads:
 
     def move_to_new_package(
         self,
-        link_ids: List[int],
-        pkg_ids: List[int],
-        new_pkg_name: str,
-        download_path: str,
+        link_ids: List[int] = [],
+        pkg_ids: List[int] = [],
+        new_pkg_name: str = "",
+        download_path: str = "",
     ) -> Any:
         """Move link_ids and pkg_ids to a new package
 
@@ -243,7 +255,9 @@ class Downloads:
 
         return download_packages
 
-    def remove_links(self, link_ids: List[int], package_ids: List[int]) -> None:
+    def remove_links(
+        self, link_ids: List[int] = [], package_ids: List[int] = []
+    ) -> None:
         """Remove links/packages from download list.
 
         :param link_ids: Link IDs that are used
@@ -260,7 +274,7 @@ class Downloads:
 
         self.action("/removeStopMark")
 
-    def rename_link(self, link: int, new_name: str) -> None:
+    def rename_link(self, link: int = -1, new_name: str = "") -> None:
         """Rename a link.
 
         :param link: The ID of the link
@@ -272,7 +286,7 @@ class Downloads:
         params = [link, new_name]
         self.action("/renameLink", params)
 
-    def rename_package(self, package_id: str, new_name: str) -> None:
+    def rename_package(self, package_id: str = "", new_name: str = "") -> None:
         """Rename a package.
 
         :param package_id: ID of the packages
@@ -285,7 +299,9 @@ class Downloads:
         resp = self.action("/renamePackage", params)
         return resp
 
-    def reset_links(self, link_ids: List[int], package_ids: List[int]) -> None:
+    def reset_links(
+        self, link_ids: List[int] = [], package_ids: List[int] = []
+    ) -> None:
         """Reset links/packages in the download list.
 
         :param link_ids: Link IDs that are used
@@ -297,7 +313,9 @@ class Downloads:
         params = [link_ids, package_ids]
         self.action("/resetLinks", params)
 
-    def resume_links(self, link_ids: List[int], package_ids: List[int]) -> None:
+    def resume_links(
+        self, link_ids: List[int] = [], package_ids: List[int] = []
+    ) -> None:
         """Resume links/packages.
 
         :param link_ids: Link IDs that are used
@@ -309,7 +327,9 @@ class Downloads:
         params = [link_ids, package_ids]
         self.action("/resumeLinks", params)
 
-    def set_download_directory(self, directory: str, package_ids: List[int]) -> None:
+    def set_download_directory(
+        self, directory: str = "", package_ids: List[int] = []
+    ) -> None:
         """Set the download directory for a packages.
 
         :param directory: Path of the download directory
@@ -323,7 +343,7 @@ class Downloads:
         return resp
 
     def set_download_password(
-        self, link_ids: List[int], package_ids: List[int], password: str
+        self, link_ids: List[int] = [], package_ids: List[int] = [], password: str = ""
     ) -> bool:
         """Set the download password for links/packages.
 
@@ -342,7 +362,10 @@ class Downloads:
         return resp
 
     def set_enabled(
-        self, enabled: bool, link_ids: List[int], package_ids: List[int]
+        self,
+        enabled: bool = True,
+        link_ids: List[int] = [],
+        package_ids: List[int] = [],
     ) -> bool:
         """Enable/disable links and packages.
 
@@ -359,7 +382,10 @@ class Downloads:
         return resp
 
     def set_priority(
-        self, priority: Priority, link_ids: List[int], package_ids: List[int]
+        self,
+        priority: Priority = Priority.DEFAULT,
+        link_ids: List[int] = [],
+        package_ids: List[int] = [],
     ) -> None:
         """Set the priority for links and packages.
 
@@ -374,7 +400,9 @@ class Downloads:
         params = [priority.value, link_ids, package_ids]
         self.action("/setPriority", params)
 
-    def set_stop_mark(self, link_id: Optional[int] = None, package_id: Optional[int] = None) -> None:
+    def set_stop_mark(
+        self, link_id: Optional[int] = None, package_id: Optional[int] = None
+    ) -> None:
         """Set the stop mark to the specified id.
 
         Only one of link_id and package_id has to be given.
@@ -389,7 +417,7 @@ class Downloads:
         self.action("/setStopMark", params)
 
     def split_package_by_hoster(
-        self, link_ids: List[int], package_ids: List[int]
+        self, link_ids: List[int] = [], package_ids: List[int] = []
     ) -> None:
         """Split the packages/links by hoster.
 
@@ -403,7 +431,7 @@ class Downloads:
         self.action("/splitPackageByHoster", params)
 
     def start_online_status_check(
-        self, link_ids: List[int], package_ids: List[int]
+        self, link_ids: List[int] = [], package_ids: List[int] = []
     ) -> None:
         """Start an online status check for links and packages.
 
@@ -417,7 +445,10 @@ class Downloads:
         self.action("/startOnlineStatusCheck", params)
 
     def unskip(
-        self, link_ids: List[int], package_ids: List[int], filter_by_reason: Reason
+        self,
+        link_ids: List[int] = [],
+        package_ids: List[int] = [],
+        filter_by_reason: Reason = Reason.DISK_FULL,
     ) -> bool:
         """Un-skip links and packages
 
