@@ -8,7 +8,7 @@ For more information, see here:
 from __future__ import annotations
 
 from enum import Enum
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Any, List, Optional
 
 
@@ -471,6 +471,22 @@ class CrawledPackageQuery(BaseModel):
             startAt=0,
             status=True,
         )
+
+
+class DialogInfo(BaseModel):
+    properties: Optional[dict[str, str]]
+    type: Optional[str]
+
+    def __repr__(self):
+        return f"<DialogInfo ({self.type})>"
+
+
+class DialogTypeInfo(BaseModel):
+    in_: Optional[dict[str, str]] = Field(..., alias="in")
+    out: Optional[dict[str, str]]
+
+    def __repr__(self):
+        return "<DialogTypeInfo>"
 
 
 class DownloadLink(BaseModel):

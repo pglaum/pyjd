@@ -3,8 +3,6 @@ from . import get_jdownloader
 
 
 class TestContent:
-    jdownload = None
-
     @classmethod
     def setup_class(cls):
         cls.jdownloader = get_jdownloader()

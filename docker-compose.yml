@@ -4,6 +4,7 @@ services:
         image: jlesage/jdownloader-2
         ports:
             - 5800:5800
+            - 3128:3128
         volumes:
             - ./.docker/org.jdownloader.api.RemoteAPIConfig.json:/config/cfg/org.jdownloader.api.RemoteAPIConfig.json
 
