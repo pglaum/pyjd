@@ -3,7 +3,7 @@ name: Run tests
 on: push
 
 jobs:
-  pypi:
+  run-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
