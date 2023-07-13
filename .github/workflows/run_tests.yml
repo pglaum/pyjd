@@ -1,0 +1,12 @@
+name: Run tests
+
+on: push
+
+jobs:
+  pypi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: start jdownloader
+        run: docker compose up -d jdownloader
+      - name: run tests
+        run: docker compose up --exit-code-from pytest pytest

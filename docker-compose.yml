@@ -1,12 +1,20 @@
 version: '3'
 services:
     jdownloader:
-        image: jlesage/jdownloader-2
+        build:
+            context: ./
+            dockerfile: jdownloader.dockerfile
         ports:
             - 5800:5800
             - 3128:3128
         volumes:
             - ./.docker/org.jdownloader.api.RemoteAPIConfig.json:/config/cfg/org.jdownloader.api.RemoteAPIConfig.json
+        healthcheck:
+            test: curl --fail http://localhost:3128/device/ping || exit 1
+            interval: 20s
+            retries: 5
+            start_period: 20s
+            timeout: 10s
 
     pytest:
         build:
@@ -15,4 +23,5 @@ services:
         volumes:
             - .:/pyjd
         depends_on:
-            - jdownloader
+            jdownloader:
+                condition: service_healthy
