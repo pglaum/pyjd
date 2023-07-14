@@ -6,12 +6,16 @@ if TYPE_CHECKING:
 
 
 class MyJDConnectionHelper:
-    def __init__(self, device: "JDDevice") -> None:
+    def __init__(
+        self, device: "JDDevice", refresh_direct_connections: bool = True
+    ) -> None:
 
         self.device = device
 
         self.__direct_connection_info: Optional[list] = None
-        self.__refresh_direct_connections()
+        if refresh_direct_connections:
+            print("refreshing direct connections")
+            self.__refresh_direct_connections()
         self.__direct_connection_enabled = True
         self.__direct_connection_cooldown = 0
         self.__direct_connection_consecutive_failures = 0
@@ -71,6 +75,26 @@ class MyJDConnectionHelper:
 
         self.__direct_connection_enabled = False
         self.__direct_connection_info = None
+
+    def get_direct_connection_info(self) -> Optional[list]:
+        """
+        Get information about the direct connections.
+
+        :return: Information about the direct connections
+        :rtype: list
+        """
+
+        return self.__direct_connection_info
+
+    def set_direct_connection_info(self, direct_info: list) -> None:
+        """
+        Set information about the direct connections.
+
+        :param direct_info: Information about the direct connections
+        :type direct_info: list
+        """
+
+        self.__direct_connection_info = direct_info
 
     def action(
         self,

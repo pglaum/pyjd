@@ -301,6 +301,8 @@ class MyJDConnector:
             ).decode("ASCII")
             if self.__device_encryption_token
             else None,
+            "devices": self.__devices,
+            "connected": self.__connected,
         }
 
     def from_session(self, session: dict) -> None:
@@ -322,7 +324,8 @@ class MyJDConnector:
         self.__device_encryption_token = base64.b64decode(
             session["device_encryption_token"].encode("ASCII")
         )
-        self.__connected = True
+        self.__devices = session["devices"]
+        self.__connected = session["connected"]
 
     def update_devices(self) -> bool:
         """Update available devices.
@@ -364,7 +367,10 @@ class MyJDConnector:
         return self.__devices
 
     def get_device(
-        self, device_name: Optional[str] = None, device_id: Optional[str] = None
+        self,
+        device_name: Optional[str] = None,
+        device_id: Optional[str] = None,
+        refresh_direct_connections=True,
     ) -> JDDevice:
         """Get a JDDevice instance for a device
 
@@ -384,12 +390,22 @@ class MyJDConnector:
         if device_id is not None:
             for device in self.__devices:
                 if device["id"] == device_id:
-                    return JDDevice(self, MyJDConnectionHelper, device)
+                    return JDDevice(
+                        self,
+                        MyJDConnectionHelper,
+                        device,
+                        refresh_direct_connections=refresh_direct_connections,
+                    )
 
         elif device_name is not None:
             for device in self.__devices:
                 if device["name"] == device_name:
-                    return JDDevice(self, MyJDConnectionHelper, device)
+                    return JDDevice(
+                        self,
+                        MyJDConnectionHelper,
+                        device,
+                        refresh_direct_connections=refresh_direct_connections,
+                    )
 
         raise (Exception("Device not found\n"))
 

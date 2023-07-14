@@ -1,3 +1,4 @@
+from pyjd.myjd_connection_helper import MyJDConnectionHelper
 from .accounts import Accounts
 from .captcha import Captcha
 from .config import Config
@@ -21,7 +22,13 @@ from typing import Any
 class JDDevice:
     """A class that represents a JDownloader device and its functions."""
 
-    def __init__(self, connector: Any, connection_helper: Any, device_dict: dict):
+    def __init__(
+        self,
+        connector: Any,
+        connection_helper: Any,
+        device_dict: dict,
+        refresh_direct_connections: bool = True,
+    ):
         """Initializes the device instance.
 
         :param connector: The connector object (direct or MyJD)
@@ -37,7 +44,12 @@ class JDDevice:
         self.device_type = device_dict["type"]
 
         self.connector = connector
-        self.connection_helper = connection_helper(self)
+        if connection_helper == MyJDConnectionHelper:
+            self.connection_helper = connection_helper(
+                self, refresh_direct_connections=refresh_direct_connections
+            )
+        else:
+            self.connection_helper = connection_helper(self)
 
         self.accounts = Accounts(self)
         self.captcha = Captcha(self)
