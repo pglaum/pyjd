@@ -275,6 +275,55 @@ class MyJDConnector:
 
         return response
 
+    def get_session(self) -> dict:
+        """Get the current session.
+
+        :returns: The current session
+        :rtype: dict
+        """
+
+        return {
+            "login_secret": base64.b64encode(self.__login_secret).decode("ASCII")
+            if self.__login_secret
+            else None,
+            "device_secret": base64.b64encode(self.__device_secret).decode("ASCII")
+            if self.__device_secret
+            else None,
+            "session_token": self.__session_token,
+            "regain_token": self.__regain_token,
+            "server_encryption_token": base64.b64encode(
+                self.__server_encryption_token
+            ).decode("ASCII")
+            if self.__server_encryption_token
+            else None,
+            "device_encryption_token": base64.b64encode(
+                self.__device_encryption_token
+            ).decode("ASCII")
+            if self.__device_encryption_token
+            else None,
+        }
+
+    def from_session(self, session: dict) -> None:
+        """Set the current session.
+
+        :param session: The session to set
+        :type session: dict
+        """
+
+        self.__login_secret = base64.b64decode(session["login_secret"].encode("ASCII"))
+        self.__device_secret = base64.b64decode(
+            session["device_secret"].encode("ASCII")
+        )
+        self.__session_token = session["session_token"]
+        self.__regain_token = session["regain_token"]
+        self.__server_encryption_token = base64.b64decode(
+            session["server_encryption_token"].encode("ASCII")
+        )
+        self.__device_encryption_token = base64.b64decode(
+            session["device_encryption_token"].encode("ASCII")
+        )
+        self.__connected = True
+
     def update_devices(self) -> bool:
         """Update available devices.
 
