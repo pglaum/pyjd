@@ -45,7 +45,7 @@ class MyJDConnector:
 
         self.__request_id = int(time.time() * 1000)
         self.__api_url = "https://api.jdownloader.org"
-        self.__app_key = "https://pglaum.srht.site/pyjd-api"
+        self.__app_key = "https://github.com/pglaum/pyjd"
         self.__api_version = 1
         self.__devices: List[dict] = []
 

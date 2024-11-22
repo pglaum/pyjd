@@ -4,9 +4,10 @@ import requests
 
 
 class DirectConnector:
-    def __init__(self, base_url: str = "http://localhost:3128"):
+    def __init__(self, base_url: str = "http://localhost:3128", headers=None):
 
         self.base_url = base_url
+        self.headers = headers
 
     def is_connected(self) -> bool:
         """Check if the JDownloader is reachable.
@@ -19,7 +20,7 @@ class DirectConnector:
         """
 
         try:
-            requests.get(self.base_url + "/jd/version")
+            requests.get(self.base_url + "/jd/version", headers=self.headers)
             return True
         except Exception:
             pass
