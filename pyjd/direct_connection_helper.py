@@ -38,9 +38,9 @@ class DirectConnectionHelper:
         rparams = "?" + "&".join(param_list)
 
         if binary:
-            return requests.get(rurl + rparams).content
+            return requests.get(rurl + rparams, headers=self.device.connector.headers).content
 
-        rstr = requests.get(rurl + rparams).content.decode()
+        rstr = requests.get(rurl + rparams, headers=self.device.connector.headers).content.decode()
         robj = json.loads(rstr)
 
         if "data" in robj:
