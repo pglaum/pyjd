@@ -12,7 +12,7 @@ def read(fname):
 
 setup(
     name="pyjd",
-    version="1.0.12",
+    version="1.0.13",
     author="Philipp Glaum",
     author_email="p@pglaum.de",
     description=("A wrapper for the JDownloader API"),
